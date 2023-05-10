@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Projekat_WEB2_backend.Infrastructure;
+using Projekat_WEB2_backend.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,6 +38,15 @@ namespace Projekat_WEB2_backend
             });
 
             services.AddDbContext<ProdavnicaDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ProdavnicaDatabase")));
+
+            //Registracija mapera u kontejneru, zivotni vek singleton
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
