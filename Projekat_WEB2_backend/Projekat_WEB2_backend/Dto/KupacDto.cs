@@ -8,6 +8,6 @@ namespace Projekat_WEB2_backend.Dto
 {
     public class KupacDto : KorisnikDto
     {
-        public List<Porudzbina> Porudzbine { get; set; }
+        
     }
 }

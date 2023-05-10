@@ -13,10 +13,6 @@ namespace Projekat_WEB2_backend.Dto
         public string Komentar { get; set; }
         public string Adresa { get; set; }
         public StanjePorudzbine StanjePorudzbine { get; set; }
-
-        //vezano za bazu i relacije
-        public List<Artikal> Artikli { get; set; }
-        
         public Kupac Kupac { get; set; }
     }
 }

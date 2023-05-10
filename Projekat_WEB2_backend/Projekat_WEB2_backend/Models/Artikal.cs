@@ -17,7 +17,6 @@ namespace Projekat_WEB2_backend.Models
         public int Kolicina { get; set; }
         public string Opis { get; set; }
         public string Fotografija { get; set; }
-
         public List<Porudzbina> Porudzbine { get; set; }
 
 
