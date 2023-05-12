@@ -8,10 +8,10 @@ namespace Projekat_WEB2_backend.Interfaces
 {
     public interface IKorisnikService
     {
-        KorisnikDto AddKorisnik(KorisnikDto newKorisnik);
-        List<PorudzbinaDto> GetAllKorisnik();
-        PorudzbinaDto GetPorudzbinaById(long id);
-        PorudzbinaDto UpdatePorudzbina(long id, PorudzbinaDto updatePorudzbinaDto);
-        void DeletePorudzbina(long id);
+        KorisnikDto AddKorisnik(KorisnikDto newKorisnikDto);
+        List<KorisnikDto> GetAllKorisnik();
+        KorisnikDto GetKorisnikById(long id);
+        KorisnikDto UpdateKorisnik(long id, KorisnikDto updateKorisnikDto);
+        void DeleteKorisnik(long id);
     }
 }

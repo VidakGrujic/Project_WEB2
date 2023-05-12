@@ -1,5 +1,9 @@
-﻿using Projekat_WEB2_backend.Dto;
+﻿using AutoMapper;
+using Projekat_WEB2_backend.Dto;
+using Projekat_WEB2_backend.Helper_Classes;
+using Projekat_WEB2_backend.Infrastructure;
 using Projekat_WEB2_backend.Interfaces;
+using Projekat_WEB2_backend.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,29 +13,52 @@ namespace Projekat_WEB2_backend.Services
 {
     public class ArtikalService : IArtikalService
     {
+        private readonly IMapper _mapper;
+        private readonly ProdavnicaDbContext _dbContext;
+
+        public ArtikalService(IMapper mapper, ProdavnicaDbContext dbContext)
+        {
+            _mapper = mapper;
+            _dbContext = dbContext;
+        }
+
+
         public ArtikalDto AddArtikal(ArtikalDto newArtikalDto)
         {
-            throw new NotImplementedException();
+            Artikal newArtikal = _mapper.Map<Artikal>(newArtikalDto);
+            _dbContext.Artikli.Add(newArtikal);
+            _dbContext.SaveChanges();
+
+            return _mapper.Map<ArtikalDto>(newArtikal);
         }
 
         public void DeleteStudent(long id)
         {
-            throw new NotImplementedException();
+            Artikal deleteArtikal = _dbContext.Artikli.Find(id);
+            _dbContext.Artikli.Remove(deleteArtikal);
+            _dbContext.SaveChanges();
+
         }
 
         public List<ArtikalDto> GetAllArtikals()
         {
-            throw new NotImplementedException();
+            List<ArtikalDto> artikalList = _mapper.Map<List<ArtikalDto>>(_dbContext.Artikli.ToList());
+            return artikalList;
         }
 
-        public ArtikalDto GetArtikalById()
+        public ArtikalDto GetArtikalById(long id)
         {
-            throw new NotImplementedException();
+            return _mapper.Map<ArtikalDto>(_dbContext.Artikli.Find(id));
         }
 
         public ArtikalDto UpdateArtikal(long id, ArtikalDto updateArtikalDto)
         {
-            throw new NotImplementedException();
+            Artikal updateArtikal = _dbContext.Artikli.Find(id);
+            HelperClass.UpdateArtikalFiels(updateArtikal, updateArtikalDto);
+            _dbContext.SaveChanges();
+
+            return _mapper.Map<ArtikalDto>(updateArtikal);
+            
         }
     }
 }

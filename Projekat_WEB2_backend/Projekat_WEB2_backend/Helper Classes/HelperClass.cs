@@ -30,6 +30,23 @@ namespace Projekat_WEB2_backend.Helper_Classes
             korisnik.DatumRodjenja = korisnikDto.DatumRodjenja;
             korisnik.Adresa = korisnikDto.Adresa;
             korisnik.Slika = korisnikDto.Slika;
+            korisnik.StatusVerifikacije = korisnikDto.StatusVerifikacije;
+        }
+
+        public static void UpdatePorudzbinaFields(Porudzbina porudzbina, PorudzbinaDto porudzbinaDto)
+        {
+            porudzbina.Komentar = porudzbinaDto.Komentar;
+            porudzbina.Adresa = porudzbinaDto.Adresa;
+            porudzbina.StanjePorudzbine = porudzbinaDto.StanjePorudzbine;
+        }
+
+        public static void UpdateArtikalFiels(Artikal artikal, ArtikalDto artikalDto)
+        {
+            artikal.Naziv = artikalDto.Naziv;
+            artikal.Cena = artikalDto.Cena;
+            artikal.Kolicina = artikalDto.Kolicina;
+            artikal.Opis = artikalDto.Opis;
+            artikal.Fotografija = artikalDto.Fotografija;
         }
     }
 }

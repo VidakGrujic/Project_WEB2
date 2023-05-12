@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Projekat_WEB2_backend.Interfaces
 {
-    interface IArtikalService
+    public interface IArtikalService
     {
         ArtikalDto AddArtikal(ArtikalDto newArtikalDto);
         List<ArtikalDto> GetAllArtikals();
-        ArtikalDto GetArtikalById();
+        ArtikalDto GetArtikalById(long id);
         ArtikalDto UpdateArtikal(long id, ArtikalDto updateArtikalDto);
         void DeleteStudent(long id);
 

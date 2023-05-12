@@ -10,7 +10,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Projekat_WEB2_backend.Infrastructure;
+using Projekat_WEB2_backend.Interfaces;
 using Projekat_WEB2_backend.Mapping;
+using Projekat_WEB2_backend.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,6 +38,10 @@ namespace Projekat_WEB2_backend
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Projekat_WEB2_backend", Version = "v1" });
             });
+
+            services.AddScoped<IArtikalService, ArtikalService>();
+            services.AddScoped<IKorisnikService, KorisnikService>();
+            services.AddScoped<IPorudzbinaService, PorudzbinaService>();
 
             services.AddDbContext<ProdavnicaDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ProdavnicaDatabase")));
 
