@@ -34,52 +34,6 @@ namespace Projekat_WEB2_backend.Migrations
                     b.ToTable("ArtikalPorudzbina");
                 });
 
-            modelBuilder.Entity("Projekat_WEB2_backend.Models.Administrator", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Adresa")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("DatumRodjenja")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Ime")
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<string>("KorisnickoIme")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Lozinka")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Prezime")
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<string>("Slika")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TipKorisnika")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Email")
-                        .IsUnique()
-                        .HasFilter("[Email] IS NOT NULL");
-
-                    b.ToTable("Administratori");
-                });
-
             modelBuilder.Entity("Projekat_WEB2_backend.Models.Artikal", b =>
                 {
                     b.Property<long>("Id")
@@ -109,80 +63,7 @@ namespace Projekat_WEB2_backend.Migrations
                     b.ToTable("Artikli");
                 });
 
-            modelBuilder.Entity("Projekat_WEB2_backend.Models.Kupac", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Adresa")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("DatumRodjenja")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Ime")
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<string>("KorisnickoIme")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Lozinka")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Prezime")
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<string>("Slika")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TipKorisnika")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Email")
-                        .IsUnique()
-                        .HasFilter("[Email] IS NOT NULL");
-
-                    b.ToTable("Kupci");
-                });
-
-            modelBuilder.Entity("Projekat_WEB2_backend.Models.Porudzbina", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Adresa")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Komentar")
-                        .HasMaxLength(5000)
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long>("KupacId")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("StanjePorudzbine")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("KupacId");
-
-                    b.ToTable("Porudzbine");
-                });
-
-            modelBuilder.Entity("Projekat_WEB2_backend.Models.Prodavac", b =>
+            modelBuilder.Entity("Projekat_WEB2_backend.Models.Korisnik", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -228,7 +109,34 @@ namespace Projekat_WEB2_backend.Migrations
                         .IsUnique()
                         .HasFilter("[Email] IS NOT NULL");
 
-                    b.ToTable("Prodavci");
+                    b.ToTable("Korisnici");
+                });
+
+            modelBuilder.Entity("Projekat_WEB2_backend.Models.Porudzbina", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Adresa")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Komentar")
+                        .HasMaxLength(5000)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("KorisnikId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("StanjePorudzbine")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("KorisnikId");
+
+                    b.ToTable("Porudzbine");
                 });
 
             modelBuilder.Entity("ArtikalPorudzbina", b =>
@@ -248,16 +156,16 @@ namespace Projekat_WEB2_backend.Migrations
 
             modelBuilder.Entity("Projekat_WEB2_backend.Models.Porudzbina", b =>
                 {
-                    b.HasOne("Projekat_WEB2_backend.Models.Kupac", "Kupac")
+                    b.HasOne("Projekat_WEB2_backend.Models.Korisnik", "Korisnik")
                         .WithMany("Porudzbine")
-                        .HasForeignKey("KupacId")
+                        .HasForeignKey("KorisnikId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Kupac");
+                    b.Navigation("Korisnik");
                 });
 
-            modelBuilder.Entity("Projekat_WEB2_backend.Models.Kupac", b =>
+            modelBuilder.Entity("Projekat_WEB2_backend.Models.Korisnik", b =>
                 {
                     b.Navigation("Porudzbine");
                 });

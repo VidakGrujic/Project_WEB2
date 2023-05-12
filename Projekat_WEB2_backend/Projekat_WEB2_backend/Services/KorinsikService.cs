@@ -7,29 +7,29 @@ using System.Threading.Tasks;
 
 namespace Projekat_WEB2_backend.Services
 {
-    public class ArtikalService : IArtikalService
+    public class KorinsikService : IKorisnikService
     {
-        public ArtikalDto AddArtikal(ArtikalDto newArtikalDto)
+        public KorisnikDto AddKorisnik(KorisnikDto newKorisnik)
         {
             throw new NotImplementedException();
         }
 
-        public void DeleteStudent(long id)
+        public void DeletePorudzbina(long id)
         {
             throw new NotImplementedException();
         }
 
-        public List<ArtikalDto> GetAllArtikals()
+        public List<PorudzbinaDto> GetAllKorisnik()
         {
             throw new NotImplementedException();
         }
 
-        public ArtikalDto GetArtikalById()
+        public PorudzbinaDto GetPorudzbinaById(long id)
         {
             throw new NotImplementedException();
         }
 
-        public ArtikalDto UpdateArtikal(long id, ArtikalDto updateArtikalDto)
+        public PorudzbinaDto UpdatePorudzbina(long id, PorudzbinaDto updatePorudzbinaDto)
         {
             throw new NotImplementedException();
         }

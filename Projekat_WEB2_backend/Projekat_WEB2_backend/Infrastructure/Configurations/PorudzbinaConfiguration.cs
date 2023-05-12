@@ -16,9 +16,9 @@ namespace Projekat_WEB2_backend.Infrastructure.Configurations
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
             builder.Property(x => x.Komentar).HasMaxLength(5000);
 
-            builder.HasOne(x => x.Kupac)
+            builder.HasOne(x => x.Korisnik)
                    .WithMany(x => x.Porudzbine)
-                   .HasForeignKey(x => x.KupacId)
+                   .HasForeignKey(x => x.KorisnikId)
                    .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasMany(x => x.Artikli)

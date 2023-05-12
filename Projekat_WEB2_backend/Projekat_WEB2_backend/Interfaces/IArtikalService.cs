@@ -8,10 +8,10 @@ namespace Projekat_WEB2_backend.Interfaces
 {
     interface IArtikalService
     {
-        ArtikalDto AddArtikal(ArtikalDto newArtikal);
+        ArtikalDto AddArtikal(ArtikalDto newArtikalDto);
         List<ArtikalDto> GetAllArtikals();
         ArtikalDto GetArtikalById();
-        ArtikalDto UpdateArtikal(long id, ArtikalDto updateArtikal);
+        ArtikalDto UpdateArtikal(long id, ArtikalDto updateArtikalDto);
         void DeleteStudent(long id);
 
 

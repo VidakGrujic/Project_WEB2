@@ -22,5 +22,7 @@ namespace Projekat_WEB2_backend.Models
         public string Adresa { get; set; }
         public TipKorisnika TipKorisnika { get; set; }
         public string Slika { get; set; }
+        public StatusVerifikacije StatusVerifikacije { get; set; }
+        public List<Porudzbina> Porudzbine { get; set; }
     }
 }

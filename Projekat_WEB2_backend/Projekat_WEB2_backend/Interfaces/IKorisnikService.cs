@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Projekat_WEB2_backend.Interfaces
 {
-    public interface IPorudzbinaService
+    public interface IKorisnikService
     {
-        PorudzbinaDto AddPorudzbina(PorudzbinaDto newPorudzbinaDto);
-        List<PorudzbinaDto> GetAllPorudzbina();
+        KorisnikDto AddKorisnik(KorisnikDto newKorisnik);
+        List<PorudzbinaDto> GetAllKorisnik();
         PorudzbinaDto GetPorudzbinaById(long id);
         PorudzbinaDto UpdatePorudzbina(long id, PorudzbinaDto updatePorudzbinaDto);
         void DeletePorudzbina(long id);

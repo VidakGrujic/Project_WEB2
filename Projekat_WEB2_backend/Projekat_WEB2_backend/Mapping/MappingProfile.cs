@@ -12,11 +12,9 @@ namespace Projekat_WEB2_backend.Mapping
     {
         public MappingProfile()
         {
-            CreateMap<Administrator, AdministratorDto>().ReverseMap();
+            CreateMap<Korisnik, KorisnikDto>().ReverseMap();
             CreateMap<Artikal, ArtikalDto>().ReverseMap();
-            CreateMap<Kupac, KupacDto>().ReverseMap();
             CreateMap<Porudzbina, PorudzbinaDto>().ReverseMap();
-            CreateMap<Prodavac, ProdavacDto>().ReverseMap();
         }
     }
 }

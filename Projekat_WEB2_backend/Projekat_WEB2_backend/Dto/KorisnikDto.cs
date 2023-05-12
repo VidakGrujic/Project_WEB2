@@ -18,5 +18,6 @@ namespace Projekat_WEB2_backend.Dto
         public string Adresa { get; set; }
         public TipKorisnika TipKorisnika { get; set; }
         public string Slika { get; set; }
+        public StatusVerifikacije StatusVerifikacije { get; set; }
     }
 }

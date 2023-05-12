@@ -9,9 +9,7 @@ namespace Projekat_WEB2_backend.Infrastructure
 {
     public class ProdavnicaDbContext : DbContext
     {
-        public DbSet<Administrator> Administratori { get; set; }
-        public DbSet<Kupac> Kupci { get; set; }
-        public DbSet<Prodavac> Prodavci { get; set; }
+        public DbSet<Korisnik> Korisnici { get; set; }
         public DbSet<Artikal> Artikli { get; set; }
         public DbSet<Porudzbina> Porudzbine { get; set; }
 

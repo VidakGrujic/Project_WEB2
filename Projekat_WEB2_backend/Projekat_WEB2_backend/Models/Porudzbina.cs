@@ -12,10 +12,11 @@ namespace Projekat_WEB2_backend.Models
         public string Komentar { get; set;}
         public string Adresa { get; set; }
         public StanjePorudzbine StanjePorudzbine { get; set; }
-
-        //vezano za bazu i relacije
         public List<Artikal> Artikli { get; set; }
-        public long KupacId { get; set; }
-        public Kupac Kupac { get; set; }
+        public long KorisnikId { get; set; }
+        public Korisnik Korisnik { get; set; }
+       
+
+
     }
 }

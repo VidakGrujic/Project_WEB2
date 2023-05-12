@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Projekat_WEB2_backend.Infrastructure.Configurations
 {
-    public class AdministratorConfiguration : IEntityTypeConfiguration<Administrator>
+    public class KorisnikConfiguration : IEntityTypeConfiguration<Korisnik>
     {
-        public void Configure(EntityTypeBuilder<Administrator> builder)
+        public void Configure(EntityTypeBuilder<Korisnik> builder)
         {
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
