@@ -13,5 +13,7 @@ namespace Projekat_WEB2_backend.Dto
         public string Komentar { get; set; }
         public string Adresa { get; set; }
         public StanjePorudzbine StanjePorudzbine { get; set; }
+        public long KorisnikId { get; set; }
+        
     }
 }

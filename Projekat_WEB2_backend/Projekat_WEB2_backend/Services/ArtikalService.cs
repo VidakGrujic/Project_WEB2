@@ -32,7 +32,7 @@ namespace Projekat_WEB2_backend.Services
             return _mapper.Map<ArtikalDto>(newArtikal);
         }
 
-        public void DeleteStudent(long id)
+        public void DeleteArtikal(long id)
         {
             Artikal deleteArtikal = _dbContext.Artikli.Find(id);
             _dbContext.Artikli.Remove(deleteArtikal);
@@ -54,7 +54,7 @@ namespace Projekat_WEB2_backend.Services
         public ArtikalDto UpdateArtikal(long id, ArtikalDto updateArtikalDto)
         {
             Artikal updateArtikal = _dbContext.Artikli.Find(id);
-            HelperClass.UpdateArtikalFiels(updateArtikal, updateArtikalDto);
+            ArtikalHelperClass.UpdateArtikalFiels(updateArtikal, updateArtikalDto);
             _dbContext.SaveChanges();
 
             return _mapper.Map<ArtikalDto>(updateArtikal);

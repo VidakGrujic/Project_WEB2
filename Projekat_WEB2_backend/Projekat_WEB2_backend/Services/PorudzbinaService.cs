@@ -52,7 +52,7 @@ namespace Projekat_WEB2_backend.Services
         public PorudzbinaDto UpdatePorudzbina(long id, PorudzbinaDto updatePorudzbinaDto)
         {
             Porudzbina updatePorudzbina = _dbContext.Porudzbine.Find(id);
-            HelperClass.UpdatePorudzbinaFields(updatePorudzbina, updatePorudzbinaDto);
+            PorudzbinaHelperClass.UpdatePorudzbinaFields(updatePorudzbina, updatePorudzbinaDto);
 
             _dbContext.SaveChanges();
 

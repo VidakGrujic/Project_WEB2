@@ -25,6 +25,7 @@ namespace Projekat_WEB2_backend.Services
         public KorisnikDto AddKorisnik(KorisnikDto newKorisnikDto)
         {
             Korisnik newKorisnik = _mapper.Map<Korisnik>(newKorisnikDto);
+            newKorisnik.Lozinka = KorisnikHelperClass.HashPassword(newKorisnik.Lozinka);
             _dbContext.Korisnici.Add(newKorisnik);
             _dbContext.SaveChanges();
 
@@ -53,7 +54,7 @@ namespace Projekat_WEB2_backend.Services
         public KorisnikDto UpdateKorisnik(long id, KorisnikDto updateKorisnikDto)
         {
             Korisnik updateKorisnik = _dbContext.Korisnici.Find(id);
-            HelperClass.UpdateKorisnikFields(updateKorisnik, updateKorisnikDto);
+            KorisnikHelperClass.UpdateKorisnikFields(updateKorisnik, updateKorisnikDto);
             _dbContext.SaveChanges();
 
             return _mapper.Map<KorisnikDto>(updateKorisnik);

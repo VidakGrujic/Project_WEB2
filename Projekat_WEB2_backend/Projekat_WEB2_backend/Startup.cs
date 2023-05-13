@@ -16,6 +16,7 @@ using Projekat_WEB2_backend.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Projekat_WEB2_backend
@@ -44,6 +45,15 @@ namespace Projekat_WEB2_backend
             services.AddScoped<IPorudzbinaService, PorudzbinaService>();
 
             services.AddDbContext<ProdavnicaDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ProdavnicaDatabase")));
+
+            //dodavanje za konverziju enumeracija, sa fronta saljem enumeraciju kao string, on je konvertuje ispravno
+            services.AddControllers().AddJsonOptions(x =>
+            {
+                x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                x.JsonSerializerOptions.IgnoreNullValues = true;
+            });
+
+
 
             //Registracija mapera u kontejneru, zivotni vek singleton
             var mapperConfig = new MapperConfiguration(mc =>

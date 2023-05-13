@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Projekat_WEB2_backend.Dto;
 using Projekat_WEB2_backend.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -18,5 +19,37 @@ namespace Projekat_WEB2_backend.Controllers
         {
             _porudzbinaService = porudzbinaService;
         }
+
+        [HttpGet("getAll")]
+        public IActionResult GetAllPorudzbina()
+        {
+            return Ok(_porudzbinaService.GetAllPorudzbina());
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetById(long id)
+        {
+            return Ok(_porudzbinaService.GetPorudzbinaById(id));
+        }
+
+        [HttpPost]
+        public IActionResult CreatePorudzbina([FromBody] PorudzbinaDto porudzbina)
+        {
+            return Ok(_porudzbinaService.AddPorudzbina(porudzbina));
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult ChangePorudzbina(long id, [FromBody] PorudzbinaDto porudzbina)
+        {
+            return Ok(_porudzbinaService.UpdatePorudzbina(id, porudzbina));
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeletePorudzbina(long id)
+        {
+            _porudzbinaService.DeletePorudzbina(id);
+            return Ok($"Porudzbina sa id = {id} je uspesno obrisan.");
+        }
+
     }
 }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Projekat_WEB2_backend.Helper_Classes
 {
-    public class HelperClass
+    public class KorisnikHelperClass
     {
         public static string HashPassword(string password)
         {
@@ -33,20 +33,7 @@ namespace Projekat_WEB2_backend.Helper_Classes
             korisnik.StatusVerifikacije = korisnikDto.StatusVerifikacije;
         }
 
-        public static void UpdatePorudzbinaFields(Porudzbina porudzbina, PorudzbinaDto porudzbinaDto)
-        {
-            porudzbina.Komentar = porudzbinaDto.Komentar;
-            porudzbina.Adresa = porudzbinaDto.Adresa;
-            porudzbina.StanjePorudzbine = porudzbinaDto.StanjePorudzbine;
-        }
+       
 
-        public static void UpdateArtikalFiels(Artikal artikal, ArtikalDto artikalDto)
-        {
-            artikal.Naziv = artikalDto.Naziv;
-            artikal.Cena = artikalDto.Cena;
-            artikal.Kolicina = artikalDto.Kolicina;
-            artikal.Opis = artikalDto.Opis;
-            artikal.Fotografija = artikalDto.Fotografija;
-        }
     }
 }
