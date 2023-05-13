@@ -121,17 +121,28 @@ namespace Projekat_WEB2_backend.Services
             if (string.IsNullOrEmpty(registerKorisnik.Email)) //ako nije unet email, baci gresku
                 return null;
 
-            Korisnik korisnik = _dbContext.Korisnici.First(k => k.Email == registerKorisnik.Email);
-            if (korisnik != null) //ako postoji korisnik sa tim emailom, baci gresku
-                return null;
+            foreach(Korisnik k in _dbContext.Korisnici)
+            {
+                if (k.Email == registerKorisnik.Email)
+                    return null;
+            }
 
-            if (KorisnikHelperClass.IsKorisnikFieldsValid(registerKorisnik)) //ako nisu validna polja onda nista
+            if(registerKorisnik.TipKorisnika == TipKorisnika.Prodavac)
+            {
+                registerKorisnik.StatusVerifikacije = StatusVerifikacije.Procesuira_se;
+            }
+          
+
+            if (!KorisnikHelperClass.IsKorisnikFieldsValid(registerKorisnik)) //ako nisu validna polja onda nista
                 return null;
 
             KorisnikDto registeredKorisnik = AddKorisnik(registerKorisnik);
 
             if (registeredKorisnik == null)
                 return null;
+
+            
+            
 
             //nema provere za password, pa odmah vracamo token
             List<Claim> claims = new List<Claim>();
