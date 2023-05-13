@@ -13,5 +13,10 @@ namespace Projekat_WEB2_backend.Interfaces
         KorisnikDto GetKorisnikById(long id);
         KorisnikDto UpdateKorisnik(long id, KorisnikDto updateKorisnikDto);
         void DeleteKorisnik(long id);
+
+        string Login(LoginKorisnikDto loginKorisnikDto);
+        string Registration(KorisnikDto registerKorisnik);
+
+
     }
 }

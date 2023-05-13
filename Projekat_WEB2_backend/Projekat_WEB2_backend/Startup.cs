@@ -1,4 +1,5 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Projekat_WEB2_backend.Infrastructure;
 using Projekat_WEB2_backend.Interfaces;
@@ -16,6 +18,7 @@ using Projekat_WEB2_backend.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
@@ -38,7 +41,52 @@ namespace Projekat_WEB2_backend
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Projekat_WEB2_backend", Version = "v1" });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Please enter token",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    BearerFormat = "JWT",
+                    Scheme = "bearer"
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type=ReferenceType.SecurityScheme,
+                                Id="Bearer"
+                            }
+                        },
+                        new string[]{}
+                    }
+                });
             });
+
+
+            //Dodajemo semu autentifikacije i podesavamo da se radi o JWT beareru
+            services.AddAuthentication(opt => {
+                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+           .AddJwtBearer(options =>
+           {
+               options.TokenValidationParameters = new TokenValidationParameters //Podesavamo parametre za validaciju pristiglih tokena
+               {
+                   ValidateIssuer = true, //Validira izdavaoca tokena
+                   ValidateAudience = false, //Kazemo da ne validira primaoce tokena
+                   ValidateLifetime = true,//Validira trajanje tokena
+                   ValidateIssuerSigningKey = true, //validira potpis token, ovo je jako vazno!
+                   ValidIssuer = "http://localhost:44385", //odredjujemo koji server je validni izdavalac
+                   ClockSkew = TimeSpan.Zero, //ovo u stvari proverava da li je isteklo vazenje tokena
+                   IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["SecretKey"]))//navodimo privatni kljuc kojim su potpisani nasi tokeni
+               };
+           });
+
+
 
             services.AddScoped<IArtikalService, ArtikalService>();
             services.AddScoped<IKorisnikService, KorisnikService>();
@@ -79,6 +127,7 @@ namespace Projekat_WEB2_backend
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

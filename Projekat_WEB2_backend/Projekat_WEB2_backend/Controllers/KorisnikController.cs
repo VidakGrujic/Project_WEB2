@@ -30,7 +30,7 @@ namespace Projekat_WEB2_backend.Controllers
         public IActionResult GetKorisnikById(long id)
         {
             return Ok(_korisnikService.GetKorisnikById(id));
-        } 
+        }
 
         [HttpPost]
         public IActionResult CreateKorisnik([FromBody] KorisnikDto korisnik)
@@ -51,7 +51,27 @@ namespace Projekat_WEB2_backend.Controllers
             return Ok($"Korisnik sa id = {id} je uspesno obrisan.");
         }
 
+        [HttpPost("login")]
+        public IActionResult Login([FromBody] LoginKorisnikDto loginKorisnikDto)
+        {
+            string token = _korisnikService.Login(loginKorisnikDto);
+            if (token == null)
+                return Unauthorized("Ili nisu uneti dobri podaci ili korisnik ne postoji u sistemu");
 
+            return Ok(token);
+        }
+
+        [HttpPost("registration")]
+        public IActionResult Registration([FromBody] KorisnikDto registerKorisnikDto)
+        {
+            string token = _korisnikService.Registration(registerKorisnikDto);
+            if (token == null)
+                return Unauthorized();
+
+            return Ok(token);
+
+            //bolje je za login i registration vracati i samog korisnika
+        }
 
     }
 }
