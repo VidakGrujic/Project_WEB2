@@ -26,6 +26,7 @@ namespace Projekat_WEB2_backend
 {
     public class Startup
     {
+        private readonly string _cors = "cors";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -80,11 +81,23 @@ namespace Projekat_WEB2_backend
                    ValidateAudience = false, //Kazemo da ne validira primaoce tokena
                    ValidateLifetime = true,//Validira trajanje tokena
                    ValidateIssuerSigningKey = true, //validira potpis token, ovo je jako vazno!
-                   ValidIssuer = "http://localhost:44385", //odredjujemo koji server je validni izdavalac
+                   ValidIssuer = Configuration["ValidIssuer"], //odredjujemo koji server je validni izdavalac
                    ClockSkew = TimeSpan.Zero, //ovo u stvari proverava da li je isteklo vazenje tokena
                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["SecretKey"]))//navodimo privatni kljuc kojim su potpisani nasi tokeni
                };
            });
+
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: _cors, builder =>
+                {
+                    builder.WithOrigins(Configuration["ReactApp"])
+                           .AllowAnyHeader()
+                           .AllowAnyMethod()
+                           .AllowCredentials();
+                });
+            });
 
 
 
