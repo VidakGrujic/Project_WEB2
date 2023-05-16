@@ -90,9 +90,10 @@ namespace Projekat_WEB2_backend
 
             services.AddCors(options =>
             {
+                var reactApp = Configuration["ReactApp"];
                 options.AddPolicy(name: _cors, builder =>
                 {
-                    builder.WithOrigins(Configuration["ReactApp"])
+                    builder.WithOrigins(reactApp)
                            .AllowAnyHeader()
                            .AllowAnyMethod()
                            .AllowCredentials();
@@ -137,6 +138,8 @@ namespace Projekat_WEB2_backend
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors(_cors);
 
             app.UseRouting();
 
