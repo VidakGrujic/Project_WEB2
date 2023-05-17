@@ -1,7 +1,8 @@
-import React, { useState } from "react";
-import axios from "../api/axios";
+import React, { useState} from "react";
+import axios from "../../api/axios";
+import { useNavigate } from "react-router-dom";
 
-const Registration = () => {
+const Registration = ({handleAuth, handleTipKorisnika}) => {
     const [korisnickoIme, setKorisnickoIme] = useState('');
     const [email, setEmail] = useState('');
     const [lozinka, setLozinka] = useState('');
@@ -12,22 +13,40 @@ const Registration = () => {
     const [tipKorisnika, setTipKorisnika] = useState('Kupac');
     const [adresa, setAdresa] = useState('')
     const [statusVerifikacije, setStatusVerifikacije] = useState('Prihvacen');
-  
+    const navigate = useNavigate();
     const REGISTRATION_URL = "/users/registration";
+
+
+
+
+    const setInputsToEmpty = () => {
+        setKorisnickoIme('');
+        setEmail('');
+        setLozinka('');
+        setLozinka2('');
+        setIme('');
+        setPrezime('');
+        setDatumRodjenja('');
+        setTipKorisnika('Kupac');
+        setStatusVerifikacije('Prihvacen');
+        setAdresa('');
+    }
+
+     const redirectTo = (tipKorisnika) => {
+        if(tipKorisnika === 'Admin'){
+            navigate('/adminDashboard');
+        }
+        else if(tipKorisnika === 'Kupac'){
+            navigate('/kupacDashboard');
+        }
+        else if(tipKorisnika === 'Prodavac'){
+            navigate('/prodavacDashboard');
+        }
+    }
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        /*console.log(korisnickoIme);
-        console.log(email);
-        console.log(lozinka);
-        console.log(lozinka2);
-        console.log(ime);
-        console.log(prezime);
-        console.log(datumRodjenja);
-        console.log(tipKorisnika);
-        console.log(adresa);
-        console.log(statusVerifikacije);*/
-
+      
         //uraditi provere za lozinke, tj. da li se prva i druga poklapaju i da li su uneta stva polja
         if(lozinka === lozinka2){
             const korisnikJSON = JSON.stringify({
@@ -50,15 +69,19 @@ const Registration = () => {
                         withCredentials: true
                     }
                 );
-                console.log(response.data);
+                handleAuth(true);
+
+                sessionStorage.setItem('korisnik_token', JSON.stringify(response.data));
+                const tipKorisnika = response.data.korisnikDto.tipKorisnika;
+                handleTipKorisnika(tipKorisnika);
+                redirectTo(tipKorisnika);
+
             } catch (err) { 
                 alert("Nesto se desilo prilikom registracije");
+                setInputsToEmpty();
+                handleAuth(false);
             }
         }
-        
-        
-
-
     }
 
     return (

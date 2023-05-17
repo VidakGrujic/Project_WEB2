@@ -69,8 +69,9 @@ namespace Projekat_WEB2_backend.Services
             return _mapper.Map<KorisnikDto>(updateKorisnik);
         }
 
-        public string Login(LoginKorisnikDto loginKorisnikDto)
+        public ResponseDto Login(LoginKorisnikDto loginKorisnikDto)
         {
+            
             if (string.IsNullOrEmpty(loginKorisnikDto.Email) && string.IsNullOrEmpty(loginKorisnikDto.Lozinka))
                 return null;
 
@@ -100,8 +101,13 @@ namespace Projekat_WEB2_backend.Services
                     expires: DateTime.Now.AddMinutes(40),
                     signingCredentials: signInCredentials
                     );
+
                 string token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-                return token;
+                KorisnikDto korisnikDto = _mapper.Map<KorisnikDto>(loginKorisnik);
+
+                ResponseDto responseDto = new ResponseDto(token, korisnikDto);
+
+                return responseDto;
             }
             else
             {
@@ -116,7 +122,7 @@ namespace Projekat_WEB2_backend.Services
         //ako je kupac ili administrator, status verifikacije je odmah prihvacen
         //ako je prodavac, onda se stavi na status obrade
 
-        public string Registration(KorisnikDto registerKorisnik)
+        public ResponseDto Registration(KorisnikDto registerKorisnik)
         {
             if (string.IsNullOrEmpty(registerKorisnik.Email)) //ako nije unet email, baci gresku
                 return null;
@@ -141,9 +147,6 @@ namespace Projekat_WEB2_backend.Services
             if (registeredKorisnik == null)
                 return null;
 
-            
-            
-
             //nema provere za password, pa odmah vracamo token
             List<Claim> claims = new List<Claim>();
             if (registerKorisnik.TipKorisnika == TipKorisnika.Administrator)
@@ -162,7 +165,9 @@ namespace Projekat_WEB2_backend.Services
                 signingCredentials: signInCredentials
                 );
             string token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-            return token;
+
+            ResponseDto responseDto = new ResponseDto(token, registeredKorisnik);
+            return responseDto;
 
 
 

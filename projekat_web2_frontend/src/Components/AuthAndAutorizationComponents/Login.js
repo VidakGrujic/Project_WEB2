@@ -1,13 +1,30 @@
 import React, { useState } from "react";
-import axios from "../api/axios";
+import axios from "../../api/axios";
+import { useNavigate } from "react-router-dom";
 
-const Login = () => {
-
+const Login = ({handleAuth, handleTipKorisnika}) => {
     const LOGIN_URL = '/users/login';
 
     const[email, setEmail] = useState('');
     const[lozinka, setLozinka] = useState('');
+    const navigate = useNavigate();
 
+    const setInputsToEmpty = () => {
+        setEmail('');
+        setLozinka(''); 
+    }
+
+    const redirectTo = (tipKorisnika) => {
+        if(tipKorisnika === 'Admin'){
+            navigate('/adminDashboard');
+        }
+        else if(tipKorisnika === 'Kupac'){
+            navigate('/kupacDashboard');
+        }
+        else if(tipKorisnika === 'Prodavac'){
+            navigate('/prodavacDashboard');
+        }
+    }
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -21,11 +38,18 @@ const Login = () => {
                 }
             );
             console.log(response.data);
-            setEmail('');
-            setLozinka('');
+            handleAuth(true);
+            
+            sessionStorage.setItem('korisnik_token', JSON.stringify(response.data));
+            const tipKorisnika = response.data.korisnikDto.tipKorisnika; // propertiji su mala slova
+            handleTipKorisnika(tipKorisnika);
+            redirectTo(tipKorisnika);
+            
         }
         catch(err){
             alert("Nesto se desilo");
+            handleAuth(false);
+            setInputsToEmpty();
         }
 
     }

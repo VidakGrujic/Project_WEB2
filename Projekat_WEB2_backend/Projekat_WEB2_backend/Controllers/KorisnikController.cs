@@ -54,23 +54,22 @@ namespace Projekat_WEB2_backend.Controllers
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginKorisnikDto loginKorisnikDto)
         {
-            string token = _korisnikService.Login(loginKorisnikDto);
-            if (token == null)
+            ResponseDto responseDto = _korisnikService.Login(loginKorisnikDto);
+            if (responseDto == null)
                 return Unauthorized("Ili nisu uneti dobri podaci ili korisnik ne postoji u sistemu");
 
-            return Ok(token);
+            return Ok(responseDto);
         }
 
         [HttpPost("registration")]
         public IActionResult Registration([FromBody] KorisnikDto registerKorisnikDto)
         {
-            string token = _korisnikService.Registration(registerKorisnikDto);
-            if (token == null)
+            ResponseDto responseDto = _korisnikService.Registration(registerKorisnikDto);
+            if (responseDto == null)
                 return Unauthorized();
 
-            return Ok(token);
+            return Ok(responseDto);
 
-            //bolje je za login i registration vracati i samog korisnika
         }
 
     }
