@@ -41,7 +41,14 @@ namespace Projekat_WEB2_backend.Controllers
         [HttpPut("{id}")]
         public IActionResult ChangeKorisnik(long id, [FromBody] KorisnikDto korisnik)
         {
-            return Ok(_korisnikService.UpdateKorisnik(id, korisnik));
+            KorisnikDto updatedKorisnik = _korisnikService.UpdateKorisnik(id, korisnik);
+            if (updatedKorisnik == null)
+            {
+                return Unauthorized("Ne postoji korinsik");
+            }
+            
+            updatedKorisnik.Lozinka = korisnik.Lozinka;
+            return Ok(updatedKorisnik);
         }
 
         [HttpDelete("{id}")]
@@ -58,6 +65,7 @@ namespace Projekat_WEB2_backend.Controllers
             if (responseDto == null)
                 return Unauthorized("Ili nisu uneti dobri podaci ili korisnik ne postoji u sistemu");
 
+            responseDto.KorisnikDto.Lozinka = loginKorisnikDto.Lozinka;
             return Ok(responseDto);
         }
 
@@ -68,6 +76,7 @@ namespace Projekat_WEB2_backend.Controllers
             if (responseDto == null)
                 return Unauthorized();
 
+            responseDto.KorisnikDto.Lozinka = registerKorisnikDto.Lozinka;
             return Ok(responseDto);
 
         }

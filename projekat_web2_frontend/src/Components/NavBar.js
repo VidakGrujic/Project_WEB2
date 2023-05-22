@@ -12,7 +12,7 @@ const NavBar = ({isAuth, tipKorisnika}) => {
 
     
     return (
-        <div className="ui blue secondary pointing menu">
+        <div className="ui inverted blue secondary menu">
             {/*nelogovani i neregistrovani korisnici
             oni vide home, register i login. Posle cu dodavati za role, da li je korisnik ovakav ili onakav*/}
             {isAuth ? null : <NavLink className={({isActive}) => active(isActive)} to="/">Home page</NavLink> }

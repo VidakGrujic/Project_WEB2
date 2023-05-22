@@ -63,6 +63,12 @@ namespace Projekat_WEB2_backend.Services
         public KorisnikDto UpdateKorisnik(long id, KorisnikDto updateKorisnikDto)
         {
             Korisnik updateKorisnik = _dbContext.Korisnici.Find(id);
+            if(updateKorisnik == null)
+            {
+                return null;
+            }
+
+            updateKorisnik.Lozinka = KorisnikHelperClass.HashPassword(updateKorisnikDto.Lozinka);
             KorisnikHelperClass.UpdateKorisnikFields(updateKorisnik, updateKorisnikDto);
             _dbContext.SaveChanges();
 

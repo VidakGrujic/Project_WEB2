@@ -7,7 +7,11 @@ const Login = ({handleAuth, handleTipKorisnika}) => {
 
     const[email, setEmail] = useState('');
     const[lozinka, setLozinka] = useState('');
+    const[error, setError] = useState(false);
+
     const navigate = useNavigate();
+
+    
 
     const setInputsToEmpty = () => {
         setEmail('');
@@ -29,6 +33,11 @@ const Login = ({handleAuth, handleTipKorisnika}) => {
     const handleSubmit = async (event) => {
         event.preventDefault();
     
+        if(email.length === 0 || lozinka.length === 0){
+            setError(true)
+            return;
+        }
+
         try{
             const response = await axios.post(`${process.env.REACT_APP_API_BACK}${LOGIN_URL}`,
                 JSON.stringify({email, lozinka}),
@@ -40,7 +49,8 @@ const Login = ({handleAuth, handleTipKorisnika}) => {
             console.log(response.data);
             handleAuth(true);
             
-            sessionStorage.setItem('korisnik_token', JSON.stringify(response.data));
+            sessionStorage.setItem('token', JSON.stringify(response.data.token))
+            sessionStorage.setItem('korisnik', JSON.stringify(response.data.korisnikDto));
             const tipKorisnika = response.data.korisnikDto.tipKorisnika; // propertiji su mala slova
             handleTipKorisnika(tipKorisnika);
             redirectTo(tipKorisnika);
@@ -53,9 +63,6 @@ const Login = ({handleAuth, handleTipKorisnika}) => {
         }
 
     }
-    /*
-        KAD SE RADI LOGIN, TREBA PROVERITI KUPCEV STATUS VERIFIKACIJE I NA OSNOVU TOGA GA REDIREKTOVATI
-    */
 
     return (
         <div className="card">
@@ -68,6 +75,7 @@ const Login = ({handleAuth, handleTipKorisnika}) => {
                            name="email" 
                            placeholder="Email" 
                            onChange={(e) => setEmail(e.target.value)}/>
+                    {error && email.length === 0 ? <div className="ui pointing red basic label">Morate uneti email</div> : null}
                 </div>
                 <div className="field">
                     <label>Lozinka</label>
@@ -76,6 +84,8 @@ const Login = ({handleAuth, handleTipKorisnika}) => {
                            name="lozinka" 
                            placeholder="Lozinka"
                            onChange={(e) => setLozinka(e.target.value)}/>
+                    
+                   {error && lozinka.length === 0 ? <div className="ui pointing red basic label">Morate uneti lozinku</div> : null} 
                 </div>
                 <button className="ui button" type="submit">Log in</button>
             </form>

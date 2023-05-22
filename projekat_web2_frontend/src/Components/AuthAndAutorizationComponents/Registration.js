@@ -1,6 +1,8 @@
 import React, { useState} from "react";
 import axios from "../../api/axios";
 import { useNavigate } from "react-router-dom";
+import "react-datepicker/dist/react-datepicker.css";
+import DatePicker from "react-datepicker";
 
 const Registration = ({handleAuth, handleTipKorisnika}) => {
     const [korisnickoIme, setKorisnickoIme] = useState('');
@@ -9,14 +11,14 @@ const Registration = ({handleAuth, handleTipKorisnika}) => {
     const [lozinka2, setLozinka2] = useState('');
     const [ime, setIme] = useState('');
     const [prezime, setPrezime] = useState('');
-    const [datumRodjenja, setDatumRodjenja] = useState('');
+    const [datumRodjenja, setDatumRodjenja] = useState(null);
     const [tipKorisnika, setTipKorisnika] = useState('Kupac');
     const [adresa, setAdresa] = useState('')
     const [statusVerifikacije, setStatusVerifikacije] = useState('Prihvacen');
     const navigate = useNavigate();
     const REGISTRATION_URL = "/users/registration";
 
-
+    const[error, setError] = useState(false);
 
 
     const setInputsToEmpty = () => {
@@ -32,7 +34,7 @@ const Registration = ({handleAuth, handleTipKorisnika}) => {
         setAdresa('');
     }
 
-     const redirectTo = (tipKorisnika) => {
+    const redirectTo = (tipKorisnika) => {
         if(tipKorisnika === 'Admin'){
             navigate('/adminDashboard');
         }
@@ -48,6 +50,14 @@ const Registration = ({handleAuth, handleTipKorisnika}) => {
         event.preventDefault();
       
         //uraditi provere za lozinke, tj. da li se prva i druga poklapaju i da li su uneta stva polja
+
+        if(korisnickoIme.length === 0 || email.length === 0 || lozinka.length === 0 || lozinka2.length === 0 
+            || ime.length === 0 || prezime.length === 0 || datumRodjenja === null || adresa.length === 0 || lozinka !== lozinka2){
+                setError(true);
+                return;
+            }
+
+
         if(lozinka === lozinka2){
             const korisnikJSON = JSON.stringify({
                 korisnickoIme,
@@ -71,7 +81,8 @@ const Registration = ({handleAuth, handleTipKorisnika}) => {
                 );
                 handleAuth(true);
 
-                sessionStorage.setItem('korisnik_token', JSON.stringify(response.data));
+                sessionStorage.setItem('token', JSON.stringify(response.data.token))
+                sessionStorage.setItem('korisnik', JSON.stringify(response.data.korisnikDto));
                 const tipKorisnika = response.data.korisnikDto.tipKorisnika;
                 handleTipKorisnika(tipKorisnika);
                 redirectTo(tipKorisnika);
@@ -96,6 +107,7 @@ const Registration = ({handleAuth, handleTipKorisnika}) => {
                             value={korisnickoIme}
                             onChange={(e) => setKorisnickoIme(e.target.value)}
                             />
+                    {error && korisnickoIme.length === 0 ? <div className="ui pointing red basic label">Morate uneti korisnickoIme</div> : null}
                 </div>
                 <div className="field">
                     <label>Email</label>
@@ -104,6 +116,7 @@ const Registration = ({handleAuth, handleTipKorisnika}) => {
                            placeholder="Email"
                            value={email}
                            onChange={(e) => setEmail(e.target.value)}/>
+                    {error && email.length === 0 ? <div className="ui pointing red basic label">Morate uneti email</div> : null}
                 </div>
                 <div className="field">
                     <div className="two fields"> 
@@ -114,6 +127,7 @@ const Registration = ({handleAuth, handleTipKorisnika}) => {
                                     placeholder="Lozinka"
                                     value={lozinka}
                                     onChange={(e) => setLozinka(e.target.value)}/>
+                            {error && lozinka.length === 0 ? <div className="ui pointing red basic label">Morate uneti lozinku</div> : null}
                         </div>
                         <div className="field">
                             <label>Potvrdite lozinku</label>
@@ -123,9 +137,15 @@ const Registration = ({handleAuth, handleTipKorisnika}) => {
                                     value={lozinka2}
                                     onChange={(e) => setLozinka2(e.target.value)}
                                     />
+                            {error && lozinka2.length === 0 ? <div className="ui pointing red basic label">Morate potvrditi lozinku</div> : null}
                         </div>
                     </div>
                 </div>
+                    {error && lozinka !== lozinka2  ? 
+                        <div className="field">
+                            <div className="ui pointing red basic label">Lozinke se moraju poklapati</div>
+                        </div>
+                    : null}
                 <div className="field">
                     <div className="two fields">
                         <div className="field">
@@ -136,6 +156,7 @@ const Registration = ({handleAuth, handleTipKorisnika}) => {
                                     value={ime}
                                     onChange={(e) => setIme(e.target.value)}
                                     />
+                            {error && ime.length === 0 ? <div className="ui pointing red basic label">Morate uneti ime</div> : null}
                         </div>
                         <div className="field">
                             <label>Prezime</label>
@@ -145,18 +166,22 @@ const Registration = ({handleAuth, handleTipKorisnika}) => {
                                     value={prezime}
                                     onChange={(e) => setPrezime(e.target.value)}
                                     />
+                            {error && prezime.length === 0 ? <div className="ui pointing red basic label">Morate uneti prezime</div> : null}
                         </div>
                     </div>
                 </div>
                 <div className="fields">
                     <div className="six wide field">
                         <label>Datum Rodjenja</label>
-                        <input type="date"
-                               name="datumRodjenja" 
-                               placeholder="Datum"
-                               value={datumRodjenja}
-                               onChange={(e) => setDatumRodjenja(e.target.value)}
-                               />
+                        <DatePicker 
+                            showIcon
+                            selected={datumRodjenja}
+                            onChange={datum => setDatumRodjenja(datum)}
+                            dateFormat="dd/MM/yyyy"
+                            showYearDropdown
+                            scrollableMonthYearDropdown
+                        />
+                        {error && datumRodjenja === null ? <div className="ui pointing red basic label">Morate izabrati datum rodjenja</div> : null}
                     </div>
                     <div className="ten wide field">
                         <label>Tip korisnika</label>
@@ -174,6 +199,7 @@ const Registration = ({handleAuth, handleTipKorisnika}) => {
                             value={adresa}
                             onChange={(e) => setAdresa(e.target.value)}
                             />
+                    {error && prezime.length === 0 ? <div className="ui pointing red basic label">Morate uneti adresu</div> : null}
                 </div>
                 <button className="ui button" type="submit">Submit</button>
             </form>
