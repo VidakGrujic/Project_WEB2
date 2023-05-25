@@ -29,3 +29,12 @@
 .loader-container{
   padding-top: 20%;
 }
+
+.load-picture-button{
+  padding: 2.8rem 0 0 2rem;
+  margin-left: 1rem;
+}
+
+.textarea-resize {
+  resize: none !important;
+}

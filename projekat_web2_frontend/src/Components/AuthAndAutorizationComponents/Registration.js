@@ -203,7 +203,7 @@ const Registration = ({handleAuth, handleTipKorisnika, handleStatusVerifikacije}
                             />
                     {error && prezime.length === 0 ? <div className="ui pointing red basic label">Morate uneti adresu</div> : null}
                 </div>
-                <button className="ui button" type="submit">Submit</button>
+                <button className="ui blue button" type="submit">Submit</button>
             </form>
         </div>
     );

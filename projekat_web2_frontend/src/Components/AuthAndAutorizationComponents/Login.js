@@ -89,7 +89,7 @@ const Login = ({handleAuth, handleTipKorisnika, handleStatusVerifikacije}) => {
                     
                    {error && lozinka.length === 0 ? <div className="ui pointing red basic label">Morate uneti lozinku</div> : null} 
                 </div>
-                <button className="ui button" type="submit">Log in</button>
+                <button className="ui blue button" type="submit">Log in</button>
             </form>
         </div>
     );
