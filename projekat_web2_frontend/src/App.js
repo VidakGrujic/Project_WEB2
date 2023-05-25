@@ -20,7 +20,7 @@ function App() {
   //da li je korisnik autentifikovan, on je atuentifikovan i posle registracije i posle logovanje
   const [isAuth, setIsAuth] = useState(false);
   const [tipKorisnika, setTipKorisnika] = useState('');
- 
+  const [statusVerifikacije, setStatusVerifikacije] = useState('');
 
   const handleAuth = (autentifikovan) => {
     setIsAuth(autentifikovan);
@@ -30,13 +30,17 @@ function App() {
     setTipKorisnika(tipKorisnika);
   }
 
+  const handleStatusVerifikacije = (statusVerifikacije) => {
+    setStatusVerifikacije(statusVerifikacije);
+  }
+
   const routes = [
     {path: '/', element: <Home></Home>},
-    {path: '/login', element: <Login handleAuth={handleAuth} handleTipKorisnika={handleTipKorisnika}></Login>},
-    {path: '/registration', element: <Registration handleAuth={handleAuth} handleTipKorisnika={handleTipKorisnika}></Registration>},
+    {path: '/login', element: <Login handleAuth={handleAuth} handleTipKorisnika={handleTipKorisnika} handleStatusVerifikacije={handleStatusVerifikacije}></Login>},
+    {path: '/registration', element: <Registration handleAuth={handleAuth} handleTipKorisnika={handleTipKorisnika} handleStatusVerifikacije={handleStatusVerifikacije}></Registration>},
     {path: '/kupacDashboard', element: <KupacDashboard></KupacDashboard>},
     {path: '/kupacPrethodnePorudzbine', element: <KupacPrethodnePorudzbine></KupacPrethodnePorudzbine>},
-    {path: '/prodavacDashboard', element: <ProdavacDashboard></ProdavacDashboard>},
+    {path: '/prodavacDashboard', element: <ProdavacDashboard statusVerifikacije={statusVerifikacije}></ProdavacDashboard>},
     {path: '/prodavacDodajArtikal', element: <ProdavacDodajArtikal></ProdavacDodajArtikal>},
     {path: '/prodavacNovePorudzbine', element: <ProdavacNovePorudzbine></ProdavacNovePorudzbine>},
     {path: '/prodavacMojePorudzbine', element: <ProdavacMojePorudzbine></ProdavacMojePorudzbine>},
@@ -48,7 +52,7 @@ function App() {
 
   return (
     <div className='App'>
-      <NavBar isAuth={isAuth} tipKorisnika={tipKorisnika}/>
+      <NavBar isAuth={isAuth} tipKorisnika={tipKorisnika} statusVerifikacije={statusVerifikacije}/>
       <div className='container'>
         <Routes>
           {

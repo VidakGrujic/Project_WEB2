@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "../../api/axios";
 import { useNavigate } from "react-router-dom";
 
-const Login = ({handleAuth, handleTipKorisnika}) => {
+const Login = ({handleAuth, handleTipKorisnika, handleStatusVerifikacije}) => {
     const LOGIN_URL = '/users/login';
 
     const[email, setEmail] = useState('');
@@ -19,7 +19,7 @@ const Login = ({handleAuth, handleTipKorisnika}) => {
     }
 
     const redirectTo = (tipKorisnika) => {
-        if(tipKorisnika === 'Admin'){
+        if(tipKorisnika === 'Administrator'){
             navigate('/adminDashboard');
         }
         else if(tipKorisnika === 'Kupac'){
@@ -49,10 +49,12 @@ const Login = ({handleAuth, handleTipKorisnika}) => {
             console.log(response.data);
             handleAuth(true);
             
-            sessionStorage.setItem('token', JSON.stringify(response.data.token))
+            sessionStorage.setItem('token', response.data.token)
             sessionStorage.setItem('korisnik', JSON.stringify(response.data.korisnikDto));
             const tipKorisnika = response.data.korisnikDto.tipKorisnika; // propertiji su mala slova
+            const statusVerifikacije = response.data.korisnikDto.statusVerifikacije;
             handleTipKorisnika(tipKorisnika);
+            handleStatusVerifikacije(statusVerifikacije);
             redirectTo(tipKorisnika);
             
         }

@@ -178,6 +178,40 @@ namespace Projekat_WEB2_backend.Services
 
 
         }
-        
+
+        public List<KorisnikDto> GetProdavce()
+        {
+            List<Korisnik> prodavci = new List<Korisnik>();
+            foreach(Korisnik korisnik in _dbContext.Korisnici.ToList())
+            {
+                if(korisnik.TipKorisnika == TipKorisnika.Prodavac && korisnik.StatusVerifikacije != StatusVerifikacije.Odbijen)
+                {
+                    prodavci.Add(korisnik);
+                }
+            }
+
+            return _mapper.Map<List<KorisnikDto>>(prodavci);
+        }
+
+        public List<KorisnikDto> VerifyProdavce(long id, string statusVerifikacije)
+        {
+            Korisnik prodavac = _dbContext.Korisnici.Find(id);
+            if(prodavac == null)
+            {
+                return null;
+            }
+
+            if (statusVerifikacije.Equals(StatusVerifikacije.Prihvacen.ToString()))
+            {
+                prodavac.StatusVerifikacije = StatusVerifikacije.Prihvacen;
+            }
+            else if (statusVerifikacije.Equals(StatusVerifikacije.Odbijen.ToString()))
+            {
+                prodavac.StatusVerifikacije = StatusVerifikacije.Odbijen;
+            }
+            _dbContext.SaveChanges();
+
+            return GetProdavce();
+        }
     }
 }

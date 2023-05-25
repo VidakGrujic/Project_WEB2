@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
 
-const Registration = ({handleAuth, handleTipKorisnika}) => {
+const Registration = ({handleAuth, handleTipKorisnika, handleStatusVerifikacije}) => {
     const [korisnickoIme, setKorisnickoIme] = useState('');
     const [email, setEmail] = useState('');
     const [lozinka, setLozinka] = useState('');
@@ -84,7 +84,9 @@ const Registration = ({handleAuth, handleTipKorisnika}) => {
                 sessionStorage.setItem('token', JSON.stringify(response.data.token))
                 sessionStorage.setItem('korisnik', JSON.stringify(response.data.korisnikDto));
                 const tipKorisnika = response.data.korisnikDto.tipKorisnika;
+                const statusVerifikacije = response.data.korisnikDto.statusVerifikacije;
                 handleTipKorisnika(tipKorisnika);
+                handleStatusVerifikacije(statusVerifikacije);
                 redirectTo(tipKorisnika);
 
             } catch (err) { 

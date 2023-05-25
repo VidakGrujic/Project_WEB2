@@ -18,5 +18,9 @@ namespace Projekat_WEB2_backend.Interfaces
         ResponseDto Registration(KorisnikDto registerKorisnik);
 
 
+        List<KorisnikDto> GetProdavce();
+        List<KorisnikDto> VerifyProdavce(long id, string statusVerifikacije);
+
+
     }
 }

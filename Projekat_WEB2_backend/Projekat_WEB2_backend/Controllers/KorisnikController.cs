@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Projekat_WEB2_backend.Dto;
 using Projekat_WEB2_backend.Interfaces;
@@ -14,10 +15,12 @@ namespace Projekat_WEB2_backend.Controllers
     public class KorisnikController : ControllerBase
     {
         private readonly IKorisnikService _korisnikService;
+        private readonly IEmailVerifyService _emailVerifyService;
 
-        public KorisnikController(IKorisnikService korisnikService)
+        public KorisnikController(IKorisnikService korisnikService, IEmailVerifyService emailVerifyService)
         {
             _korisnikService = korisnikService;
+            _emailVerifyService = emailVerifyService;
         }
 
         [HttpGet("getAll")]
@@ -46,7 +49,7 @@ namespace Projekat_WEB2_backend.Controllers
             {
                 return Unauthorized("Ne postoji korinsik");
             }
-            
+
             updatedKorisnik.Lozinka = korisnik.Lozinka;
             return Ok(updatedKorisnik);
         }
@@ -74,11 +77,36 @@ namespace Projekat_WEB2_backend.Controllers
         {
             ResponseDto responseDto = _korisnikService.Registration(registerKorisnikDto);
             if (responseDto == null)
-                return Unauthorized();
+                return NoContent();
 
             responseDto.KorisnikDto.Lozinka = registerKorisnikDto.Lozinka;
             return Ok(responseDto);
 
+        }
+
+
+        [HttpGet("getProdavce")]
+        [Authorize(Roles = "administrator")]
+        public IActionResult GetProdavce()
+        {
+            return Ok(_korisnikService.GetProdavce());
+        }
+
+
+        [HttpPut("verifyProdavca/{id}")]
+        [Authorize(Roles = "administrator")]
+        public IActionResult VerifyProdavca(long id, [FromBody] string statusVerifikacije)
+        {
+            List<KorisnikDto> verifiedProdavci = _korisnikService.VerifyProdavce(id, statusVerifikacije);
+            if(verifiedProdavci == null)
+            {
+                return null;
+            }
+
+            KorisnikDto prodavac = _korisnikService.GetKorisnikById(id);
+            _emailVerifyService.SendVerificationMail(prodavac.Email, statusVerifikacije);
+
+            return Ok(verifiedProdavci);
         }
 
     }

@@ -1,9 +1,9 @@
 import React from "react";
 
-const ProdavacDashboard = () => {
+const ProdavacDashboard = ({statusVerifikacije}) => {
     return (
         <>
-            prodavac Dashboard
+            {statusVerifikacije}
         </>
     );
 }

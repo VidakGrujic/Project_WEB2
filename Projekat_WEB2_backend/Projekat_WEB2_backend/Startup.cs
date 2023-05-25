@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Projekat_WEB2_backend.Infrastructure;
+using Projekat_WEB2_backend.Infrastructure.Configurations;
 using Projekat_WEB2_backend.Interfaces;
 using Projekat_WEB2_backend.Mapping;
 using Projekat_WEB2_backend.Services;
@@ -21,6 +22,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+
 
 namespace Projekat_WEB2_backend
 {
@@ -100,11 +102,18 @@ namespace Projekat_WEB2_backend
                 });
             });
 
+            var emailVerifyConfiguration = Configuration
+                 .GetSection("EmailVerifyConfiguration")
+                 .Get<EmailVerifyConfiguration>();
+            services.AddSingleton(emailVerifyConfiguration);
 
 
             services.AddScoped<IArtikalService, ArtikalService>();
             services.AddScoped<IKorisnikService, KorisnikService>();
             services.AddScoped<IPorudzbinaService, PorudzbinaService>();
+            services.AddScoped<IEmailVerifyService, EmailVerifyService>();
+            
+
 
             services.AddDbContext<ProdavnicaDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ProdavnicaDatabase")));
 

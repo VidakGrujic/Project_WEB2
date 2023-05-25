@@ -57,13 +57,19 @@ const Profil = () => {
                 statusVerifikacije
             });
 
+            const token = sessionStorage.getItem('token');
             try{
                 const respones = await axios.put(
                     `${process.env.REACT_APP_API_BACK}${UPDATE_URL}`,
                     updatedKorisnikJSON,
                     {
-                        headers: {'Content-Type' : 'application/json'},
+                        headers: 
+                        {
+                            'Content-Type' : 'application/json',
+                            'Authorization' : token
+                        },
                         withCredentials: true
+                        
                     }
                 );
                 
