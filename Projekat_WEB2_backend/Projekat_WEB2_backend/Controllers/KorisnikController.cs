@@ -47,7 +47,7 @@ namespace Projekat_WEB2_backend.Controllers
             KorisnikDto updatedKorisnik = _korisnikService.UpdateKorisnik(id, korisnik);
             if (updatedKorisnik == null)
             {
-                return Unauthorized("Ne postoji korinsik");
+                return BadRequest("Postoje neka prazna polja(mozda korisnik ne postoji)");
             }
 
             updatedKorisnik.Lozinka = korisnik.Lozinka;
@@ -65,8 +65,10 @@ namespace Projekat_WEB2_backend.Controllers
         public IActionResult Login([FromBody] LoginKorisnikDto loginKorisnikDto)
         {
             ResponseDto responseDto = _korisnikService.Login(loginKorisnikDto);
-            if (responseDto == null)
-                return Unauthorized("Ili nisu uneti dobri podaci ili korisnik ne postoji u sistemu");
+            if(responseDto.KorisnikDto == null)
+            {
+                return BadRequest(responseDto.Result);
+            }
 
             responseDto.KorisnikDto.Lozinka = loginKorisnikDto.Lozinka;
             return Ok(responseDto);
@@ -76,8 +78,8 @@ namespace Projekat_WEB2_backend.Controllers
         public IActionResult Registration([FromBody] KorisnikDto registerKorisnikDto)
         {
             ResponseDto responseDto = _korisnikService.Registration(registerKorisnikDto);
-            if (responseDto == null)
-                return NoContent();
+            if (responseDto.KorisnikDto == null)
+                return BadRequest(responseDto.Result);
 
             responseDto.KorisnikDto.Lozinka = registerKorisnikDto.Lozinka;
             return Ok(responseDto);
@@ -100,7 +102,7 @@ namespace Projekat_WEB2_backend.Controllers
             List<KorisnikDto> verifiedProdavci = _korisnikService.VerifyProdavce(id, statusVerifikacije);
             if(verifiedProdavci == null)
             {
-                return null;
+                return BadRequest("Ne postoji prodavac");
             }
 
             KorisnikDto prodavac = _korisnikService.GetKorisnikById(id);

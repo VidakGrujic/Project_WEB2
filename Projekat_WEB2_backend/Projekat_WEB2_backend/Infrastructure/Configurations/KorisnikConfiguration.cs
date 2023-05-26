@@ -18,6 +18,13 @@ namespace Projekat_WEB2_backend.Infrastructure.Configurations
             builder.Property(x => x.Ime).HasMaxLength(30);
             builder.Property(x => x.Prezime).HasMaxLength(30);
             builder.HasIndex(x => x.Email).IsUnique();
+
+
+
+
+
+
+
         }
     }
 }

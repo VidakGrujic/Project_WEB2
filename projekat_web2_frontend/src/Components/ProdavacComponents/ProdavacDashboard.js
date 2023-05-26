@@ -14,7 +14,7 @@ const ProdavacDashboard = ({statusVerifikacije}) => {
                     </h1>
                 </>
             }
-            {statusVerifikacije === 'Odbijen' && 
+            {statusVerifikacije === 'Odbijen' &&
                 <>
                    <h1 className="ui red center aligned icon header">
                         <i className="x icon"></i>

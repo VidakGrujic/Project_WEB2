@@ -9,7 +9,6 @@ namespace Projekat_WEB2_backend.Helper_Classes
 {
     public class ArtikalHelperClass
     {
-
         public static void UpdateArtikalFiels(Artikal artikal, ArtikalDto artikalDto)
         {
             artikal.Naziv = artikalDto.Naziv;
@@ -18,5 +17,7 @@ namespace Projekat_WEB2_backend.Helper_Classes
             artikal.Opis = artikalDto.Opis;
             artikal.Fotografija = artikalDto.Fotografija;
         }
+    
+       
     }
 }

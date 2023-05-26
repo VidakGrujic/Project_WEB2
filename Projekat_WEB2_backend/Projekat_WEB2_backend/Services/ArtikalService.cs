@@ -22,11 +22,13 @@ namespace Projekat_WEB2_backend.Services
             _dbContext = dbContext;
         }
 
-
+        
         public ArtikalDto AddArtikal(ArtikalDto newArtikalDto)
         {
             Artikal newArtikal = _mapper.Map<Artikal>(newArtikalDto);
+            newArtikal.Prodavac = _dbContext.Korisnici.Find(newArtikalDto.ProdavacId);
             _dbContext.Artikli.Add(newArtikal);
+
             _dbContext.SaveChanges();
 
             return _mapper.Map<ArtikalDto>(newArtikal);

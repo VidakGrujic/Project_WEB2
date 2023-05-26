@@ -54,12 +54,14 @@ const Login = ({handleAuth, handleTipKorisnika, handleStatusVerifikacije}) => {
             const tipKorisnika = response.data.korisnikDto.tipKorisnika; // propertiji su mala slova
             const statusVerifikacije = response.data.korisnikDto.statusVerifikacije;
             handleTipKorisnika(tipKorisnika);
-            handleStatusVerifikacije(statusVerifikacije);
+            handleStatusVerifikacije(statusVerifikacije)
+            alert("Uspesno ste se logovali");
             redirectTo(tipKorisnika);
             
         }
-        catch(err){
-            alert("Nesto se desilo");
+        catch(err){ 
+            const result = err.response.data;
+            alert(result);
             handleAuth(false);
             setInputsToEmpty();
         }

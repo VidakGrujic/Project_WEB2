@@ -24,5 +24,7 @@ namespace Projekat_WEB2_backend.Models
         public string Slika { get; set; }
         public StatusVerifikacije StatusVerifikacije { get; set; }
         public List<Porudzbina> Porudzbine { get; set; }
+
+        public List<Artikal> ProdavceviArtikli { get; set; }
     }
 }

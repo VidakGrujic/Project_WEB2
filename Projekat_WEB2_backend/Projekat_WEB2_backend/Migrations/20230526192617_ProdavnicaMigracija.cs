@@ -3,27 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Projekat_WEB2_backend.Migrations
 {
-    public partial class ProdavnicaMigration : Migration
+    public partial class ProdavnicaMigracija : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Artikli",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", maxLength: 50, nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Naziv = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Cena = table.Column<double>(type: "float", nullable: false),
-                    Kolicina = table.Column<int>(type: "int", nullable: false),
-                    Opis = table.Column<string>(type: "nvarchar(max)", maxLength: 5000, nullable: true),
-                    Fotografija = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Artikli", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "Korisnici",
                 columns: table => new
@@ -47,6 +30,30 @@ namespace Projekat_WEB2_backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Artikli",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", maxLength: 50, nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Naziv = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Cena = table.Column<double>(type: "float", nullable: false),
+                    Kolicina = table.Column<int>(type: "int", nullable: false),
+                    Opis = table.Column<string>(type: "nvarchar(max)", maxLength: 5000, nullable: true),
+                    Fotografija = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ProdavacId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Artikli", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Artikli_Korisnici_ProdavacId",
+                        column: x => x.ProdavacId,
+                        principalTable: "Korisnici",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Porudzbine",
                 columns: table => new
                 {
@@ -54,6 +61,8 @@ namespace Projekat_WEB2_backend.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Komentar = table.Column<string>(type: "nvarchar(max)", maxLength: 5000, nullable: true),
                     Adresa = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DatumDostave = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DatumKreiranja = table.Column<DateTime>(type: "datetime2", nullable: false),
                     StanjePorudzbine = table.Column<int>(type: "int", nullable: false),
                     KorisnikId = table.Column<long>(type: "bigint", nullable: false)
                 },
@@ -68,34 +77,10 @@ namespace Projekat_WEB2_backend.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "ArtikalPorudzbina",
-                columns: table => new
-                {
-                    ArtikliId = table.Column<long>(type: "bigint", nullable: false),
-                    PorudzbineId = table.Column<long>(type: "bigint", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ArtikalPorudzbina", x => new { x.ArtikliId, x.PorudzbineId });
-                    table.ForeignKey(
-                        name: "FK_ArtikalPorudzbina_Artikli_ArtikliId",
-                        column: x => x.ArtikliId,
-                        principalTable: "Artikli",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ArtikalPorudzbina_Porudzbine_PorudzbineId",
-                        column: x => x.PorudzbineId,
-                        principalTable: "Porudzbine",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.CreateIndex(
-                name: "IX_ArtikalPorudzbina_PorudzbineId",
-                table: "ArtikalPorudzbina",
-                column: "PorudzbineId");
+                name: "IX_Artikli_ProdavacId",
+                table: "Artikli",
+                column: "ProdavacId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Korisnici_Email",
@@ -112,9 +97,6 @@ namespace Projekat_WEB2_backend.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "ArtikalPorudzbina");
-
             migrationBuilder.DropTable(
                 name: "Artikli");
 

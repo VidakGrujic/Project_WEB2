@@ -13,7 +13,8 @@ const ProdavacDodajArtikal = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        console.log(naziv, cena, kolicina, opis)
+        console.log(naziv, cena, kolicina, opis);
+        
     }
 
     return (

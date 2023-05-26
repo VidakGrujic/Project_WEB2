@@ -62,11 +62,19 @@ namespace Projekat_WEB2_backend.Services
 
         public KorisnikDto UpdateKorisnik(long id, KorisnikDto updateKorisnikDto)
         {
-            Korisnik updateKorisnik = _dbContext.Korisnici.Find(id);
-            if(updateKorisnik == null)
+
+            Korisnik updateKorisnik = new Korisnik();
+
+            try
+            {
+                updateKorisnik = _dbContext.Korisnici.Find(id);
+            }
+            catch(Exception e)
             {
                 return null;
             }
+            if (!KorisnikHelperClass.IsKorisnikFieldsValid(updateKorisnikDto))
+                return null;
 
             updateKorisnik.Lozinka = KorisnikHelperClass.HashPassword(updateKorisnikDto.Lozinka);
             KorisnikHelperClass.UpdateKorisnikFields(updateKorisnik, updateKorisnikDto);
@@ -77,17 +85,23 @@ namespace Projekat_WEB2_backend.Services
 
         public ResponseDto Login(LoginKorisnikDto loginKorisnikDto)
         {
-            
+
+            Korisnik loginKorisnik = new Korisnik();
             if (string.IsNullOrEmpty(loginKorisnikDto.Email) && string.IsNullOrEmpty(loginKorisnikDto.Lozinka))
-                return null;
-
-            Korisnik loginKorisnik = _dbContext.Korisnici.First(x => x.Email == loginKorisnikDto.Email);
-
-            if (loginKorisnik == null)
             {
-                return null;
+                return new ResponseDto("Niste uneli email ili lozinku.");
             }
-
+            
+            try
+            {
+                loginKorisnik = _dbContext.Korisnici.First(x => x.Email == loginKorisnikDto.Email);
+            }
+            catch (Exception e)
+            {
+                return new ResponseDto($"Korisnik sa emailom {loginKorisnikDto.Email} ne postoji");
+            }
+            
+ 
             if (BCrypt.Net.BCrypt.Verify(loginKorisnikDto.Lozinka, loginKorisnik.Lozinka))
             {
                 List<Claim> claims = new List<Claim>();
@@ -111,42 +125,34 @@ namespace Projekat_WEB2_backend.Services
                 string token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
                 KorisnikDto korisnikDto = _mapper.Map<KorisnikDto>(loginKorisnik);
 
-                ResponseDto responseDto = new ResponseDto(token, korisnikDto);
-
+                ResponseDto responseDto = new ResponseDto(token, korisnikDto, "Uspesno ste se logovali na sistem");
                 return responseDto;
             }
             else
             {
-                return null;
+                return new ResponseDto("Lozinka nije ispravno uneta");
             }
-
-
         }
-
-
-        //kod registracije, mora se proveriti i uloga korisnika
-        //ako je kupac ili administrator, status verifikacije je odmah prihvacen
-        //ako je prodavac, onda se stavi na status obrade
 
         public ResponseDto Registration(KorisnikDto registerKorisnik)
         {
             if (string.IsNullOrEmpty(registerKorisnik.Email)) //ako nije unet email, baci gresku
-                return null;
+                return new ResponseDto("Niste uneli email");
 
             foreach(Korisnik k in _dbContext.Korisnici)
             {
                 if (k.Email == registerKorisnik.Email)
-                    return null;
+                    return new ResponseDto("Email vec postoji");
             }
 
             if(registerKorisnik.TipKorisnika == TipKorisnika.Prodavac)
             {
                 registerKorisnik.StatusVerifikacije = StatusVerifikacije.Procesuira_se;
             }
-          
+
 
             if (!KorisnikHelperClass.IsKorisnikFieldsValid(registerKorisnik)) //ako nisu validna polja onda nista
-                return null;
+                return new ResponseDto("Ostala polja moraju biti validna");
 
             KorisnikDto registeredKorisnik = AddKorisnik(registerKorisnik);
 
@@ -172,11 +178,8 @@ namespace Projekat_WEB2_backend.Services
                 );
             string token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
 
-            ResponseDto responseDto = new ResponseDto(token, registeredKorisnik);
+            ResponseDto responseDto = new ResponseDto(token, registeredKorisnik, "Uspesno ste se registrovali");
             return responseDto;
-
-
-
         }
 
         public List<KorisnikDto> GetProdavce()

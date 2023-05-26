@@ -79,18 +79,20 @@ const Registration = ({handleAuth, handleTipKorisnika, handleStatusVerifikacije}
                         withCredentials: true
                     }
                 );
-                handleAuth(true);
 
+                handleAuth(true);
                 sessionStorage.setItem('token', JSON.stringify(response.data.token))
                 sessionStorage.setItem('korisnik', JSON.stringify(response.data.korisnikDto));
                 const tipKorisnika = response.data.korisnikDto.tipKorisnika;
                 const statusVerifikacije = response.data.korisnikDto.statusVerifikacije;
                 handleTipKorisnika(tipKorisnika);
                 handleStatusVerifikacije(statusVerifikacije);
+                alert("Uspesno ste se registrovali");
                 redirectTo(tipKorisnika);
 
             } catch (err) { 
-                alert("Nesto se desilo prilikom registracije");
+                const result = err.response.data;
+                alert(result);
                 setInputsToEmpty();
                 handleAuth(false);
             }

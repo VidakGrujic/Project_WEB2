@@ -10,8 +10,8 @@ using Projekat_WEB2_backend.Infrastructure;
 namespace Projekat_WEB2_backend.Migrations
 {
     [DbContext(typeof(ProdavnicaDbContext))]
-    [Migration("20230512193327_ProdavnicaMigration")]
-    partial class ProdavnicaMigration
+    [Migration("20230526192617_ProdavnicaMigracija")]
+    partial class ProdavnicaMigracija
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,21 +20,6 @@ namespace Projekat_WEB2_backend.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.14")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("ArtikalPorudzbina", b =>
-                {
-                    b.Property<long>("ArtikliId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("PorudzbineId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("ArtikliId", "PorudzbineId");
-
-                    b.HasIndex("PorudzbineId");
-
-                    b.ToTable("ArtikalPorudzbina");
-                });
 
             modelBuilder.Entity("Projekat_WEB2_backend.Models.Artikal", b =>
                 {
@@ -60,7 +45,12 @@ namespace Projekat_WEB2_backend.Migrations
                         .HasMaxLength(5000)
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<long>("ProdavacId")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ProdavacId");
 
                     b.ToTable("Artikli");
                 });
@@ -124,6 +114,12 @@ namespace Projekat_WEB2_backend.Migrations
                     b.Property<string>("Adresa")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("DatumDostave")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DatumKreiranja")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Komentar")
                         .HasMaxLength(5000)
                         .HasColumnType("nvarchar(max)");
@@ -141,19 +137,15 @@ namespace Projekat_WEB2_backend.Migrations
                     b.ToTable("Porudzbine");
                 });
 
-            modelBuilder.Entity("ArtikalPorudzbina", b =>
+            modelBuilder.Entity("Projekat_WEB2_backend.Models.Artikal", b =>
                 {
-                    b.HasOne("Projekat_WEB2_backend.Models.Artikal", null)
-                        .WithMany()
-                        .HasForeignKey("ArtikliId")
+                    b.HasOne("Projekat_WEB2_backend.Models.Korisnik", "Prodavac")
+                        .WithMany("ProdavceviArtikli")
+                        .HasForeignKey("ProdavacId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Projekat_WEB2_backend.Models.Porudzbina", null)
-                        .WithMany()
-                        .HasForeignKey("PorudzbineId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Prodavac");
                 });
 
             modelBuilder.Entity("Projekat_WEB2_backend.Models.Porudzbina", b =>
@@ -170,6 +162,8 @@ namespace Projekat_WEB2_backend.Migrations
             modelBuilder.Entity("Projekat_WEB2_backend.Models.Korisnik", b =>
                 {
                     b.Navigation("Porudzbine");
+
+                    b.Navigation("ProdavceviArtikli");
                 });
 #pragma warning restore 612, 618
         }

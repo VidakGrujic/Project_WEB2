@@ -17,6 +17,10 @@ namespace Projekat_WEB2_backend.Infrastructure.Configurations
             builder.Property(x => x.Id).HasMaxLength(50);
             builder.Property(x => x.Opis).HasMaxLength(5000);
 
+            builder.HasOne(x => x.Prodavac)
+                   .WithMany(x => x.ProdavceviArtikli)
+                   .HasForeignKey(x => x.ProdavacId)
+                   .OnDelete(DeleteBehavior.Cascade);
           
         }
     }

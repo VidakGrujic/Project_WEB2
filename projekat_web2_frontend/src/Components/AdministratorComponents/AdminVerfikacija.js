@@ -82,9 +82,11 @@ const AdminVerifikacija = () => {
                 }
             );
             setProdavci(data);
+            alert(`Uspesno ste ${buttonType} prodavca.`)
 
         } catch(err){
-            alert('Nesto se desilo prilikom verifikacije')
+            const result = err.response.data;
+            alert(result);
         }
 
 

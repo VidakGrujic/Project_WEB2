@@ -73,13 +73,15 @@ const Profil = () => {
                     }
                 );
                 
-                sessionStorage.setItem('korisnik', JSON.stringify(respones.data));
+                sessionStorage.setItem('korisnik', updatedKorisnikJSON);
                 alert("Uspesno ste izmenili podatke")
                 redirectTo(tipKorisnika); 
 
             }
             catch (err){
-                alert("Nesto se desilo prilikom izmene profila");
+                const result = err.response.data;
+                alert(result);
+                
             }
     }
     

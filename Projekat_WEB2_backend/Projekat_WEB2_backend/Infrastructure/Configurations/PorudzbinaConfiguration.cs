@@ -21,9 +21,7 @@ namespace Projekat_WEB2_backend.Infrastructure.Configurations
                    .HasForeignKey(x => x.KorisnikId)
                    .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasMany(x => x.Artikli)
-                   .WithMany(x => x.Porudzbine);
-
+            
 
         }
     }
