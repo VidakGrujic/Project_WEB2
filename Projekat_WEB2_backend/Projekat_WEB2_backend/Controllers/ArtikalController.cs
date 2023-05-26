@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Projekat_WEB2_backend.Dto;
 using Projekat_WEB2_backend.Interfaces;
@@ -32,10 +33,16 @@ namespace Projekat_WEB2_backend.Controllers
             return Ok(_artikalService.GetArtikalById(id));
         }
 
-        [HttpPost]
+        [HttpPost("addArtikal")]
+        //[Authorize(Roles = "prodavac")]
         public IActionResult CreateArtikal([FromBody] ArtikalDto artikal)
         {
-            return Ok(_artikalService.AddArtikal(artikal));
+            ArtikalDto newArtikalDto = _artikalService.AddArtikal(artikal);
+            if(newArtikalDto == null)
+            {
+                return BadRequest("Polja nisu dobro popunjena ili prodavac ne postoji");
+            }
+            return Ok(newArtikalDto);
         }
 
         [HttpPut("{id}")]

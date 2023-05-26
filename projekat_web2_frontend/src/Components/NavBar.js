@@ -25,11 +25,10 @@ const NavBar = ({isAuth, tipKorisnika, statusVerifikacije}) => {
 
             {/*logovani korisnik koji je prodavac, dodati proveru za role, dodati da li je korisnik verifikovan*/}
             {isAuth && tipKorisnika === 'Prodavac' ? <NavLink className={({isActive}) => active(isActive)} to="/prodavacDashboard">Prodavac dashboard</NavLink> : null}
-            {/*isAuth && tipKorisnika === 'Prodavac' && statusVerifikacije === 'Prihvacen' ? <NavLink className={({isActive}) => active(isActive)} to="/prodavacDodajArtikal">Prodavac dodaj artikal</NavLink> : null*/}
+            {isAuth && tipKorisnika === 'Prodavac' && statusVerifikacije === 'Prihvacen' ? <NavLink className={({isActive}) => active(isActive)} to="/prodavacDodajArtikal">Prodavac dodaj artikal</NavLink> : null}
             {isAuth && tipKorisnika === 'Prodavac' && statusVerifikacije === 'Prihvacen' ? <NavLink className={({isActive}) => active(isActive)} to="/prodavacNovePorudzbine">Prodavac nove porudzbine</NavLink> : null}
             {isAuth && tipKorisnika === 'Prodavac' && statusVerifikacije === 'Prihvacen' ? <NavLink className={({isActive}) => active(isActive)} to="/prodavacMojePorudzbine">Prodavac moje porudzbine</NavLink> : null}
-            <NavLink className={({isActive}) => active(isActive)} to="/prodavacDodajArtikal">Prodavac dodaj artikal</NavLink>
-
+           
 
             {/*logovani korisnik koji je admin, dodati proveru za role*/}
             {isAuth && tipKorisnika === 'Administrator' ? <NavLink className={({isActive}) => active(isActive)} to="/adminDashboard">Admin dashboard</NavLink> : null}

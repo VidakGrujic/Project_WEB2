@@ -25,6 +25,11 @@ namespace Projekat_WEB2_backend.Services
         
         public ArtikalDto AddArtikal(ArtikalDto newArtikalDto)
         {
+            if (!ArtikalHelperClass.IsArtikalFieldsValid(newArtikalDto))
+                return null;
+            if (_dbContext.Korisnici.Find(newArtikalDto.ProdavacId) == null)
+                return null;
+
             Artikal newArtikal = _mapper.Map<Artikal>(newArtikalDto);
             newArtikal.Prodavac = _dbContext.Korisnici.Find(newArtikalDto.ProdavacId);
             _dbContext.Artikli.Add(newArtikal);

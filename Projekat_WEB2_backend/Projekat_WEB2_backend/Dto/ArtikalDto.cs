@@ -14,7 +14,7 @@ namespace Projekat_WEB2_backend.Dto
         public int Kolicina { get; set; }
         public string Opis { get; set; }
         public string Fotografija { get; set; }
-        public string ProdavacId { get; set; }
+        public long ProdavacId { get; set; }
         
     }
 }

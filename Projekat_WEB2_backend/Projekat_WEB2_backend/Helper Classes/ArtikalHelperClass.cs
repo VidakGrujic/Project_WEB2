@@ -18,6 +18,24 @@ namespace Projekat_WEB2_backend.Helper_Classes
             artikal.Fotografija = artikalDto.Fotografija;
         }
     
-       
+        public static bool IsArtikalFieldsValid(ArtikalDto artikalDto)
+        {
+            if (string.IsNullOrEmpty(artikalDto.Naziv))
+                return false;
+            if (string.IsNullOrEmpty(artikalDto.Opis))
+                return false;
+            if (artikalDto.Cena == 0)
+                return false;
+            if (artikalDto.Kolicina == 0)
+                return false;
+            if (artikalDto.ProdavacId == 0)
+                return false;
+            if (string.IsNullOrEmpty(artikalDto.Fotografija))
+                return false;
+
+
+            return true;
+
+        }
     }
 }
