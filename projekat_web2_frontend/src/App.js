@@ -40,7 +40,7 @@ function App() {
     {path: '/login', element: <Login handleAuth={handleAuth} handleTipKorisnika={handleTipKorisnika} handleStatusVerifikacije={handleStatusVerifikacije}></Login>},
     {path: '/registration', element: <Registration handleAuth={handleAuth} handleTipKorisnika={handleTipKorisnika} handleStatusVerifikacije={handleStatusVerifikacije}></Registration>},
     {path: '/kupacDashboard', element: <KupacDashboard></KupacDashboard>},
-    {path: '//kupacPoruci' , element: <KupacPoruci></KupacPoruci>},
+    {path: '/kupacDashboard/kupacPoruci' , element: <KupacPoruci></KupacPoruci>},
     {path: '/kupacPrethodnePorudzbine', element: <KupacPrethodnePorudzbine></KupacPrethodnePorudzbine>},
     {path: '/prodavacDashboard', element: <ProdavacDashboard statusVerifikacije={statusVerifikacije}></ProdavacDashboard>},
     {path: '/prodavacDodajArtikal', element: <ProdavacDodajArtikal></ProdavacDodajArtikal>},

@@ -38,3 +38,7 @@
 .textarea-resize {
   resize: none !important;
 }
+
+.poruci-btn{
+  padding-bottom: 10%;
+}
