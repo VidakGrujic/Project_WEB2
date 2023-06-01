@@ -15,6 +15,7 @@ import AdminDashboard from './Components/AdministratorComponents/AdminDashboard'
 import AdminSvePorudzbine from './Components/AdministratorComponents/AdminSvePorudzbine';
 import AdminVerifikacija from './Components/AdministratorComponents/AdminVerfikacija';
 import Profil from './Components/ProfileComponents/Profil';
+import KupacPoruci from './Components/KupacComponents/KupacPoruci';
 function App() {
 
   //da li je korisnik autentifikovan, on je atuentifikovan i posle registracije i posle logovanje
@@ -39,6 +40,7 @@ function App() {
     {path: '/login', element: <Login handleAuth={handleAuth} handleTipKorisnika={handleTipKorisnika} handleStatusVerifikacije={handleStatusVerifikacije}></Login>},
     {path: '/registration', element: <Registration handleAuth={handleAuth} handleTipKorisnika={handleTipKorisnika} handleStatusVerifikacije={handleStatusVerifikacije}></Registration>},
     {path: '/kupacDashboard', element: <KupacDashboard></KupacDashboard>},
+    {path: '//kupacPoruci' , element: <KupacPoruci></KupacPoruci>},
     {path: '/kupacPrethodnePorudzbine', element: <KupacPrethodnePorudzbine></KupacPrethodnePorudzbine>},
     {path: '/prodavacDashboard', element: <ProdavacDashboard statusVerifikacije={statusVerifikacije}></ProdavacDashboard>},
     {path: '/prodavacDodajArtikal', element: <ProdavacDodajArtikal></ProdavacDodajArtikal>},

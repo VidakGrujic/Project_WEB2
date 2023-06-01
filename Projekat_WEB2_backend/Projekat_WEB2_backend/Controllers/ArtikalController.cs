@@ -22,6 +22,7 @@ namespace Projekat_WEB2_backend.Controllers
         }
 
         [HttpGet("getAll")]
+        //[Authorize(Roles = "kupac")]
         public IActionResult GetAllArtikals()
         {
             return Ok(_artikalService.GetAllArtikals());
@@ -34,7 +35,7 @@ namespace Projekat_WEB2_backend.Controllers
         }
 
         [HttpPost("addArtikal")]
-        //[Authorize(Roles = "prodavac")]
+        [Authorize(Roles = "prodavac")]
         public IActionResult CreateArtikal([FromBody] ArtikalDto artikal)
         {
             ArtikalDto newArtikalDto = _artikalService.AddArtikal(artikal);

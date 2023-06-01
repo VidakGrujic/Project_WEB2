@@ -22,7 +22,6 @@ const ProdavacDodajArtikal = () => {
         setCena(0);
         setKolicina(0);
         setOpis('');
-        setFotografija('');
     }
 
 
@@ -130,7 +129,7 @@ const ProdavacDodajArtikal = () => {
                     /> 
                     {error && opis.length === 0 ? <div className="ui pointing red basic label">Morate opis artikla</div> : null}
                 </div>
-                <button className="ui blue button" type="submit">Submit</button>
+                <button className="ui blue button" type="submit">Dodajte artikal</button>
             </form>
         </div>
     );

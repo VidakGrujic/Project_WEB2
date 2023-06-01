@@ -8,7 +8,7 @@ namespace Projekat_WEB2_backend.Dto
 {
     public class ArtikalDto
     {
-        public long Id;
+        public long Id { get; set; }
         public string Naziv { get; set; }
         public double Cena { get; set; }
         public int Kolicina { get; set; }

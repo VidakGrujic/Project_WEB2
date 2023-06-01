@@ -20,8 +20,10 @@ const NavBar = ({isAuth, tipKorisnika, statusVerifikacije}) => {
             {isAuth ? null : <NavLink className={({isActive}) => active(isActive)} to="/registration">Registration</NavLink> }
             
             {/* logovani korisnik koji je kupac, dodati proveru za role*/}
-            {isAuth && tipKorisnika === 'Kupac' ? <NavLink className={({isActive}) => active(isActive)} to="/kupacDashboard">Kupac Dashboard</NavLink> : null}
+            {/*isAuth && tipKorisnika === 'Kupac' ? <NavLink className={({isActive}) => active(isActive)} to="/kupacDashboard">Kupac Dashboard</NavLink> : null*/}
+            {isAuth && tipKorisnika === 'Kupac' ? <NavLink className={({isActive}) => active(isActive)} to="/kupacPoruci"></NavLink> : null}
             {isAuth && tipKorisnika === 'Kupac' ?  <NavLink className={({isActive}) => active(isActive)} to="/kupacPrethodnePorudzbine">Kupac prethodne porudzbine</NavLink> : null}
+            <NavLink className={({isActive}) => active(isActive)} to="/kupacDashboard">Kupac Dashboard</NavLink>
 
             {/*logovani korisnik koji je prodavac, dodati proveru za role, dodati da li je korisnik verifikovan*/}
             {isAuth && tipKorisnika === 'Prodavac' ? <NavLink className={({isActive}) => active(isActive)} to="/prodavacDashboard">Prodavac dashboard</NavLink> : null}

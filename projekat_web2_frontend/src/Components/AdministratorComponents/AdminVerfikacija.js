@@ -60,8 +60,6 @@ const AdminVerifikacija = () => {
     }
 
 
-
- 
     const handleClick = async (e) => {
       
         const prodavacId = Number(e.target.id);
@@ -88,12 +86,7 @@ const AdminVerifikacija = () => {
             const result = err.response.data;
             alert(result);
         }
-
-
     }
-
-
-
 
     return (
         <div className="verification-container">
