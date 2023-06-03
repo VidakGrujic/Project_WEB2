@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "../../api/axios";
 import { useNavigate } from "react-router-dom";
 
-const Login = ({handleAuth, handleTipKorisnika, handleStatusVerifikacije}) => {
+const Login = ({handleKorisnikInfo}) => {
     const LOGIN_URL = '/users/login';
 
     const[email, setEmail] = useState('');
@@ -11,12 +11,13 @@ const Login = ({handleAuth, handleTipKorisnika, handleStatusVerifikacije}) => {
 
     const navigate = useNavigate();
 
-    
 
     const setInputsToEmpty = () => {
         setEmail('');
         setLozinka(''); 
     }
+
+
 
     const redirectTo = (tipKorisnika) => {
         if(tipKorisnika === 'Administrator'){
@@ -47,14 +48,12 @@ const Login = ({handleAuth, handleTipKorisnika, handleStatusVerifikacije}) => {
                 }
             );
             console.log(response.data);
-            handleAuth(true);
-            
+
+            sessionStorage.setItem('isAuth', JSON.stringify(true));
             sessionStorage.setItem('token', response.data.token)
             sessionStorage.setItem('korisnik', JSON.stringify(response.data.korisnikDto));
             const tipKorisnika = response.data.korisnikDto.tipKorisnika; // propertiji su mala slova
-            const statusVerifikacije = response.data.korisnikDto.statusVerifikacije;
-            handleTipKorisnika(tipKorisnika);
-            handleStatusVerifikacije(statusVerifikacije)
+            handleKorisnikInfo(true); //prvo se postave podaci pa se re reneruje
             alert("Uspesno ste se logovali");
             redirectTo(tipKorisnika);
             
@@ -62,7 +61,8 @@ const Login = ({handleAuth, handleTipKorisnika, handleStatusVerifikacije}) => {
         catch(err){ 
             const result = err.response;
             alert(result);
-            handleAuth(false);
+            sessionStorage.setItem('isAuth', false);
+            handleKorisnikInfo(false); //prvo se postave podaci pa se re reneruje
             setInputsToEmpty();
         }
 

@@ -3,6 +3,9 @@ import { NavLink } from "react-router-dom";
 
 const NavBar = ({isAuth, tipKorisnika, statusVerifikacije}) => {
 
+   
+   
+
     const active = (isActive) =>{
         if(isActive)
             return "item active"

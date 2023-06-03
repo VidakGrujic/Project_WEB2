@@ -2,9 +2,7 @@ import React from "react";
 
 const KupacPrethodnePorudzbine = () => {
     return (
-        <>
-            Kupac prethodne porudzbine;
-        </>
+        <div>s</div>
     )
 }
 

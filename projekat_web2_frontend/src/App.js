@@ -4,7 +4,7 @@ import Login from './Components/AuthAndAutorizationComponents/Login';
 import Registration from './Components/AuthAndAutorizationComponents/Registration';
 import Home from './Components/Home';
 import { Route, Routes } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import KupacDashboard from './Components/KupacComponents/KupacDashboard';
 import KupacPrethodnePorudzbine from './Components/KupacComponents/KupacPrethodnePorudzbine';
 import ProdavacDashboard from './Components/ProdavacComponents/ProdavacDashboard';
@@ -22,27 +22,33 @@ function App() {
   const [isAuth, setIsAuth] = useState(false);
   const [tipKorisnika, setTipKorisnika] = useState('');
   const [statusVerifikacije, setStatusVerifikacije] = useState('');
+  const [isKorisnikInfoGot, setIsKorisnikInfoGot] = useState(false);  //ovo govori da li smo dobili podatke o korisniku
 
-  const handleAuth = (autentifikovan) => {
-    setIsAuth(autentifikovan);
-  }
-
-  const handleTipKorisnika = (tipKorisnika) => {
-    setTipKorisnika(tipKorisnika);
-  }
-
-  const handleStatusVerifikacije = (statusVerifikacije) => {
-    setStatusVerifikacije(statusVerifikacije);
+  useEffect(() => {
+    const getAuth = () => {
+        if(sessionStorage.getItem('korisnik') !== null && sessionStorage.getItem('isAuth') !== null){
+            setIsAuth(JSON.parse(sessionStorage.getItem('isAuth')))
+            const korisnik = JSON.parse(sessionStorage.getItem('korisnik'))
+            setTipKorisnika(korisnik.tipKorisnika);
+            setStatusVerifikacije(korisnik.statusVerifikacije);
+        }
+    }
+    getAuth();
+  }, [isKorisnikInfoGot]); //kada dobijemo ove podatke, ova funkcija ce se rerenderovati i onda ce se azurirati stanja
+                            //na taj nacin izqazvacemo ponovno azuriranje stranice i onda navbara, nadam se da je tako
+  
+  const handleKorisnikInfo = (gotKorisnikInfo) => {
+    setIsKorisnikInfoGot(gotKorisnikInfo);
   }
 
   const routes = [
     {path: '/', element: <Home></Home>},
-    {path: '/login', element: <Login handleAuth={handleAuth} handleTipKorisnika={handleTipKorisnika} handleStatusVerifikacije={handleStatusVerifikacije}></Login>},
-    {path: '/registration', element: <Registration handleAuth={handleAuth} handleTipKorisnika={handleTipKorisnika} handleStatusVerifikacije={handleStatusVerifikacije}></Registration>},
+    {path: '/login', element: <Login handleKorisnikInfo={handleKorisnikInfo}></Login>},
+    {path: '/registration', element: <Registration handleKorisnikInfo={handleKorisnikInfo}></Registration>},
     {path: '/kupacDashboard', element: <KupacDashboard></KupacDashboard>},
     {path: '/kupacDashboard/kupacPoruci' , element: <KupacPoruci></KupacPoruci>},
     {path: '/kupacPrethodnePorudzbine', element: <KupacPrethodnePorudzbine></KupacPrethodnePorudzbine>},
-    {path: '/prodavacDashboard', element: <ProdavacDashboard statusVerifikacije={statusVerifikacije}></ProdavacDashboard>},
+    {path: '/prodavacDashboard', element: <ProdavacDashboard></ProdavacDashboard>},
     {path: '/prodavacDodajArtikal', element: <ProdavacDodajArtikal></ProdavacDodajArtikal>},
     {path: '/prodavacNovePorudzbine', element: <ProdavacNovePorudzbine></ProdavacNovePorudzbine>},
     {path: '/prodavacMojePorudzbine', element: <ProdavacMojePorudzbine></ProdavacMojePorudzbine>},
@@ -54,7 +60,7 @@ function App() {
 
   return (
     <div className='App'>
-      <NavBar isAuth={isAuth} tipKorisnika={tipKorisnika} statusVerifikacije={statusVerifikacije}/>
+      <NavBar isAuth={isAuth} tipKorisnika = {tipKorisnika} statusVerifikacije={statusVerifikacije}/>
       <div className='container'>
         <Routes>
           {

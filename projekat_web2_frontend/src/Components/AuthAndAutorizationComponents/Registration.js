@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
 
-const Registration = ({handleAuth, handleTipKorisnika, handleStatusVerifikacije}) => {
+const Registration = ({handleKorisnikInfo}) => {
     const [korisnickoIme, setKorisnickoIme] = useState('');
     const [email, setEmail] = useState('');
     const [lozinka, setLozinka] = useState('');
@@ -84,13 +84,10 @@ const Registration = ({handleAuth, handleTipKorisnika, handleStatusVerifikacije}
                     }
                 );
 
-                handleAuth(true);
+                sessionStorage.setItem('isAuth', JSON.stringify(true));
                 sessionStorage.setItem('token', response.data.token)
                 sessionStorage.setItem('korisnik', JSON.stringify(response.data.korisnikDto));
-                const tipKorisnika = response.data.korisnikDto.tipKorisnika;
-                const statusVerifikacije = response.data.korisnikDto.statusVerifikacije;
-                handleTipKorisnika(tipKorisnika);
-                handleStatusVerifikacije(statusVerifikacije);
+                handleKorisnikInfo(true); //prvo se postave podaci pa se re reneruje
                 alert("Uspesno ste se registrovali");
                 redirectTo(tipKorisnika);
 
@@ -98,7 +95,8 @@ const Registration = ({handleAuth, handleTipKorisnika, handleStatusVerifikacije}
                 const result = err.response.data;
                 alert(result);
                 setInputsToEmpty();
-                handleAuth(false);
+                sessionStorage.setItem('isAuth', JSON.stringify(false));
+                handleKorisnikInfo(false);
             }
         }
     }
