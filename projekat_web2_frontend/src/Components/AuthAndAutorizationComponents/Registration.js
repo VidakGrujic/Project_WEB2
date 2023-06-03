@@ -15,6 +15,7 @@ const Registration = ({handleAuth, handleTipKorisnika, handleStatusVerifikacije}
     const [tipKorisnika, setTipKorisnika] = useState('Kupac');
     const [adresa, setAdresa] = useState('')
     const [statusVerifikacije, setStatusVerifikacije] = useState('Prihvacen');
+    const [cenaDostave, setCenaDostave] = useState(0);
     const navigate = useNavigate();
     const REGISTRATION_URL = "/users/registration";
 
@@ -32,6 +33,7 @@ const Registration = ({handleAuth, handleTipKorisnika, handleStatusVerifikacije}
         setTipKorisnika('Kupac');
         setStatusVerifikacije('Prihvacen');
         setAdresa('');
+        setCenaDostave('');
     }
 
     const redirectTo = (tipKorisnika) => {
@@ -52,7 +54,8 @@ const Registration = ({handleAuth, handleTipKorisnika, handleStatusVerifikacije}
         //uraditi provere za lozinke, tj. da li se prva i druga poklapaju i da li su uneta stva polja
 
         if(korisnickoIme.length === 0 || email.length === 0 || lozinka.length === 0 || lozinka2.length === 0 
-            || ime.length === 0 || prezime.length === 0 || datumRodjenja === null || adresa.length === 0 || lozinka !== lozinka2){
+            || ime.length === 0 || prezime.length === 0 || datumRodjenja === null || adresa.length === 0 || lozinka !== lozinka2
+            || (cenaDostave === 0 && tipKorisnika === 'Prodavac')){
                 setError(true);
                 return;
             }
@@ -68,7 +71,8 @@ const Registration = ({handleAuth, handleTipKorisnika, handleStatusVerifikacije}
                 datumRodjenja,
                 tipKorisnika,
                 adresa,
-                statusVerifikacije
+                statusVerifikacije, 
+                cenaDostave
             });
 
             try {
@@ -81,7 +85,7 @@ const Registration = ({handleAuth, handleTipKorisnika, handleStatusVerifikacije}
                 );
 
                 handleAuth(true);
-                sessionStorage.setItem('token', JSON.stringify(response.data.token))
+                sessionStorage.setItem('token', response.data.token)
                 sessionStorage.setItem('korisnik', JSON.stringify(response.data.korisnikDto));
                 const tipKorisnika = response.data.korisnikDto.tipKorisnika;
                 const statusVerifikacije = response.data.korisnikDto.statusVerifikacije;
@@ -203,8 +207,20 @@ const Registration = ({handleAuth, handleTipKorisnika, handleStatusVerifikacije}
                             value={adresa}
                             onChange={(e) => setAdresa(e.target.value)}
                             />
-                    {error && prezime.length === 0 ? <div className="ui pointing red basic label">Morate uneti adresu</div> : null}
+                    {error && adresa.length === 0 ? <div className="ui pointing red basic label">Morate uneti adresu</div> : null}
                 </div>
+                {tipKorisnika === "Prodavac" ? 
+                        <div className="field">
+                            <label>Kao prodavac, potrebno je uneti cenu dostave</label>
+                            <input  type="number" 
+                                    name="cenaDostave" 
+                                    placeholder="Cena dostave"
+                                    value={cenaDostave}
+                                    onChange={(e) => setCenaDostave(e.target.value)}
+                                    />
+                            {error && cenaDostave === "" ? <div className="ui pointing red basic label">Morate uneti cenu dostave</div> : null}
+                        </div>
+                            : null}
                 <button className="ui blue button" type="submit">Submit</button>
             </form>
         </div>

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Projekat_WEB2_backend.Dto;
 using Projekat_WEB2_backend.Interfaces;
@@ -32,10 +33,16 @@ namespace Projekat_WEB2_backend.Controllers
             return Ok(_porudzbinaService.GetPorudzbinaById(id));
         }
 
-        [HttpPost]
+        [HttpPost("addPorudzbina")]
+        [Authorize(Roles = "kupac")]
         public IActionResult CreatePorudzbina([FromBody] PorudzbinaDto porudzbina)
         {
-            return Ok(_porudzbinaService.AddPorudzbina(porudzbina));
+            PorudzbinaDto newPorudzbinaDto = _porudzbinaService.AddPorudzbina(porudzbina);
+            if(newPorudzbinaDto == null)
+            {
+                return BadRequest("Postoji neki problem prilikom dodavanja porudzbine");
+            }
+            return Ok(newPorudzbinaDto);
         }
 
         [HttpPut("{id}")]
@@ -50,6 +57,10 @@ namespace Projekat_WEB2_backend.Controllers
             _porudzbinaService.DeletePorudzbina(id);
             return Ok($"Porudzbina sa id = {id} je uspesno obrisan.");
         }
+
+
+
+
 
     }
 }

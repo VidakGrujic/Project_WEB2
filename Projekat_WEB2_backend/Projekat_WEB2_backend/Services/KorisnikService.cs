@@ -150,6 +150,11 @@ namespace Projekat_WEB2_backend.Services
                 registerKorisnik.StatusVerifikacije = StatusVerifikacije.Procesuira_se;
             }
 
+            if(registerKorisnik.TipKorisnika != TipKorisnika.Prodavac)
+            {
+                registerKorisnik.CenaDostave = 0;
+            }
+            
 
             if (!KorisnikHelperClass.IsKorisnikFieldsValid(registerKorisnik)) //ako nisu validna polja onda nista
                 return new ResponseDto("Ostala polja moraju biti validna");

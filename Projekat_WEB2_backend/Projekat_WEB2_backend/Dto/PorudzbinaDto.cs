@@ -16,6 +16,10 @@ namespace Projekat_WEB2_backend.Dto
         public DateTime DatumKreiranja { get; set; }
         public StanjePorudzbine StanjePorudzbine { get; set; }
         public long KorisnikId { get; set; }
+        public List<ArtikalPorudzbineDto> ArtikliPorudzbine { get; set; }
+        public double CenaPorudzbine { get; set; }
+       
+
         
     }
 }

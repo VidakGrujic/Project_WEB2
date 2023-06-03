@@ -1,4 +1,5 @@
 ﻿using Projekat_WEB2_backend.Dto;
+using Projekat_WEB2_backend.Enumerations;
 using Projekat_WEB2_backend.Models;
 using System;
 using System.Collections.Generic;
@@ -44,6 +45,8 @@ namespace Projekat_WEB2_backend.Helper_Classes
             if (korisnikDto.DatumRodjenja > DateTime.Now) //ne moze da se rodi u buducnost \
                 return false;
             if (string.IsNullOrEmpty(korisnikDto.Adresa))
+                return false;
+            if (korisnikDto.CenaDostave == 0 && korisnikDto.TipKorisnika == TipKorisnika.Prodavac)
                 return false;
 
             return true;

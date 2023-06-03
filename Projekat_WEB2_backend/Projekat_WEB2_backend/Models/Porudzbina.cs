@@ -14,8 +14,10 @@ namespace Projekat_WEB2_backend.Models
         public DateTime DatumDostave { get; set; }
         public DateTime DatumKreiranja { get; set; }
         public StanjePorudzbine StanjePorudzbine { get; set; }
+        public double CenaPorudzbine { get; set; }
         public long KorisnikId { get; set; }
         public Korisnik Korisnik { get; set; }
+        public List<ArtikalPorudzbine> ArtikliPorudzbine { get; set; }
        
 
 

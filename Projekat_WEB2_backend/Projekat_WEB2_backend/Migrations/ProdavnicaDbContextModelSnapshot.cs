@@ -23,11 +23,13 @@ namespace Projekat_WEB2_backend.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasMaxLength(50)
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<double>("Cena")
+                        .HasColumnType("float");
+
+                    b.Property<double>("CenaDostave")
                         .HasColumnType("float");
 
                     b.Property<string>("Fotografija")
@@ -37,7 +39,8 @@ namespace Projekat_WEB2_backend.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Naziv")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Opis")
                         .HasMaxLength(5000)
@@ -53,6 +56,29 @@ namespace Projekat_WEB2_backend.Migrations
                     b.ToTable("Artikli");
                 });
 
+            modelBuilder.Entity("Projekat_WEB2_backend.Models.ArtikalPorudzbine", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<long>("ArtikalId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("Kolicina")
+                        .HasColumnType("int");
+
+                    b.Property<long>("PorudzbinaId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PorudzbinaId");
+
+                    b.ToTable("ArtikliUPorudzbinama");
+                });
+
             modelBuilder.Entity("Projekat_WEB2_backend.Models.Korisnik", b =>
                 {
                     b.Property<long>("Id")
@@ -62,6 +88,9 @@ namespace Projekat_WEB2_backend.Migrations
 
                     b.Property<string>("Adresa")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("CenaDostave")
+                        .HasColumnType("float");
 
                     b.Property<DateTime>("DatumRodjenja")
                         .HasColumnType("datetime2");
@@ -112,6 +141,9 @@ namespace Projekat_WEB2_backend.Migrations
                     b.Property<string>("Adresa")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<double>("CenaPorudzbine")
+                        .HasColumnType("float");
+
                     b.Property<DateTime>("DatumDostave")
                         .HasColumnType("datetime2");
 
@@ -146,6 +178,17 @@ namespace Projekat_WEB2_backend.Migrations
                     b.Navigation("Prodavac");
                 });
 
+            modelBuilder.Entity("Projekat_WEB2_backend.Models.ArtikalPorudzbine", b =>
+                {
+                    b.HasOne("Projekat_WEB2_backend.Models.Porudzbina", "Porudzbina")
+                        .WithMany("ArtikliPorudzbine")
+                        .HasForeignKey("PorudzbinaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Porudzbina");
+                });
+
             modelBuilder.Entity("Projekat_WEB2_backend.Models.Porudzbina", b =>
                 {
                     b.HasOne("Projekat_WEB2_backend.Models.Korisnik", "Korisnik")
@@ -162,6 +205,11 @@ namespace Projekat_WEB2_backend.Migrations
                     b.Navigation("Porudzbine");
 
                     b.Navigation("ProdavceviArtikli");
+                });
+
+            modelBuilder.Entity("Projekat_WEB2_backend.Models.Porudzbina", b =>
+                {
+                    b.Navigation("ArtikliPorudzbine");
                 });
 #pragma warning restore 612, 618
         }

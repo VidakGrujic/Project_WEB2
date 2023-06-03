@@ -12,6 +12,7 @@ namespace Projekat_WEB2_backend.Infrastructure
         public DbSet<Korisnik> Korisnici { get; set; }
         public DbSet<Artikal> Artikli { get; set; }
         public DbSet<Porudzbina> Porudzbine { get; set; }
+        public DbSet<ArtikalPorudzbine> ArtikliUPorudzbinama { get; set; }
 
         public ProdavnicaDbContext(DbContextOptions options) : base(options)
         {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "../../api/axios";
-import { redirect, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const KupacDashboard = () => {
   const [artikli, setArtikli] = useState([]);
@@ -17,6 +17,7 @@ const KupacDashboard = () => {
   const navigate = useNavigate();
 
   const GET_ARTIKLE_URL = "/products/getAll";
+  const token = sessionStorage.getItem('token')
 
   useEffect(() => {
     const getArtikle = async () => {
@@ -28,7 +29,7 @@ const KupacDashboard = () => {
           {
             headers: {
               "Content-Type": "application/json",
-              //Authorization : `Bearer ${token}`
+              Authorization : `Bearer ${token}`
             },
           }
         );
@@ -41,7 +42,6 @@ const KupacDashboard = () => {
         });
         setShowMessage(true);
       } catch (err) {
-        alert("Nesto se desilo prilikom dobavljanja artikala");
         setLoading(true);
         setShowMessage(false);
       }
@@ -53,7 +53,11 @@ const KupacDashboard = () => {
   useEffect(() => {
     console.log(izabraniArtikli);
     //upisem u session storage
-    sessionStorage.setItem("Porudzbina", JSON.stringify(izabraniArtikli));
+    //ovde je potrebno upisati u local storage, da bi se ya tog korisnika cuvao tacno ta porudzbina
+    /*const korinsik = JSON.parse('korinsik')
+    const korisnikId = korinsik.id;
+    localStorage.setItem(`porudzbina ${korisnikId}`);*/
+    sessionStorage.setItem("porudzbina", JSON.stringify(izabraniArtikli));
   }, [izabraniArtikli]);
 
   
@@ -109,6 +113,7 @@ const KupacDashboard = () => {
           kolicina: parseInt(unetaKolicina),
           naziv: artikal.naziv,
           cena: artikal.cena,
+          cenaDostave: parseInt(artikal.cenaDostave)
         };
         setIzabraniArtikli([...izabraniArtikli, noviIzabraniArtikal]);
         setMessage({
@@ -125,6 +130,7 @@ const KupacDashboard = () => {
       alert("Nema dovoljnog broja artikala")
     }
   };
+
 
  
   const handleClickIzbaciArtikal = (e) => {
@@ -195,9 +201,8 @@ const KupacDashboard = () => {
                       <div className="content">
                         {artikal.naziv}
                         <div className="sub header">Cena: {artikal.cena}</div>
-                        <div className="sub header">
-                          Kolicina: {artikal.kolicina}
-                        </div>
+                        <div className="sub header">Kolicina: {artikal.kolicina}</div>
+                        <div className="sub header">Cena Dostave: {artikal.cenaDostave}</div>
                       </div>
                     </h4>
                   </td>

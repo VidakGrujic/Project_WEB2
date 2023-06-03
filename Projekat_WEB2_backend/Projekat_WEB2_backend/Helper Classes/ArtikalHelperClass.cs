@@ -32,7 +32,7 @@ namespace Projekat_WEB2_backend.Helper_Classes
                 return false;
             if (string.IsNullOrEmpty(artikalDto.Fotografija))
                 return false;
-
+            
 
             return true;
 

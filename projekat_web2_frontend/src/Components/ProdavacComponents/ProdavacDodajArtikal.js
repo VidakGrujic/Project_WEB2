@@ -31,6 +31,7 @@ const ProdavacDodajArtikal = () => {
         const prodavac = JSON.parse(sessionStorage.getItem('korisnik'));
         const token = sessionStorage.getItem('token');
         const prodavacId = prodavac.id;
+        const cenaDostave = prodavac.cenaDostave;
 
         if(naziv.length === 0 || cena === 0 || Math.floor(kolicina) === 0
         || opis.length === 0 || fotografija.length === 0){
@@ -39,7 +40,7 @@ const ProdavacDodajArtikal = () => {
         }
 
         const artikalDto = JSON.stringify({
-            naziv, cena, kolicina, opis, fotografija, prodavacId
+            naziv, cena, kolicina, opis, fotografija, prodavacId, cenaDostave
         });
 
         const url = `${process.env.REACT_APP_API_BACK}${ADD_ARTIKAL_URL}`;
@@ -62,11 +63,6 @@ const ProdavacDodajArtikal = () => {
             alert(result);
             setInputsToEmpty();
         }
-
-
-
-
-        
     }
 
     return (

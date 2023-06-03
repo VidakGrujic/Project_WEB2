@@ -20,17 +20,11 @@ const NavBar = ({isAuth, tipKorisnika, statusVerifikacije}) => {
             {isAuth ? null : <NavLink className={({isActive}) => active(isActive)} to="/registration">Registration</NavLink> }
             
             {/* logovani korisnik koji je kupac, dodati proveru za role*/}
-            {/*isAuth && tipKorisnika === 'Kupac' ? <NavLink className={({isActive}) => active(isActive)} to="/kupacDashboard">Kupac Dashboard</NavLink> : null*/}
-            {isAuth && tipKorisnika === 'Kupac' ? <NavLink className={({isActive}) => active(isActive)} to="/kupacPoruci"></NavLink> : null}
+            {isAuth && tipKorisnika === 'Kupac' ? <NavLink className={({isActive}) => active(isActive)} to="/kupacDashboard">Kupac Dashboard</NavLink> : null}  
+            {/*isAuth && tipKorisnika === 'Kupac' ? <NavLink className={({isActive}) => active(isActive)} to="/kupacPoruci"></NavLink> : null*/}
             {isAuth && tipKorisnika === 'Kupac' ?  <NavLink className={({isActive}) => active(isActive)} to="/kupacPrethodnePorudzbine">Kupac prethodne porudzbine</NavLink> : null}
-            
-            {/**ne zaboravi token u getAll da prosledis */}
-            <NavLink className={({isActive}) => active(isActive)} to="/kupacDashboard">Kupac Dashboard</NavLink>
-            
-            {/*ovo obrisati nakon pravljenja stranice, obavezno tokene dodati */}
-            <NavLink className={({isActive}) => active(isActive)} to="/kupacDashboard/KupacPoruci">Kupac poruci</NavLink>
-            
-            
+
+
             {/*logovani korisnik koji je prodavac, dodati proveru za role, dodati da li je korisnik verifikovan*/}
             {isAuth && tipKorisnika === 'Prodavac' ? <NavLink className={({isActive}) => active(isActive)} to="/prodavacDashboard">Prodavac dashboard</NavLink> : null}
             {isAuth && tipKorisnika === 'Prodavac' && statusVerifikacije === 'Prihvacen' ? <NavLink className={({isActive}) => active(isActive)} to="/prodavacDodajArtikal">Prodavac dodaj artikal</NavLink> : null}
@@ -45,7 +39,7 @@ const NavBar = ({isAuth, tipKorisnika, statusVerifikacije}) => {
            
 
             {/*logovani korisnik bez obzira na ulogu*/}
-            {isAuth ? <NavLink className={({isActive}) => active(isActive)} to="/profil">Profil</NavLink> : null}
+            {isAuth && statusVerifikacije === 'Prihvacen' ? <NavLink className={({isActive}) => active(isActive)} to="/profil">Profil</NavLink> : null}
 
 
 

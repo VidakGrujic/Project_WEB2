@@ -60,7 +60,7 @@ const Login = ({handleAuth, handleTipKorisnika, handleStatusVerifikacije}) => {
             
         }
         catch(err){ 
-            const result = err.response.data;
+            const result = err.response;
             alert(result);
             handleAuth(false);
             setInputsToEmpty();

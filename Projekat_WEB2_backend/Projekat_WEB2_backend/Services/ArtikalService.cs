@@ -32,6 +32,7 @@ namespace Projekat_WEB2_backend.Services
 
             Artikal newArtikal = _mapper.Map<Artikal>(newArtikalDto);
             newArtikal.Prodavac = _dbContext.Korisnici.Find(newArtikalDto.ProdavacId);
+            newArtikal.CenaDostave = _dbContext.Korisnici.Find(newArtikalDto.ProdavacId).CenaDostave;
             _dbContext.Artikli.Add(newArtikal);
 
             _dbContext.SaveChanges();
