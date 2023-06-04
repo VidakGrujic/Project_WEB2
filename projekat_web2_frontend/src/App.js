@@ -6,7 +6,7 @@ import Home from './Components/Home';
 import { Route, Routes } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import KupacDashboard from './Components/KupacComponents/KupacDashboard';
-import KupacPrethodnePorudzbine from './Components/KupacComponents/KupacPrethodnePorudzbine';
+import KupacPorudzbine from './Components/KupacComponents/KupacPorudzbine';
 import ProdavacDashboard from './Components/ProdavacComponents/ProdavacDashboard';
 import ProdavacMojePorudzbine from './Components/ProdavacComponents/ProdavacMojePorudzbine';
 import ProdavacDodajArtikal from './Components/ProdavacComponents/ProdavacDodajArtikal';
@@ -16,6 +16,7 @@ import AdminSvePorudzbine from './Components/AdministratorComponents/AdminSvePor
 import AdminVerifikacija from './Components/AdministratorComponents/AdminVerfikacija';
 import Profil from './Components/ProfileComponents/Profil';
 import KupacPoruci from './Components/KupacComponents/KupacPoruci';
+import PrikazPorudzbine from './Components/PorudzbinaComponents/PrikazPorudzbina'
 function App() {
 
   //da li je korisnik autentifikovan, on je atuentifikovan i posle registracije i posle logovanje
@@ -47,7 +48,8 @@ function App() {
     {path: '/registration', element: <Registration handleKorisnikInfo={handleKorisnikInfo}></Registration>},
     {path: '/kupacDashboard', element: <KupacDashboard></KupacDashboard>},
     {path: '/kupacDashboard/kupacPoruci' , element: <KupacPoruci></KupacPoruci>},
-    {path: '/kupacPrethodnePorudzbine', element: <KupacPrethodnePorudzbine></KupacPrethodnePorudzbine>},
+    {path: '/kupacPorudzbine', element: <KupacPorudzbine></KupacPorudzbine>},
+    {path: '/kupacPorudzbine/PrikazPorudzbine/:id', element: <PrikazPorudzbine></PrikazPorudzbine>},
     {path: '/prodavacDashboard', element: <ProdavacDashboard></ProdavacDashboard>},
     {path: '/prodavacDodajArtikal', element: <ProdavacDodajArtikal></ProdavacDodajArtikal>},
     {path: '/prodavacNovePorudzbine', element: <ProdavacNovePorudzbine></ProdavacNovePorudzbine>},

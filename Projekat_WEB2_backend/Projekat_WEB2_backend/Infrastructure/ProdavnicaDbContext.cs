@@ -16,13 +16,17 @@ namespace Projekat_WEB2_backend.Infrastructure
 
         public ProdavnicaDbContext(DbContextOptions options) : base(options)
         {
-
+            
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ProdavnicaDbContext).Assembly);
+            
+           
+            
+
         }
 
 

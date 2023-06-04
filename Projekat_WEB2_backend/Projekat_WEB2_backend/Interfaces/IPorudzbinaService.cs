@@ -10,8 +10,11 @@ namespace Projekat_WEB2_backend.Interfaces
     {
         PorudzbinaDto AddPorudzbina(PorudzbinaDto newPorudzbinaDto);
         List<PorudzbinaDto> GetAllPorudzbina();
-        PorudzbinaDto GetPorudzbinaById(long id);
+        PorudzbinaPrikazDto GetPorudzbinaById(long id);
         PorudzbinaDto UpdatePorudzbina(long id, PorudzbinaDto updatePorudzbinaDto);
         void DeletePorudzbina(long id);
+        List<PorudzbinaDto> GetKupcevePorudzbine(long id);
+
+        
     }
 }

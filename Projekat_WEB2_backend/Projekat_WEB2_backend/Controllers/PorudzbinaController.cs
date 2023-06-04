@@ -28,9 +28,16 @@ namespace Projekat_WEB2_backend.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles ="kupac")]
         public IActionResult GetById(long id)
         {
-            return Ok(_porudzbinaService.GetPorudzbinaById(id));
+            PorudzbinaPrikazDto porudzbinaZaPrikazDto = _porudzbinaService.GetPorudzbinaById(id);
+            if(porudzbinaZaPrikazDto == null)
+            {
+                return BadRequest("Porudzbina ne postoji");
+            }
+
+            return Ok(porudzbinaZaPrikazDto);
         }
 
         [HttpPost("addPorudzbina")]
@@ -38,7 +45,7 @@ namespace Projekat_WEB2_backend.Controllers
         public IActionResult CreatePorudzbina([FromBody] PorudzbinaDto porudzbina)
         {
             PorudzbinaDto newPorudzbinaDto = _porudzbinaService.AddPorudzbina(porudzbina);
-            if(newPorudzbinaDto == null)
+            if (newPorudzbinaDto == null)
             {
                 return BadRequest("Postoji neki problem prilikom dodavanja porudzbine");
             }
@@ -58,7 +65,17 @@ namespace Projekat_WEB2_backend.Controllers
             return Ok($"Porudzbina sa id = {id} je uspesno obrisan.");
         }
 
-
+        [HttpGet("getKupcevePorudzbine/{id}")]
+        [Authorize(Roles = "kupac")]
+        public IActionResult GetKupcevePorudzbine(long id)
+        {
+            List<PorudzbinaDto> korisnikovePorudzbineDto = _porudzbinaService.GetKupcevePorudzbine(id);
+            if(korisnikovePorudzbineDto == null)
+            {
+                return BadRequest("Ne postoji korisnik sa datim id");
+            }
+            return Ok(korisnikovePorudzbineDto);
+        }
 
 
 

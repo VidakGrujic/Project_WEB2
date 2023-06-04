@@ -15,6 +15,7 @@ namespace Projekat_WEB2_backend.Mapping
             CreateMap<Korisnik, KorisnikDto>().ReverseMap();
             CreateMap<Artikal, ArtikalDto>().ReverseMap();
             CreateMap<Porudzbina, PorudzbinaDto>().ReverseMap();
+            CreateMap<Porudzbina, PorudzbinaPrikazDto>().ReverseMap();
             CreateMap<ArtikalPorudzbine, ArtikalPorudzbineDto>().ReverseMap();
         }
     }

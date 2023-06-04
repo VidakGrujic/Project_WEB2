@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 const KupacDashboard = () => {
   const [artikli, setArtikli] = useState([]);
   const [izabraniArtikli, setIzabraniArtikli] = useState([]); //ovo su artikli koji sadrze id artikla i kolicinu koju korisnik hoce da poruic
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   //koriste se za prikaz poruke i njen kontent
   const [showMessage, setShowMessage] = useState(false);
@@ -160,9 +160,6 @@ const KupacDashboard = () => {
   const handlePoruci = () => {
     navigate("/kupacDashboard/kupacPoruci");
   } 
-
-
-
 
   return (
     <div className="verification-container">

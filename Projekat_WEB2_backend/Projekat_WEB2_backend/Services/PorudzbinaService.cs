@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Projekat_WEB2_backend.Dto;
 using Projekat_WEB2_backend.Helper_Classes;
 using Projekat_WEB2_backend.Infrastructure;
@@ -18,6 +19,7 @@ namespace Projekat_WEB2_backend.Services
 
         public PorudzbinaService(IMapper mapper, ProdavnicaDbContext dbContext)
         {
+           
             _mapper = mapper;
             _dbContext = dbContext;
         }
@@ -131,9 +133,46 @@ namespace Projekat_WEB2_backend.Services
             return _mapper.Map<List<PorudzbinaDto>>(_dbContext.Porudzbine.ToList());
         }
 
-        public PorudzbinaDto GetPorudzbinaById(long id)
+        public List<PorudzbinaDto> GetKupcevePorudzbine(long id)
         {
-            return _mapper.Map<PorudzbinaDto>(_dbContext.Porudzbine.Find(id));
+            //moraju sugavi includovi zbog lazy loadinga
+            Korisnik kupac = _dbContext.Korisnici.Include(x => x.Porudzbine)
+                                                 .ThenInclude(porudzbina => porudzbina.ArtikliPorudzbine)
+                                                 .First(x => x.Id == id);
+            if(kupac == null)
+            {
+                return null;
+            }
+
+            List<PorudzbinaDto> kupcevePorudzbineDto = _mapper.Map<List<PorudzbinaDto>>(kupac.Porudzbine);
+
+
+            return kupcevePorudzbineDto;           
+
+        }
+
+        public PorudzbinaPrikazDto GetPorudzbinaById(long id)
+        {
+            Porudzbina porudzbinaPrikaz = _dbContext.Porudzbine.Include(x => x.ArtikliPorudzbine).First(x => x.Id == id);
+            if(porudzbinaPrikaz == null)
+            {
+                return null;
+            }
+
+            PorudzbinaPrikazDto porudzbinaPrikazDto = _mapper.Map<PorudzbinaPrikazDto>(porudzbinaPrikaz);
+            porudzbinaPrikazDto.ImenaArtikala = new List<string>();
+
+            foreach(ArtikalPorudzbine artikalPorudzbine in porudzbinaPrikaz.ArtikliPorudzbine)
+            {
+                Artikal praviArtikal = _dbContext.Artikli.Find(artikalPorudzbine.ArtikalId);
+                if(praviArtikal == null)
+                {
+                    return null;
+                }
+                porudzbinaPrikazDto.ImenaArtikala.Add(praviArtikal.Naziv);
+            }
+
+            return porudzbinaPrikazDto;
         }
 
         public PorudzbinaDto UpdatePorudzbina(long id, PorudzbinaDto updatePorudzbinaDto)
@@ -145,5 +184,7 @@ namespace Projekat_WEB2_backend.Services
 
             return _mapper.Map<PorudzbinaDto>(updatePorudzbina);
         }
+
+        
     }
 }
