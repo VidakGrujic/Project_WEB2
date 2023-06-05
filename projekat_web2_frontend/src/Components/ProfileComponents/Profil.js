@@ -59,7 +59,7 @@ const Profil = () => {
 
             const token = sessionStorage.getItem('token');
             try{
-                const respones = await axios.put(
+                const {data} = await axios.put(
                     `${process.env.REACT_APP_API_BACK}${UPDATE_URL}`,
                     updatedKorisnikJSON,
                     {
@@ -72,14 +72,14 @@ const Profil = () => {
                         
                     }
                 );
-                
-                sessionStorage.setItem('korisnik', updatedKorisnikJSON);
+              
+                sessionStorage.setItem('korisnik', JSON.stringify(data));
                 alert("Uspesno ste izmenili podatke")
                 redirectTo(tipKorisnika); 
 
             }
             catch (err){
-                const result = err.response.data;
+                const result = err.response;
                 alert(result);
                 
             }
@@ -164,7 +164,7 @@ const Profil = () => {
                             />
                     {error && prezime.length === 0 ? <div className="ui pointing red basic label">Morate uneti adresu</div> : null}
                 </div>
-                <button className="ui button" type="submit">Submit</button>
+                <button className="ui blue button" type="submit">Submit</button>
             </form>
         </div>
     ) 
