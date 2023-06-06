@@ -15,6 +15,7 @@ namespace Projekat_WEB2_backend.Interfaces
         void DeletePorudzbina(long id);
         List<PorudzbinaDto> GetKupcevePorudzbine(long id);
         ResponsePorudzbinaDto OtkaziPorudzbinu(long id, string statusVerifikacije);
+        List<PorudzbinaDto> GetProdavcevePorudzbine(long id);
 
         
     }

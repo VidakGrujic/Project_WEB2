@@ -64,6 +64,26 @@ export const OtkaziPorudzbinu = async (id, token) => {
 }
 
 
+export const GetProdavcevePorudzbine = async (id, token) => {
+    try{
+        const {data} = await axios.get(
+            `${process.env.REACT_APP_API_BACK}/orders/getProdavcevePorudzbine/${id}`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                }, 
+                withCredentials: true
+            }
+        );
+        return data;
+    }catch(err){
+        console.log(err);
+        alert("Nesto se desilo prilikom dobavljanja informacija novim prodavcevim porudzbinama")
+        return null;
+    }
+}
+
 
 
 

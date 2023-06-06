@@ -7,7 +7,7 @@ export default function PrikazPorudzbina() {
   const [porudzbina, setPorudzbina] = useState({});
   const [loading, setLoading] = useState(true);
 
-  const naviagte = useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getPordzbinaId = async () => {
@@ -31,7 +31,16 @@ export default function PrikazPorudzbina() {
 
 
   const handleClickPovratak = () => {
-    naviagte('/kupacPorudzbine');
+    const korisnik = JSON.parse(sessionStorage.getItem('korisnik'))
+    if(korisnik.tipKorisnika === 'Kupac'){
+      navigate('/kupacDashboard');
+    }
+    else if(korisnik.tipKorisnika === 'Prodavac'){
+      navigate('/prodavacDashboard');
+    }
+    else if(korisnik.tipKorisnika === 'Administrator'){
+      navigate('/adminDashboard');
+    }
   }
 
   return (

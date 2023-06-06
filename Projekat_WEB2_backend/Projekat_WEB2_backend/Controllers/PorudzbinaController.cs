@@ -28,7 +28,7 @@ namespace Projekat_WEB2_backend.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles ="kupac")]
+        [Authorize(Roles ="kupac,prodavac,administrator")]
         public IActionResult GetById(long id)
         {
             PorudzbinaPrikazDto porudzbinaZaPrikazDto = _porudzbinaService.GetPorudzbinaById(id);
@@ -66,7 +66,7 @@ namespace Projekat_WEB2_backend.Controllers
         }
 
         [HttpGet("getKupcevePorudzbine/{id}")]
-        [Authorize(Roles = "kupac")]
+        [Authorize(Roles ="kupac")]
         public IActionResult GetKupcevePorudzbine(long id)
         {
             List<PorudzbinaDto> korisnikovePorudzbineDto = _porudzbinaService.GetKupcevePorudzbine(id);
@@ -88,6 +88,20 @@ namespace Projekat_WEB2_backend.Controllers
                 return BadRequest(otkazanaPorudzbinaDto);
             }
             return Ok(otkazanaPorudzbinaDto);
+        }
+
+        
+        [HttpGet("getProdavcevePorudzbine/{id}")]
+        [Authorize(Roles = "prodavac")]
+        public IActionResult GetProdavcevePorudzbine(long id)
+        {
+            List<PorudzbinaDto> prodavcevePorudzbine = _porudzbinaService.GetProdavcevePorudzbine(id);
+            if(prodavcevePorudzbine == null)
+            {
+                return BadRequest("Nesto nije kako treba");
+            }
+
+            return Ok(prodavcevePorudzbine);
         }
     }
 }

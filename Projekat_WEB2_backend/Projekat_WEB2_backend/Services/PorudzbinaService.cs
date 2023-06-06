@@ -190,7 +190,6 @@ namespace Projekat_WEB2_backend.Services
 
         public ResponsePorudzbinaDto OtkaziPorudzbinu(long id, string statusVerifikacije)
         {
-           
             try
             {
                 Porudzbina otkazivanjePorudzbina =  _dbContext.Porudzbine.Include(x => x.ArtikliPorudzbine).First(x => x.Id == id);
@@ -239,6 +238,41 @@ namespace Projekat_WEB2_backend.Services
                 return new ResponsePorudzbinaDto { PorudzbinaDto = null, Message = "Desio se neki problem" };
             }
            
+
+
+        }
+
+        public List<PorudzbinaDto> GetProdavcevePorudzbine(long id)
+        {
+            try
+            {
+                Korisnik prodavac = _dbContext.Korisnici.Include(x => x.ProdavceviArtikli).First(x => x.Id == id);
+                List<Porudzbina> prodavcevePorudzbine = new List<Porudzbina>();
+
+                foreach(Artikal prodavcevArtikal in prodavac.ProdavceviArtikli)
+                {
+                    foreach(ArtikalPorudzbine prodavcevArtikalPorudzbine in _dbContext.ArtikliUPorudzbinama.Include(x => x.Porudzbina).ToList())
+                    {
+                        //ako je datum isporuke porudzbine veci od trenutnog, i ako je stanje porudzbine nije otkazana i ako porudzbina vec nije ubacena tu
+                        if (prodavcevArtikalPorudzbine.ArtikalId == prodavcevArtikal.Id
+                            && prodavcevArtikalPorudzbine.Porudzbina.DatumDostave > DateTime.Now
+                            && prodavcevArtikalPorudzbine.Porudzbina.StanjePorudzbine != StanjePorudzbine.Otkazana 
+                            && !prodavcevePorudzbine.Contains(prodavcevArtikalPorudzbine.Porudzbina))
+                        {
+                            prodavcevePorudzbine.Add(prodavcevArtikalPorudzbine.Porudzbina);
+                        }
+                    }
+                }
+                return _mapper.Map<List<PorudzbinaDto>>(prodavcevePorudzbine);
+
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+
+
 
 
         }

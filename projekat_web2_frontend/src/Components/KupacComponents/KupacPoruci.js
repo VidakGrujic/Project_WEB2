@@ -131,7 +131,7 @@ export default function KupacPoruci() {
           />
         </div>
         <button className="ui blue button" type="submit">
-          Dodajte artikal
+          Porucite
         </button>
       </form>
     </div>
