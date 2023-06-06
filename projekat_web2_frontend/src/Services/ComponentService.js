@@ -39,8 +39,29 @@ export const GetPorudzbinaById = async (id, token) => {
     }
 }
 
+//u slucaju greske postavi da se vraca null
 
 
+export const OtkaziPorudzbinu = async (id, token) => {
+    try{
+        const {data} = await axios.put(
+            `${process.env.REACT_APP_API_BACK}/orders/otkaziPorudzbinu/${id}`,
+            'Otkazana',
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                }, 
+                withCredentials: true
+            }
+        );
+        return data;
+    }catch(err){
+        console.log(err);
+        alert('Neesto se desilo prilikom otkazivanja porudzbine');
+        return null;
+    }
+}
 
 
 

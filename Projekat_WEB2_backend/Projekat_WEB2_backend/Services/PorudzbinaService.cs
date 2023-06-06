@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Projekat_WEB2_backend.Dto;
+using Projekat_WEB2_backend.Enumerations;
 using Projekat_WEB2_backend.Helper_Classes;
 using Projekat_WEB2_backend.Infrastructure;
 using Projekat_WEB2_backend.Interfaces;
@@ -144,7 +145,9 @@ namespace Projekat_WEB2_backend.Services
                 return null;
             }
 
-            List<PorudzbinaDto> kupcevePorudzbineDto = _mapper.Map<List<PorudzbinaDto>>(kupac.Porudzbine);
+
+            //ovde treba da se stavi provera da li je porudzbina otkazana ili ne
+            List<PorudzbinaDto> kupcevePorudzbineDto = _mapper.Map<List<PorudzbinaDto>>(kupac.Porudzbine.FindAll(x => x.StanjePorudzbine != StanjePorudzbine.Otkazana));
 
 
             return kupcevePorudzbineDto;           
@@ -185,6 +188,59 @@ namespace Projekat_WEB2_backend.Services
             return _mapper.Map<PorudzbinaDto>(updatePorudzbina);
         }
 
-        
+        public ResponsePorudzbinaDto OtkaziPorudzbinu(long id, string statusVerifikacije)
+        {
+           
+            try
+            {
+                Porudzbina otkazivanjePorudzbina =  _dbContext.Porudzbine.Include(x => x.ArtikliPorudzbine).First(x => x.Id == id);
+                if((DateTime.UtcNow - otkazivanjePorudzbina.DatumKreiranja).TotalHours < 1 && statusVerifikacije == "Otkazana")
+                {
+                    otkazivanjePorudzbina.StanjePorudzbine = StanjePorudzbine.Otkazana;
+
+                    foreach (ArtikalPorudzbine artikalPorudzbine in otkazivanjePorudzbina.ArtikliPorudzbine)
+                    {
+                        Artikal praviArtikal = _dbContext.Artikli.Find(artikalPorudzbine.ArtikalId);
+                        if (praviArtikal != null)
+                        {
+                            praviArtikal.Kolicina += artikalPorudzbine.Kolicina;
+                        }
+                    }
+
+                    ResponsePorudzbinaDto otkazanaPorudzbinaResponseDto = new ResponsePorudzbinaDto
+                    {
+                        Message = "Uspesno otkazana porudzbina",
+                        PorudzbinaDto = _mapper.Map<PorudzbinaDto>(otkazivanjePorudzbina)
+                    };
+
+                    _dbContext.SaveChanges();
+                    return otkazanaPorudzbinaResponseDto;
+                } 
+                else
+                {
+                    return new ResponsePorudzbinaDto { PorudzbinaDto = null, Message = "Nije moguce otkazati porudzbinu nakon sat vremena" };
+                }
+            }
+            catch(Exception e)
+            {
+               
+                Console.WriteLine(e.Message);
+                /*
+                otkazivanjePorudzbina.StanjePorudzbine = StanjePorudzbine.Prihvacena;
+
+                foreach (ArtikalPorudzbine artikalPorudzbine in otkazivanjePorudzbina.ArtikliPorudzbine)
+                {
+                    Artikal praviArtikal = _dbContext.Artikli.Find(artikalPorudzbine.ArtikalId);
+                    if (praviArtikal != null)
+                    {
+                        praviArtikal.Kolicina -= artikalPorudzbine.Kolicina;
+                    }
+                }*/
+                return new ResponsePorudzbinaDto { PorudzbinaDto = null, Message = "Desio se neki problem" };
+            }
+           
+
+
+        }
     }
 }

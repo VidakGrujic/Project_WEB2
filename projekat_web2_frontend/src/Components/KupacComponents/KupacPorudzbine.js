@@ -1,11 +1,14 @@
 import React, {useEffect, useState} from "react";
 import CountdownTimer from "../Other Components/CountdownTimer";
-import { GetKupcevePorudzbine } from "../../Services/ComponentService";
+import { GetKupcevePorudzbine, OtkaziPorudzbinu } from "../../Services/ComponentService";
+import { useNavigate } from "react-router-dom";
 
 const KupacPorudzbine = () => {
     
     const [kupcevePorudzbine, setKupcevePorudzbine] = useState([]);
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(true);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         const getPorudzbine = async () =>{
@@ -20,6 +23,7 @@ const KupacPorudzbine = () => {
         } 
         getPorudzbine();
     }, [])
+
 
   
     const handleButtonCell = (datumKreiranja, id) => {
@@ -50,8 +54,19 @@ const KupacPorudzbine = () => {
 
     
 
-    const handleOtkaziDugmeClick = (e) => {
+    const handleOtkaziDugmeClick = async (e) => {
         e.preventDefault();
+        const id = e.target.id;
+
+        const token = sessionStorage.getItem('token'); 
+        const response = await OtkaziPorudzbinu(id, token)
+
+        if(response !== null){
+            alert(response.message);
+            navigate('/kupacDashboard');
+        }
+
+
     }
 
     return (

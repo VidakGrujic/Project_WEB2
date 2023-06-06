@@ -78,6 +78,16 @@ namespace Projekat_WEB2_backend.Controllers
         }
 
 
-
+        [HttpPut("otkaziPorudzbinu/{id}")]
+        [Authorize(Roles = "kupac")]
+        public IActionResult OtkaziPorudzbine(long id, [FromBody] string statusVerifikacije)
+        {
+            ResponsePorudzbinaDto otkazanaPorudzbinaDto = _porudzbinaService.OtkaziPorudzbinu(id, statusVerifikacije);
+            if(otkazanaPorudzbinaDto.PorudzbinaDto == null)
+            {
+                return BadRequest(otkazanaPorudzbinaDto);
+            }
+            return Ok(otkazanaPorudzbinaDto);
+        }
     }
 }
