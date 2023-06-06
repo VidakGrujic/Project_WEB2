@@ -1,10 +1,9 @@
 import React, {useState, useEffect} from "react";
 import CountdownTimer from "../Other Components/CountdownTimer";
-import { GetNoveProdavcevePorudzbine } from "../../Services/ComponentService";
+import { GetProdavcevePrethodnePorudzbine } from "../../Services/ComponentService";
 
-const ProdavacNovePorudzbine = () => {
-    
-    const [prodavceveNovePorudzbine, setProdavceveNovePorudzbine] = useState([]);
+const ProdavacPrethodnePorudzbine = () => {
+    const [prodavceveMojePorudzbine, setProdavceveMojePorudzbine] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -12,10 +11,10 @@ const ProdavacNovePorudzbine = () => {
             const prodavac = JSON.parse(sessionStorage.getItem('korisnik'));
             const prodavacId = prodavac.id;
             const token = sessionStorage.getItem('token'); 
-            const response = await GetNoveProdavcevePorudzbine(prodavacId, token);
+            const response = await GetProdavcevePrethodnePorudzbine(prodavacId, token);
 
             if(response !== null){
-                setProdavceveNovePorudzbine(response);
+                setProdavceveMojePorudzbine(response);
                 console.log(response)
                 setLoading(false);
             }
@@ -43,21 +42,21 @@ const ProdavacNovePorudzbine = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {prodavceveNovePorudzbine.map((prodavcevaNovaPorudzbina) => (
+                    {prodavceveMojePorudzbine.map((prodavcevaMojaPorudzbina) => (
                        <tr>
                             <td>
                                 <h4 className="ui header">
-                                    <a href={`/prodavacNovePorudzbine/PrikazPorudzbine/${prodavcevaNovaPorudzbina.id}`}>Porudzbina br {prodavcevaNovaPorudzbina.id}</a>
+                                    <a href={`/prodavacNovePorudzbine/PrikazPorudzbine/${prodavcevaMojaPorudzbina.id}`}>Porudzbina br {prodavcevaMojaPorudzbina.id}</a>
                                 </h4>
                             </td>
                             <td>
-                                {prodavcevaNovaPorudzbina.adresa}
+                                {prodavcevaMojaPorudzbina.adresa}
                             </td>
                             <td className="center aligned"> 
-                                {prodavcevaNovaPorudzbina.cenaPorudzbine}
+                                {prodavcevaMojaPorudzbina.cenaPorudzbine}
                             </td>
                             <td>
-                                <CountdownTimer targetDate={prodavcevaNovaPorudzbina.datumDostave}/>
+                                <CountdownTimer targetDate={prodavcevaMojaPorudzbina.datumDostave}/>
                             </td>
                        </tr>
                     ))}
@@ -67,4 +66,4 @@ const ProdavacNovePorudzbine = () => {
        );
 }
 
-export default ProdavacNovePorudzbine;
+export default ProdavacPrethodnePorudzbine;

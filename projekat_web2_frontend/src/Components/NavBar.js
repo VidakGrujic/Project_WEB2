@@ -32,7 +32,7 @@ const NavBar = ({isAuth, tipKorisnika, statusVerifikacije}) => {
             {isAuth && tipKorisnika === 'Prodavac' ? <NavLink className={({isActive}) => active(isActive)} to="/prodavacDashboard">Prodavac dashboard</NavLink> : null}
             {isAuth && tipKorisnika === 'Prodavac' && statusVerifikacije === 'Prihvacen' ? <NavLink className={({isActive}) => active(isActive)} to="/prodavacDodajArtikal">Prodavac dodaj artikal</NavLink> : null}
             {isAuth && tipKorisnika === 'Prodavac' && statusVerifikacije === 'Prihvacen' ? <NavLink className={({isActive}) => active(isActive)} to="/prodavacNovePorudzbine">Prodavac nove porudzbine</NavLink> : null}
-            {isAuth && tipKorisnika === 'Prodavac' && statusVerifikacije === 'Prihvacen' ? <NavLink className={({isActive}) => active(isActive)} to="/prodavacMojePorudzbine">Prodavac moje porudzbine</NavLink> : null}
+            {isAuth && tipKorisnika === 'Prodavac' && statusVerifikacije === 'Prihvacen' ? <NavLink className={({isActive}) => active(isActive)} to="/prodavacPrethodnePorudzbine">Prodavac prethodne porudzbine</NavLink> : null}
            
 
             {/*logovani korisnik koji je admin, dodati proveru za role*/}

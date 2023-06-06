@@ -64,10 +64,10 @@ export const OtkaziPorudzbinu = async (id, token) => {
 }
 
 
-export const GetProdavcevePorudzbine = async (id, token) => {
+export const GetNoveProdavcevePorudzbine = async (id, token) => {
     try{
         const {data} = await axios.get(
-            `${process.env.REACT_APP_API_BACK}/orders/getProdavcevePorudzbine/${id}`,
+            `${process.env.REACT_APP_API_BACK}/orders/getProdavceveNovePorudzbine/${id}`,
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -80,6 +80,26 @@ export const GetProdavcevePorudzbine = async (id, token) => {
     }catch(err){
         console.log(err);
         alert("Nesto se desilo prilikom dobavljanja informacija novim prodavcevim porudzbinama")
+        return null;
+    }
+}
+
+export const GetProdavcevePrethodnePorudzbine = async (id, token) => {
+    try{
+        const {data} = await axios.get(
+            `${process.env.REACT_APP_API_BACK}/orders/getProdavcevePrethodnePorudzbine/${id}`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                }, 
+                withCredentials: true
+            }
+        );
+        return data;
+    }catch(err){
+        console.log(err);
+        alert("Nesto se desilo prilikom dobavljanja informacija prethodnim prodavcevim porudzbinama")
         return null;
     }
 }

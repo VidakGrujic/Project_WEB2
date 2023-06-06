@@ -242,7 +242,7 @@ namespace Projekat_WEB2_backend.Services
 
         }
 
-        public List<PorudzbinaDto> GetProdavcevePorudzbine(long id)
+        public List<PorudzbinaDto> GetProdavceveNovePorudzbine(long id)
         {
             try
             {
@@ -271,10 +271,37 @@ namespace Projekat_WEB2_backend.Services
                 Console.WriteLine(e.Message);
                 return null;
             }
+        }
 
+        public List<PorudzbinaDto> GetProdavcevePrethodnePorudzbine(long id)
+        {
+            try
+            {
+                Korisnik prodavac = _dbContext.Korisnici.Include(x => x.ProdavceviArtikli).First(x => x.Id == id);
+                List<Porudzbina> prodavcevePorudzbine = new List<Porudzbina>();
 
+                foreach (Artikal prodavcevArtikal in prodavac.ProdavceviArtikli)
+                {
+                    foreach (ArtikalPorudzbine prodavcevArtikalPorudzbine in _dbContext.ArtikliUPorudzbinama.Include(x => x.Porudzbina).ToList())
+                    {
+                        //ako je datum isporuke porudzbine veci od trenutnog, i ako je stanje porudzbine nije otkazana i ako porudzbina vec nije ubacena tu
+                        if (prodavcevArtikalPorudzbine.ArtikalId == prodavcevArtikal.Id
+                            && prodavcevArtikalPorudzbine.Porudzbina.DatumDostave < DateTime.Now
+                            && prodavcevArtikalPorudzbine.Porudzbina.StanjePorudzbine != StanjePorudzbine.Otkazana
+                            && !prodavcevePorudzbine.Contains(prodavcevArtikalPorudzbine.Porudzbina))
+                        {
+                            prodavcevePorudzbine.Add(prodavcevArtikalPorudzbine.Porudzbina);
+                        }
+                    }
+                }
+                return _mapper.Map<List<PorudzbinaDto>>(prodavcevePorudzbine);
 
-
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
         }
     }
 }

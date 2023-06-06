@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 import KupacDashboard from './Components/KupacComponents/KupacDashboard';
 import KupacPorudzbine from './Components/KupacComponents/KupacPorudzbine';
 import ProdavacDashboard from './Components/ProdavacComponents/ProdavacDashboard';
-import ProdavacMojePorudzbine from './Components/ProdavacComponents/ProdavacMojePorudzbine';
+import ProdavacPrethodnePorudzbine from './Components/ProdavacComponents/ProdavacPrethodnePorudzbine';
 import ProdavacDodajArtikal from './Components/ProdavacComponents/ProdavacDodajArtikal';
 import ProdavacNovePorudzbine from './Components/ProdavacComponents/ProdavacNovePorudzbine'
 import AdminDashboard from './Components/AdministratorComponents/AdminDashboard';
@@ -53,8 +53,9 @@ function App() {
     {path: '/prodavacDashboard', element: <ProdavacDashboard statusVerifikacije={statusVerifikacije}></ProdavacDashboard>},
     {path: '/prodavacDodajArtikal', element: <ProdavacDodajArtikal></ProdavacDodajArtikal>},
     {path: '/prodavacNovePorudzbine', element: <ProdavacNovePorudzbine></ProdavacNovePorudzbine>},
-    {path: '/prodavacMojePorudzbine', element: <ProdavacMojePorudzbine></ProdavacMojePorudzbine>},
+    {path: '/prodavacPrethodnePorudzbine', element: <ProdavacPrethodnePorudzbine></ProdavacPrethodnePorudzbine>},
     {path: '/prodavacNovePorudzbine/PrikazPorudzbine/:id', element: <PrikazPorudzbine></PrikazPorudzbine>},
+    {path: '/prodavacPrethodnePorudzbine/PrikazPorudzbine/:id', element: <PrikazPorudzbine></PrikazPorudzbine>},
     {path: '/adminDashboard', element: <AdminDashboard></AdminDashboard>},
     {path: '/adminVerifikacija', element: <AdminVerifikacija></AdminVerifikacija>},
     {path: '/adminSvePorudzbine', element: <AdminSvePorudzbine></AdminSvePorudzbine>},

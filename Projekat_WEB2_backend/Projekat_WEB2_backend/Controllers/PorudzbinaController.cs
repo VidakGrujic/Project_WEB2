@@ -21,7 +21,7 @@ namespace Projekat_WEB2_backend.Controllers
             _porudzbinaService = porudzbinaService;
         }
 
-        [HttpGet("getAll")]
+        [HttpGet]
         public IActionResult GetAllPorudzbina()
         {
             return Ok(_porudzbinaService.GetAllPorudzbina());
@@ -39,7 +39,8 @@ namespace Projekat_WEB2_backend.Controllers
 
             return Ok(porudzbinaZaPrikazDto);
         }
-
+        
+        //izbaciti ovde add, jer je ovo crud operacija
         [HttpPost("addPorudzbina")]
         [Authorize(Roles = "kupac")]
         public IActionResult CreatePorudzbina([FromBody] PorudzbinaDto porudzbina)
@@ -91,17 +92,30 @@ namespace Projekat_WEB2_backend.Controllers
         }
 
         
-        [HttpGet("getProdavcevePorudzbine/{id}")]
+        [HttpGet("getProdavceveNovePorudzbine/{id}")]
         [Authorize(Roles = "prodavac")]
-        public IActionResult GetProdavcevePorudzbine(long id)
+        public IActionResult GetProdavceveNovePorudzbine(long id)
         {
-            List<PorudzbinaDto> prodavcevePorudzbine = _porudzbinaService.GetProdavcevePorudzbine(id);
+            List<PorudzbinaDto> prodavcevePorudzbine = _porudzbinaService.GetProdavceveNovePorudzbine(id);
             if(prodavcevePorudzbine == null)
             {
                 return BadRequest("Nesto nije kako treba");
             }
 
             return Ok(prodavcevePorudzbine);
+        }
+
+        [HttpGet("getProdavcevePrethodnePorudzbine/{id}")]
+        [Authorize(Roles ="prodavac")]
+        public IActionResult GetProdavcevePrethodnePorudzbine(long id)
+        {
+            List<PorudzbinaDto> prodavcevePrethodnePorudzbineDto = _porudzbinaService.GetProdavcevePrethodnePorudzbine(id);
+            if(prodavcevePrethodnePorudzbineDto == null)
+            {
+                return BadRequest("Nisu lepo ucitane prodavceve produzbine");
+            }
+            return Ok(prodavcevePrethodnePorudzbineDto);
+
         }
     }
 }
