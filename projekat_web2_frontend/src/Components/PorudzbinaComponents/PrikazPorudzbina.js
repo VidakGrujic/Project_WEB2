@@ -33,13 +33,14 @@ export default function PrikazPorudzbina() {
   const handleClickPovratak = () => {
     const korisnik = JSON.parse(sessionStorage.getItem('korisnik'))
     if(korisnik.tipKorisnika === 'Kupac'){
-      navigate('/kupacDashboard');
+      navigate('/kupacPorudzbine');
     }
     else if(korisnik.tipKorisnika === 'Prodavac'){
+      //ovde mozes da parsiras path name
       navigate('/prodavacDashboard');
     }
     else if(korisnik.tipKorisnika === 'Administrator'){
-      navigate('/adminDashboard');
+      navigate('/adminSvePorudzbine');
     }
   }
 

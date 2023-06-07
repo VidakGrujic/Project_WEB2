@@ -59,6 +59,7 @@ function App() {
     {path: '/adminDashboard', element: <AdminDashboard></AdminDashboard>},
     {path: '/adminVerifikacija', element: <AdminVerifikacija></AdminVerifikacija>},
     {path: '/adminSvePorudzbine', element: <AdminSvePorudzbine></AdminSvePorudzbine>},
+    {path: '/adminSvePorudzbine/PrikazPorudzbine/:id', element: <PrikazPorudzbine></PrikazPorudzbine>},
     {path: '/profil', element: <Profil></Profil>}
   ]
 

@@ -22,6 +22,7 @@ namespace Projekat_WEB2_backend.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles ="administrator")]
         public IActionResult GetAllPorudzbina()
         {
             return Ok(_porudzbinaService.GetAllPorudzbina());
