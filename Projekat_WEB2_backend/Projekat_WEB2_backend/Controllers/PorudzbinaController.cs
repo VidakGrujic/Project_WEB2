@@ -30,8 +30,8 @@ namespace Projekat_WEB2_backend.Controllers
 
         [HttpGet("{id}")]
         [Authorize(Roles ="kupac,prodavac,administrator")]
-        public IActionResult GetById(long id)
-        {
+        public IActionResult GetById(long id) //id porudzbine
+        { 
             PorudzbinaPrikazDto porudzbinaZaPrikazDto = _porudzbinaService.GetPorudzbinaById(id);
             if(porudzbinaZaPrikazDto == null)
             {
@@ -69,7 +69,7 @@ namespace Projekat_WEB2_backend.Controllers
 
         [HttpGet("getKupcevePorudzbine/{id}")]
         [Authorize(Roles ="kupac")]
-        public IActionResult GetKupcevePorudzbine(long id)
+        public IActionResult GetKupcevePorudzbine(long id) // id kupca
         {
             List<PorudzbinaDto> korisnikovePorudzbineDto = _porudzbinaService.GetKupcevePorudzbine(id);
             if(korisnikovePorudzbineDto == null)
@@ -82,7 +82,7 @@ namespace Projekat_WEB2_backend.Controllers
 
         [HttpPut("otkaziPorudzbinu/{id}")]
         [Authorize(Roles = "kupac")]
-        public IActionResult OtkaziPorudzbine(long id, [FromBody] string statusVerifikacije)
+        public IActionResult OtkaziPorudzbine(long id, [FromBody] string statusVerifikacije) //id kupca
         {
             ResponsePorudzbinaDto otkazanaPorudzbinaDto = _porudzbinaService.OtkaziPorudzbinu(id, statusVerifikacije);
             if(otkazanaPorudzbinaDto.PorudzbinaDto == null)
@@ -95,7 +95,7 @@ namespace Projekat_WEB2_backend.Controllers
         
         [HttpGet("getProdavceveNovePorudzbine/{id}")]
         [Authorize(Roles = "prodavac")]
-        public IActionResult GetProdavceveNovePorudzbine(long id)
+        public IActionResult GetProdavceveNovePorudzbine(long id) //prodavcev id
         {
             List<PorudzbinaDto> prodavcevePorudzbine = _porudzbinaService.GetProdavceveNovePorudzbine(id);
             if(prodavcevePorudzbine == null)
@@ -108,7 +108,7 @@ namespace Projekat_WEB2_backend.Controllers
 
         [HttpGet("getProdavcevePrethodnePorudzbine/{id}")]
         [Authorize(Roles ="prodavac")]
-        public IActionResult GetProdavcevePrethodnePorudzbine(long id)
+        public IActionResult GetProdavcevePrethodnePorudzbine(long id) //prodavcev id
         {
             List<PorudzbinaDto> prodavcevePrethodnePorudzbineDto = _porudzbinaService.GetProdavcevePrethodnePorudzbine(id);
             if(prodavcevePrethodnePorudzbineDto == null)

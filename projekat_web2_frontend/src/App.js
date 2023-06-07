@@ -17,6 +17,9 @@ import AdminVerifikacija from './Components/AdministratorComponents/AdminVerfika
 import Profil from './Components/ProfileComponents/Profil';
 import KupacPoruci from './Components/KupacComponents/KupacPoruci';
 import PrikazPorudzbine from './Components/PorudzbinaComponents/PrikazPorudzbina'
+import ProdavacPregledArtikala from './Components/ProdavacComponents/ProdavacPregledArtikala';
+import IzmeniArtikal from './Components/ArtikalComponents/IzmeniArtikal';
+
 function App() {
 
   //da li je korisnik autentifikovan, on je atuentifikovan i posle registracije i posle logovanje
@@ -56,6 +59,8 @@ function App() {
     {path: '/prodavacPrethodnePorudzbine', element: <ProdavacPrethodnePorudzbine></ProdavacPrethodnePorudzbine>},
     {path: '/prodavacNovePorudzbine/PrikazPorudzbine/:id', element: <PrikazPorudzbine></PrikazPorudzbine>},
     {path: '/prodavacPrethodnePorudzbine/PrikazPorudzbine/:id', element: <PrikazPorudzbine></PrikazPorudzbine>},
+    {path: '/prodavacPregledArtikala', element:<ProdavacPregledArtikala></ProdavacPregledArtikala>},
+    {path: '/prodavacPregledArtikala/IzmeniArtikal/:id', element: <IzmeniArtikal></IzmeniArtikal>},
     {path: '/adminDashboard', element: <AdminDashboard></AdminDashboard>},
     {path: '/adminVerifikacija', element: <AdminVerifikacija></AdminVerifikacija>},
     {path: '/adminSvePorudzbine', element: <AdminSvePorudzbine></AdminSvePorudzbine>},

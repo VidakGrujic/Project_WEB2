@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 import CountdownTimer from "../Other Components/CountdownTimer";
-import { GetNoveProdavcevePorudzbine } from "../../Services/ComponentService";
+import { GetNoveProdavcevePorudzbine } from "../../Services/PorudzbinaService";
 
 const ProdavacNovePorudzbine = () => {
     

@@ -15,7 +15,7 @@ export const GetKupcevePorudzbine = async(kupacId, token) => {
     } catch(err){
         console.log(err);
         alert("Nesto se desilo prilikom dobavljanja kupcevih porudzbina")
-        return [];
+        return null;
     }
 }
 
@@ -35,7 +35,7 @@ export const GetPorudzbinaById = async (id, token) => {
     }catch(err){
         console.log(err);
         alert("Nesto se desilo prilikom dobavljanja informacija o porudzbini")
-        return err;
+        return null;
     }
 }
 

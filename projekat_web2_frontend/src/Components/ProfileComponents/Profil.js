@@ -17,6 +17,7 @@ const Profil = () => {
     const [prezime, setPrezime] = useState(korisnik.prezime);
     const [datumRodjenja, setDatumRodjenja] = useState(new Date(korisnik.datumRodjenja));
     const [adresa, setAdresa] = useState(korisnik.adresa);
+    const [cenaDostave, setCenaDostave] = useState(korisnik.cenaDostave);
     
     const navigate = useNavigate();
     const UPDATE_URL = "/users/" + id ; //treba da dobije id isto
@@ -54,7 +55,8 @@ const Profil = () => {
                 datumRodjenja,
                 tipKorisnika,
                 adresa,
-                statusVerifikacije
+                statusVerifikacije,
+                cenaDostave
             });
 
             const token = sessionStorage.getItem('token');

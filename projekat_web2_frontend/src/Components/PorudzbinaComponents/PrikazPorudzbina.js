@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { GetPorudzbinaById } from "../../Services/ComponentService";
+import { GetPorudzbinaById } from "../../Services/PorudzbinaService";
 
 export default function PrikazPorudzbina() {
   const [id, setId] = useState("");
@@ -18,13 +18,13 @@ export default function PrikazPorudzbina() {
       setId(idInt);
 
       const response = await GetPorudzbinaById(idInt, sessionStorage.getItem('token'));
-      response.datumDostave = new Date(response.datumDostave);
-      response.datumKreiranja = new Date(response.datumKreiranja);
-      console.log(response)
-      setPorudzbina(response);
-      setLoading(false);
-
-
+      if(response !== null){
+        response.datumDostave = new Date(response.datumDostave);
+        response.datumKreiranja = new Date(response.datumKreiranja);
+        console.log(response)
+        setPorudzbina(response);
+        setLoading(false);
+      }
     };
     getPordzbinaId();
   }, []);
@@ -33,11 +33,18 @@ export default function PrikazPorudzbina() {
   const handleClickPovratak = () => {
     const korisnik = JSON.parse(sessionStorage.getItem('korisnik'))
     if(korisnik.tipKorisnika === 'Kupac'){
-      navigate('/kupacPorudzbine');
+      navigate('/kupacPorudzbine')
     }
     else if(korisnik.tipKorisnika === 'Prodavac'){
+      const pathname = window.location.pathname;
+      const redirectionComponent = pathname.split("/")[2];
+      
       //ovde mozes da parsiras path name
-      navigate('/prodavacDashboard');
+      if("prodavacPrethodnePorudzbine") {
+        navigate('/prodavacPrethodnePorudzbine');
+      } else if("prodavacNovePorudzbine"){
+        navigate('/prodavacNovePorudzbine');
+      }
     }
     else if(korisnik.tipKorisnika === 'Administrator'){
       navigate('/adminSvePorudzbine');

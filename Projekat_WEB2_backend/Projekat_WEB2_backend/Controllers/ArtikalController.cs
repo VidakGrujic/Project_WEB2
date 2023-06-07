@@ -21,17 +21,23 @@ namespace Projekat_WEB2_backend.Controllers
             _artikalService = artikalService;
         }
 
-        [HttpGet("getAll")]
-        //[Authorize(Roles = "kupac")]
+        [HttpGet]
+        [Authorize(Roles = "prodavac")]
         public IActionResult GetAllArtikals()
         {
             return Ok(_artikalService.GetAllArtikals());
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetArtikalById(long id)
+        [Authorize(Roles ="prodavac")]
+        public IActionResult GetArtikalById(long id) //id artikla
         {
-            return Ok(_artikalService.GetArtikalById(id));
+            ArtikalDto artikal = _artikalService.GetArtikalById(id);
+            if(artikal == null)
+            {
+                return BadRequest("Artikal ne postoji");
+            }
+            return Ok(artikal);
         }
 
         [HttpPost("addArtikal")]
@@ -47,16 +53,40 @@ namespace Projekat_WEB2_backend.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "prodavac")]
         public IActionResult ChangeArtikal(long id, [FromBody] ArtikalDto artikal)
         {
-            return Ok(_artikalService.UpdateArtikal(id, artikal)); 
+            ArtikalDto updateArtikal = _artikalService.UpdateArtikal(id, artikal);
+            if(updateArtikal == null)
+            {
+                return BadRequest("Artikal ne postoji");
+            }
+            return Ok(updateArtikal); 
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "prodavac")]
         public IActionResult DeleteArtikal(long id)
         {
-            _artikalService.DeleteArtikal(id);
+            if (!_artikalService.DeleteArtikal(id))
+            {
+                return BadRequest("Artikal ne postoji ili nije uspesno obrisan");
+            }
             return Ok($"Artikal id {id} je uspesno obrisan");
         }       
+
+        [HttpGet("getProdavceveArtikle/{id}")]
+        [Authorize(Roles = "prodavac")]
+        public IActionResult GetProdavceveArtikle(long id) //prodavcev id
+        {
+            List<ArtikalDto> prodavceviArtikli = _artikalService.GetProdavceveArtikle(id);
+            if(prodavceviArtikli == null)
+            {
+                return BadRequest("Korisnik ne postoji");
+            }
+            return Ok(prodavceviArtikli);
+        }        
+
+
     }
 }

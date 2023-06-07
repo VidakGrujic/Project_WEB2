@@ -12,8 +12,8 @@ namespace Projekat_WEB2_backend.Interfaces
         List<ArtikalDto> GetAllArtikals();
         ArtikalDto GetArtikalById(long id);
         ArtikalDto UpdateArtikal(long id, ArtikalDto updateArtikalDto);
-        void DeleteArtikal(long id);
-
+        bool DeleteArtikal(long id);
+        List<ArtikalDto> GetProdavceveArtikle(long id);
 
     }
 }

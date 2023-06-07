@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Projekat_WEB2_backend.Dto;
 using Projekat_WEB2_backend.Helper_Classes;
 using Projekat_WEB2_backend.Infrastructure;
@@ -40,11 +41,16 @@ namespace Projekat_WEB2_backend.Services
             return _mapper.Map<ArtikalDto>(newArtikal);
         }
 
-        public void DeleteArtikal(long id)
+        public bool DeleteArtikal(long id)
         {
             Artikal deleteArtikal = _dbContext.Artikli.Find(id);
+            if(deleteArtikal == null)
+            {
+                return false;
+            }
             _dbContext.Artikli.Remove(deleteArtikal);
             _dbContext.SaveChanges();
+            return true;
 
         }
 
@@ -56,17 +62,40 @@ namespace Projekat_WEB2_backend.Services
 
         public ArtikalDto GetArtikalById(long id)
         {
-            return _mapper.Map<ArtikalDto>(_dbContext.Artikli.Find(id));
+            Artikal artikal = _dbContext.Artikli.Find(id);
+            if(artikal == null)
+            {
+                return null;
+            }
+            return _mapper.Map<ArtikalDto>(artikal);
         }
 
         public ArtikalDto UpdateArtikal(long id, ArtikalDto updateArtikalDto)
         {
             Artikal updateArtikal = _dbContext.Artikli.Find(id);
+            if(updateArtikal == null)
+            {
+                return null;
+            }
             ArtikalHelperClass.UpdateArtikalFiels(updateArtikal, updateArtikalDto);
             _dbContext.SaveChanges();
 
             return _mapper.Map<ArtikalDto>(updateArtikal);
             
         }
+
+
+        public List<ArtikalDto> GetProdavceveArtikle(long id)
+        {
+            Korisnik prodavac = _dbContext.Korisnici.Include(x => x.ProdavceviArtikli).FirstOrDefault(x=> x.Id == id);
+            if(prodavac == null)
+            {
+                return null;
+            }
+
+            return _mapper.Map<List<ArtikalDto>>(prodavac.ProdavceviArtikli);
+        }
+
+
     }
 }

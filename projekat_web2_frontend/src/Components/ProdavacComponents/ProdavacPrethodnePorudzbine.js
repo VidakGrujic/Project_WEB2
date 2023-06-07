@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 import CountdownTimer from "../Other Components/CountdownTimer";
-import { GetProdavcevePrethodnePorudzbine } from "../../Services/ComponentService";
+import { GetProdavcevePrethodnePorudzbine } from "../../Services/PorudzbinaService";
 
 const ProdavacPrethodnePorudzbine = () => {
     const [prodavceveMojePorudzbine, setProdavceveMojePorudzbine] = useState([]);
@@ -46,7 +46,7 @@ const ProdavacPrethodnePorudzbine = () => {
                        <tr>
                             <td>
                                 <h4 className="ui header">
-                                    <a href={`/prodavacNovePorudzbine/PrikazPorudzbine/${prodavcevaMojaPorudzbina.id}`}>Porudzbina br {prodavcevaMojaPorudzbina.id}</a>
+                                    <a href={`/prodavacPrethodnePorudzbine/PrikazPorudzbine/${prodavcevaMojaPorudzbina.id}`}>Porudzbina br {prodavcevaMojaPorudzbina.id}</a>
                                 </h4>
                             </td>
                             <td>

@@ -16,7 +16,7 @@ const KupacDashboard = () => {
 
   const navigate = useNavigate();
 
-  const GET_ARTIKLE_URL = "/products/getAll";
+  const GET_ARTIKLE_URL = "/products";
   const token = sessionStorage.getItem('token')
 
   useEffect(() => {

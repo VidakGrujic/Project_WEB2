@@ -1,5 +1,5 @@
 import React,{useState, useEffect} from "react";
-import { GetSvePorudzbine } from "../../Services/ComponentService";
+import { GetSvePorudzbine } from "../../Services/PorudzbinaService";
 import CountdownTimer from "../Other Components/CountdownTimer";
 
 const AdminSvePorudzbine = () => {

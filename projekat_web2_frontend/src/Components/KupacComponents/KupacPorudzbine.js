@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import CountdownTimer from "../Other Components/CountdownTimer";
-import { GetKupcevePorudzbine, OtkaziPorudzbinu } from "../../Services/ComponentService";
+import { GetKupcevePorudzbine, OtkaziPorudzbinu } from "../../Services/PorudzbinaService";
 import { useNavigate } from "react-router-dom";
 
 const KupacPorudzbine = () => {
@@ -17,9 +17,11 @@ const KupacPorudzbine = () => {
             const token = sessionStorage.getItem('token'); 
             const response = await GetKupcevePorudzbine(kupacId, token);   
         
-            setKupcevePorudzbine(response);
-            console.log(response)
-            setLoading(false);
+            if(response !== null){
+                setKupcevePorudzbine(response);
+                console.log(response)
+                setLoading(false);
+            }         
         } 
         getPorudzbine();
     }, [])
