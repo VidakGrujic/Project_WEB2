@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "../../api/axios";
 import { useNavigate } from "react-router-dom";
+import { AddPorudzbina } from "../../Services/PorudzbinaService";
 
 export default function KupacPoruci() {
   const [adresa, setAdresa] = useState("");
@@ -12,8 +12,6 @@ export default function KupacPoruci() {
   const [cenaPorudzbine, setCenaPorudzbine] = useState("");
 
   const navigate = useNavigate();
-
-  const ADD_PORUDZBINA_URL = "/orders/addPorudzbina";
 
   useEffect(() => {
     const ukupnaCenaPorudzbine = () => {
@@ -65,26 +63,14 @@ export default function KupacPoruci() {
       cenaPorudzbine
     });
 
-    const url = `${process.env.REACT_APP_API_BACK}${ADD_PORUDZBINA_URL}`;
-    try {
-      const {data} = await axios.post(url,
-        porudzbinaDto, 
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          withCredentials: true,
-        });
-        
+    
+    const data = await AddPorudzbina(porudzbinaDto, token);
+    if(data !== null){
         console.log(data);
         alert("Uspesno prihvacena porudzbina");
         navigate('/kupacDashboard');
     
-      } catch (err) {
-      
-        alert("Nesto se desilo prilikom pravljenja porudzbine");
-      }
+    } 
   };
 
   return (

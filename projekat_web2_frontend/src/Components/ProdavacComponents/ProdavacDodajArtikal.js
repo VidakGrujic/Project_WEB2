@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "../../api/axios";
+import { AddArtikal } from "../../Services/ArtikalService";
 
 const ProdavacDodajArtikal = () => {
 
@@ -9,8 +9,7 @@ const ProdavacDodajArtikal = () => {
     const [opis, setOpis] = useState('');
     const [fotografija, setFotografija] = useState("https://staticg.sportskeeda.com/editor/2022/01/3daff-16432330593294-1920.jpg");
     
-    const ADD_ARTIKAL_URL = '/products/addArtikal';
-
+   
     const [error, setError] = useState(false);
 
     const handleImageLoad = () =>{ 
@@ -43,24 +42,13 @@ const ProdavacDodajArtikal = () => {
             naziv, cena, kolicina, opis, fotografija, prodavacId, cenaDostave
         });
 
-        const url = `${process.env.REACT_APP_API_BACK}${ADD_ARTIKAL_URL}`;
-        try{
-            const response = await axios.post(url,
-                artikalDto,
-                {
-                    headers:{
-                        'Content-Type' : 'application/json',
-                        Authorization : `Bearer ${token}`
-                    },
-                    withCredentials: true
-                }
-            );
+        const data = await AddArtikal(artikalDto, token);
+        if(data !== null){
+            
             setInputsToEmpty();
             alert("Artikal je uspesno dodat")
-            console.log(response)
-        }catch(err){
-            const result = err.response.data;
-            alert(result);
+            console.log(data)
+        }else{
             setInputsToEmpty();
         }
     }

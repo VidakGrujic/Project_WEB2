@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import axios from "../../api/axios";
 import { useNavigate } from "react-router-dom";
+import { GetArtikle } from "../../Services/ArtikalService";
 
 const KupacDashboard = () => {
   const [artikli, setArtikli] = useState([]);
@@ -16,24 +16,16 @@ const KupacDashboard = () => {
 
   const navigate = useNavigate();
 
-  const GET_ARTIKLE_URL = "/products";
+  
   const token = sessionStorage.getItem('token')
 
   useEffect(() => {
     const getArtikle = async () => {
       setLoading(true);
       setShowMessage(false); //dok se ne ucitaju podaci, nema prikazivanja poruke
-      try {
-        const { data } = await axios.get(
-          `${process.env.REACT_APP_API_BACK}${GET_ARTIKLE_URL}`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization : `Bearer ${token}`
-            },
-          }
-        );
-
+     
+      const data = await GetArtikle(token)
+      if(data !== null){
         setArtikli(data);
         setLoading(false);
         setMessage({
@@ -41,10 +33,10 @@ const KupacDashboard = () => {
           content: "Uspesno ucitani podaci",
         });
         setShowMessage(true);
-      } catch (err) {
+      } else{
         setLoading(true);
         setShowMessage(false);
-      }
+      }       
     };
     getArtikle();
   }, []);

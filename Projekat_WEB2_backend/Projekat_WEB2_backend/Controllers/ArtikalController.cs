@@ -22,7 +22,6 @@ namespace Projekat_WEB2_backend.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "prodavac")]
         public IActionResult GetAllArtikals()
         {
             return Ok(_artikalService.GetAllArtikals());

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import axios from "../../api/axios";
 import { useNavigate } from "react-router-dom";
+import { LoginUser } from "../../Services/KorisnikService";
 
 const Login = ({handleKorisnikInfo}) => {
-    const LOGIN_URL = '/users/login';
+    
 
     const[email, setEmail] = useState('');
     const[lozinka, setLozinka] = useState('');
@@ -39,33 +39,22 @@ const Login = ({handleKorisnikInfo}) => {
             return;
         }
 
-        try{
-            const response = await axios.post(`${process.env.REACT_APP_API_BACK}${LOGIN_URL}`,
-                JSON.stringify({email, lozinka}),
-                {
-                    headers:{'Content-Type' : 'application/json'},
-                    withCredentials: true
-                }
-            );
-            console.log(response.data);
-
-            sessionStorage.setItem('isAuth', JSON.stringify(true));
-            sessionStorage.setItem('token', response.data.token)
-            sessionStorage.setItem('korisnik', JSON.stringify(response.data.korisnikDto));
-            const tipKorisnika = response.data.korisnikDto.tipKorisnika; // propertiji su mala slova
+        const data = await LoginUser(email, lozinka);
+        if(data !== null){
+            sessionStorage.setItem("isAuth", JSON.stringify(true));
+            sessionStorage.setItem("token", data.token);
+            sessionStorage.setItem("korisnik", JSON.stringify(data.korisnikDto));
+            const tipKorisnika = data.korisnikDto.tipKorisnika; // propertiji su mala slova
             handleKorisnikInfo(true); //prvo se postave podaci pa se re reneruje
             alert("Uspesno ste se logovali");
             redirectTo(tipKorisnika);
-            
         }
-        catch(err){ 
-            const result = err.response;
-            alert(result);
-            sessionStorage.setItem('isAuth', false);
+        else{
+            
+            sessionStorage.setItem("isAuth", false);
             handleKorisnikInfo(false); //prvo se postave podaci pa se re reneruje
             setInputsToEmpty();
         }
-
     }
 
     return (

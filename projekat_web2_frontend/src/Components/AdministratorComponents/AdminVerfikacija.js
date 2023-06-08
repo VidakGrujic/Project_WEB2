@@ -1,37 +1,25 @@
 import React, { useEffect, useState } from "react";
-import axios from "../../api/axios";
+import { GetAllProdavce, VerifyProdavca } from "../../Services/KorisnikService";
 
 const AdminVerifikacija = () => {
     
-    const GET_PRODAVCE_URL = '/users/getProdavce'
-    const VERIFY_PRODAVCA = '/users/verifyProdavca/';
+    
+    
     const [prodavci, setProdavci] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const token = sessionStorage.getItem('token');
 
 
     useEffect(() => {
         const getProdavce = async () => {
             setLoading(true);
-            try{
-                const {data} = await axios.get(
-                    `${process.env.REACT_APP_API_BACK}${GET_PRODAVCE_URL}`,
-                    {
-                        headers:{
-                            'Content-Type' : 'application/json',
-                            Authorization : `Bearer ${token}`
-                        },
-                    }
-                );
 
+            const data = await GetAllProdavce(token);
+            
+            if(data !== null){
                 setProdavci(data);
                 setLoading(false);
             }
-            catch(err){
-                alert('Nesto se desilo prilikom dobavljanja prodavaca');
-                setLoading(true);
-            }
-            
         }
         getProdavce();
     }, []);
@@ -64,27 +52,11 @@ const AdminVerifikacija = () => {
       
         const prodavacId = Number(e.target.id);
         const buttonType = e.target.value; //da li je kliknuto dugme sa value 'prihvati' ili 'odbij'
-        
-        //sada treba na backu napraviti funkciju verifikacije
-        const url = `${process.env.REACT_APP_API_BACK}${VERIFY_PRODAVCA}${prodavacId}`
-        try{
-            const {data} = await axios.put(
-                `${process.env.REACT_APP_API_BACK}${VERIFY_PRODAVCA}${prodavacId}`,
-                buttonType,
-                {
-                    headers:{
-                        'Content-Type' : 'application/json',
-                        'Authorization' : `Bearer ${token}`
-                    },
-                    withCredentials: true
-                }
-            );
+    
+        const data = await VerifyProdavca(prodavacId, buttonType, token);
+        if(data !== null){
             setProdavci(data);
             alert(`Uspesno ste ${buttonType} prodavca.`)
-
-        } catch(err){
-            const result = err.response.data;
-            alert(result);
         }
     }
 

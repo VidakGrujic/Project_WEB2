@@ -82,4 +82,42 @@ export const DeleteArtikal = async(artikalId, token) => {
     }
 }
 
+export const GetArtikle = async(token) => {
+    const GET_ARTIKLE_URL = "/products";
+    try{
+        const { data } = await axios.get(
+            `${process.env.REACT_APP_API_BACK}${GET_ARTIKLE_URL}`,
+                {
+                    headers: {
+                    "Content-Type": "application/json",
+                    Authorization : `Bearer ${token}`
+                    },
+                }
+            );
+        return data;
+    }catch(err){
+        alert("Nesto se desilo prilikom dobavljanja artikala");
+        return null;
+    }
+}
 
+
+export const AddArtikal = async(artikalDto, token) => {
+    const ADD_ARTIKAL_URL = '/products/addArtikal';
+    try{
+        const {data} = await axios.post(`${process.env.REACT_APP_API_BACK}${ADD_ARTIKAL_URL}`,
+            artikalDto,
+            {
+                headers:{
+                    'Content-Type' : 'application/json',
+                    Authorization : `Bearer ${token}`
+                },
+                withCredentials: true
+            }
+        );
+        return data;
+    }catch(err){
+        alert("Nesto se desilo prilikom dodavanja artikla")
+        return null;
+    }
+}

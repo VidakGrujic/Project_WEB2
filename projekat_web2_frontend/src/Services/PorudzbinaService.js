@@ -127,4 +127,26 @@ export const GetSvePorudzbine = async (token) => {
 
 
 
+export const AddPorudzbina = async(porudzbinaDto, token) =>{
+    const ADD_PORUDZBINA_URL = "/orders/addPorudzbina";
+    try{
+        const {data} = await axios.post(`${process.env.REACT_APP_API_BACK}${ADD_PORUDZBINA_URL}`,
+            porudzbinaDto, 
+            {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+            withCredentials: true,
+            }
+        );
+        return data;
+    } catch(err){
+        console.log(err);
+         alert("Nesto se desilo prilikom pravljenja porudzbine");
+         return null;
+    }    
+}
+
+
 

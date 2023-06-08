@@ -1,8 +1,8 @@
 import React, { useState} from "react";
-import axios from "../../api/axios";
 import { useNavigate } from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
+import { RegisterUser } from "../../Services/KorisnikService";
 
 const Registration = ({handleKorisnikInfo}) => {
     const [korisnickoIme, setKorisnickoIme] = useState('');
@@ -17,7 +17,7 @@ const Registration = ({handleKorisnikInfo}) => {
     const [statusVerifikacije, setStatusVerifikacije] = useState('Prihvacen');
     const [cenaDostave, setCenaDostave] = useState(0);
     const navigate = useNavigate();
-    const REGISTRATION_URL = "/users/registration";
+
 
     const[error, setError] = useState(false);
 
@@ -75,25 +75,17 @@ const Registration = ({handleKorisnikInfo}) => {
                 cenaDostave
             });
 
-            try {
-                const response = await axios.post(`${process.env.REACT_APP_API_BACK}${REGISTRATION_URL}`,
-                    korisnikJSON,
-                    {
-                        headers:{'Content-Type' : 'application/json'},
-                        withCredentials: true
-                    }
-                );
 
+            const data = await RegisterUser(korisnikJSON);
+            if(data !== null){
                 sessionStorage.setItem('isAuth', JSON.stringify(true));
-                sessionStorage.setItem('token', response.data.token)
-                sessionStorage.setItem('korisnik', JSON.stringify(response.data.korisnikDto));
+                sessionStorage.setItem('token', data.token)
+                sessionStorage.setItem('korisnik', JSON.stringify(data.korisnikDto));
                 handleKorisnikInfo(true); //prvo se postave podaci pa se re reneruje
                 alert("Uspesno ste se registrovali");
                 redirectTo(tipKorisnika);
 
-            } catch (err) { 
-                const result = err.response.data;
-                alert(result);
+            } else {
                 setInputsToEmpty();
                 sessionStorage.setItem('isAuth', JSON.stringify(false));
                 handleKorisnikInfo(false);
