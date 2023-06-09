@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
 import {EditProfile} from "../../Services/KorisnikService";
+import UploadImage from "../Other Components/UploadImage";
 
 const Profil = () => {
   const korisnik = JSON.parse(sessionStorage.getItem("korisnik"));
@@ -21,6 +22,7 @@ const Profil = () => {
   );
   const [adresa, setAdresa] = useState(korisnik.adresa);
   const [cenaDostave, setCenaDostave] = useState(korisnik.cenaDostave);
+  const [slika, setSlika] = useState(korisnik.slika);
 
   const navigate = useNavigate();
 
@@ -36,6 +38,9 @@ const Profil = () => {
     }
   };
 
+
+  
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -46,7 +51,8 @@ const Profil = () => {
       ime.length === 0 ||
       prezime.length === 0 ||
       datumRodjenja === null ||
-      adresa.length === 0
+      adresa.length === 0 || 
+      slika.length === 0
     ) {
       setError(true);
       return;
@@ -63,6 +69,7 @@ const Profil = () => {
       adresa,
       statusVerifikacije,
       cenaDostave,
+      slika
     });
 
     const token = sessionStorage.getItem("token");
@@ -79,6 +86,11 @@ const Profil = () => {
     <div className="card">
       <form className="ui form" onSubmit={handleSubmit}>
         <h2 className="ui center aligned header">Izmenite Profil</h2>
+        <UploadImage slika={slika} setSlika={setSlika}></UploadImage>
+        {error && slika.length === 0 ?  <div className="ui pointing red basic label">
+              Morate odabrati sliku
+            </div>
+           : null}
         <div className="field">
           <label>Korisnicko ime</label>
           <input

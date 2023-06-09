@@ -1,9 +1,11 @@
 import React, { useState, useEffect} from "react";
-import { useNavigate, useOutlet } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
 import { RegisterUser } from "../../Services/KorisnikService";
 import jwt_decode from 'jwt-decode';
+import UploadImage from "../Other Components/UploadImage";
+import imageUrl from "../../Picture/registerPic.png";
 
 const Registration = ({handleKorisnikInfo}) => {
     const [korisnickoIme, setKorisnickoIme] = useState('');
@@ -17,6 +19,7 @@ const Registration = ({handleKorisnikInfo}) => {
     const [adresa, setAdresa] = useState('')
     const [statusVerifikacije, setStatusVerifikacije] = useState('Prihvacen');
     const [cenaDostave, setCenaDostave] = useState(0);
+    const [slika, setSlika] = useState(imageUrl);
 
     const [googleUser, setGoogleUser] = useState({});
     const navigate = useNavigate();
@@ -32,7 +35,6 @@ const Registration = ({handleKorisnikInfo}) => {
 
         var userObject = jwt_decode(response.credential)
       
-
         const korisnickoIme = userObject.name;
         const email = userObject.email;
         const lozinka = userObject.email;
@@ -43,6 +45,7 @@ const Registration = ({handleKorisnikInfo}) => {
         const statusVerifikacije = 'Prihvacen';
         const cenaDostave = 0;
         const adresa = 'Trenutna adresa';
+        const slika = userObject.picture
 
         const korisnikJSON = JSON.stringify({
             korisnickoIme,
@@ -54,7 +57,8 @@ const Registration = ({handleKorisnikInfo}) => {
             tipKorisnika,
             adresa,
             statusVerifikacije, 
-            cenaDostave});
+            cenaDostave,
+            slika});
 
         const data = await RegisterUser(korisnikJSON);
         if(data !== null){
@@ -70,7 +74,6 @@ const Registration = ({handleKorisnikInfo}) => {
             sessionStorage.setItem('isAuth', JSON.stringify(false));
             handleKorisnikInfo(false);
         }
-    
     }
 
     //verifikacija korisnika preko gmaila
@@ -112,6 +115,7 @@ const Registration = ({handleKorisnikInfo}) => {
         }
     }
 
+
     const handleSubmit = async (event) => {
         event.preventDefault();
       
@@ -119,7 +123,7 @@ const Registration = ({handleKorisnikInfo}) => {
 
         if(korisnickoIme.length === 0 || email.length === 0 || lozinka.length === 0 || lozinka2.length === 0 
             || ime.length === 0 || prezime.length === 0 || datumRodjenja === null || adresa.length === 0 || lozinka !== lozinka2
-            || (cenaDostave === 0 && tipKorisnika === 'Prodavac')){
+            || (cenaDostave === 0 && tipKorisnika === 'Prodavac') || slika.length === 0){
                 setError(true);
                 return;
             }
@@ -136,7 +140,8 @@ const Registration = ({handleKorisnikInfo}) => {
                 tipKorisnika,
                 adresa,
                 statusVerifikacije, 
-                cenaDostave
+                cenaDostave,
+                slika
             });
 
 
@@ -160,7 +165,9 @@ const Registration = ({handleKorisnikInfo}) => {
     return (
       <div className="card">
             <form className="ui form" onSubmit={handleSubmit}>
-            <h2 className="ui center aligned header">Registration</h2>
+            <h2 className="ui centered aligned header">Registration</h2>
+                <UploadImage slika={slika} setSlika={setSlika}></UploadImage>   
+                {error && slika.length === 0 ? <div className="ui pointing red basic label">Morate odabrati sliku</div> : null}         
                 <div className="field">
                     <label>Korisnicko ime</label>
                     <input  type="text" 

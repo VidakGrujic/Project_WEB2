@@ -1,21 +1,18 @@
 import React, { useState } from "react";
 import { AddArtikal } from "../../Services/ArtikalService";
-
+import UploadImage from "../Other Components/UploadImage";
+import suticaseUrl from "../../Picture/suitcase.png";
 const ProdavacDodajArtikal = () => {
 
     const [naziv, setNaziv] = useState('');
     const [cena, setCena] = useState(0);
     const [kolicina, setKolicina] = useState(0); 
     const [opis, setOpis] = useState('');
-    const [fotografija, setFotografija] = useState("https://staticg.sportskeeda.com/editor/2022/01/3daff-16432330593294-1920.jpg");
+    const [fotografija, setFotografija] = useState(suticaseUrl);
     
    
     const [error, setError] = useState(false);
-
-    const handleImageLoad = () =>{ 
-
-    }
-
+    
     const setInputsToEmpty = () => {
         setNaziv('');
         setCena(0);
@@ -57,18 +54,8 @@ const ProdavacDodajArtikal = () => {
         <div className="card">
             <form className="ui form" onSubmit={handleSubmit} >
                 <h2 className="ui center aligned header">Unos novog artikla</h2>
-                <div className="two fields">
-                    <div className="field">
-                        <img className="ui medium image" src={fotografija}></img>
-                        {error && fotografija.length === 0 ?  <div className="ui pointing red basic label">Morate odabrati fotografiju</div> : null}
-                    </div>
-                    <div className="field">
-                        <div className="load-picture-button">
-                            <button className="ui blue button" onClick={handleImageLoad}>Ucitajte sliku</button>
-                        </div>
-                    </div>
-                </div>
-               
+                <UploadImage slika={fotografija} setSlika={setFotografija}></UploadImage>
+                {error && fotografija.length === 0 ? <div className="ui pointing red basic label">Morate uneti naziv artikla</div> : null}
                 <div className="field">
                     <label>Naziv artikla</label>
                     <input  type="text" 

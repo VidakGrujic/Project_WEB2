@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { GetArtikalById, UpdateArtikal } from "../../Services/ArtikalService";
 import { useNavigate } from "react-router-dom";
+import UploadImage from "../Other Components/UploadImage";
+import artikalUrl from "../../Picture/suitcase.png";
 
 export default function IzmeniArtikal() {
   const [artikalId, setArtikalId] = useState(0);
@@ -8,7 +10,7 @@ export default function IzmeniArtikal() {
   const [cena, setCena] = useState(0);
   const [kolicina, setKolicina] = useState(0);
   const [opis, setOpis] = useState("");
-  const [fotografija, setFotografija] = useState("https://staticg.sportskeeda.com/editor/2022/01/3daff-16432330593294-1920.jpg");
+  const [fotografija, setFotografija] = useState(artikalUrl);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
   
@@ -28,7 +30,7 @@ export default function IzmeniArtikal() {
         setCena(response.cena);
         setKolicina(response.kolicina);
         setOpis(response.opis);
-        //setFotografija(response.fotografija)
+        setFotografija(response.fotografija)
         setLoading(false);
       }
     };
@@ -82,24 +84,12 @@ export default function IzmeniArtikal() {
         <div className="card">
           <form className="ui form" onSubmit={handleSubmit}>
             <h2 className="ui center aligned header">Izmena artikla</h2>
-            <div className="two fields">
-              <div className="field">
-                <img className="ui medium image" src={fotografija}></img>
-                {error && fotografija.length === 0 ? (
-                  <div className="ui pointing red basic label">
-                    Morate odabrati fotografiju
-                  </div>
-                ) : null}
-              </div>
-              <div className="field">
-                <div className="load-picture-button">
-                  <button className="ui blue button" onClick={handleImageLoad}>
-                    Ucitajte sliku
-                  </button>
+            <UploadImage slika={fotografija} setSlika={setFotografija}></UploadImage>
+              {error && fotografija.length === 0 ? (
+                <div className="ui pointing red basic label">
+                  Morate uneti fotografiju
                 </div>
-              </div>
-            </div>
-
+              ) : null}
             <div className="field">
               <label>Naziv artikla</label>
               <input
