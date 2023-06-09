@@ -42,3 +42,8 @@
 .poruci-btn{
   padding-bottom: 10%;
 }
+
+.buttons-flex{
+  display: flex;
+  justify-content:space-between;
+}

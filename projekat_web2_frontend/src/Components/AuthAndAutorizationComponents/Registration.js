@@ -1,8 +1,9 @@
-import React, { useState} from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect} from "react";
+import { useNavigate, useOutlet } from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
 import { RegisterUser } from "../../Services/KorisnikService";
+import jwt_decode from 'jwt-decode';
 
 const Registration = ({handleKorisnikInfo}) => {
     const [korisnickoIme, setKorisnickoIme] = useState('');
@@ -16,11 +17,74 @@ const Registration = ({handleKorisnikInfo}) => {
     const [adresa, setAdresa] = useState('')
     const [statusVerifikacije, setStatusVerifikacije] = useState('Prihvacen');
     const [cenaDostave, setCenaDostave] = useState(0);
+
+    const [googleUser, setGoogleUser] = useState({});
     const navigate = useNavigate();
 
 
     const[error, setError] = useState(false);
 
+
+    const[google, setGoogle] = useState(window.google);
+    
+    const handleCallbackResponse = async (response) => {
+        //console.log("Token: " + response.credential)
+
+        var userObject = jwt_decode(response.credential)
+      
+
+        const korisnickoIme = userObject.name;
+        const email = userObject.email;
+        const lozinka = userObject.email;
+        const ime = userObject.given_name;
+        const prezime = userObject.family_name;
+        const datumRodjenja = new Date();
+        const tipKorisnika = 'Kupac';
+        const statusVerifikacije = 'Prihvacen';
+        const cenaDostave = 0;
+        const adresa = 'Trenutna adresa';
+
+        const korisnikJSON = JSON.stringify({
+            korisnickoIme,
+            email,
+            lozinka,
+            ime,
+            prezime,
+            datumRodjenja,
+            tipKorisnika,
+            adresa,
+            statusVerifikacije, 
+            cenaDostave});
+
+        const data = await RegisterUser(korisnikJSON);
+        if(data !== null){
+            sessionStorage.setItem('isAuth', JSON.stringify(true));
+            sessionStorage.setItem('token', data.token)
+            sessionStorage.setItem('korisnik', JSON.stringify(data.korisnikDto));
+            handleKorisnikInfo(true); //prvo se postave podaci pa se re reneruje
+            alert("Uspesno ste se registrovali");
+            redirectTo(tipKorisnika);
+
+        } else {
+            setInputsToEmpty();
+            sessionStorage.setItem('isAuth', JSON.stringify(false));
+            handleKorisnikInfo(false);
+        }
+    
+    }
+
+    //verifikacija korisnika preko gmaila
+    useEffect(() => {
+        google.accounts.id.initialize({
+            client_id: process.env.REACT_APP_GOOGLE_CLIENT,
+            callback: handleCallbackResponse
+        });
+
+        google.accounts.id.renderButton(
+            document.getElementById('signInDiv'),
+            {theme: "outline", size:"medium"}
+        )
+    }, [])
 
     const setInputsToEmpty = () => {
         setKorisnickoIme('');
@@ -211,7 +275,14 @@ const Registration = ({handleKorisnikInfo}) => {
                             {error && cenaDostave === "" ? <div className="ui pointing red basic label">Morate uneti cenu dostave</div> : null}
                         </div>
                             : null}
-                <button className="ui blue button" type="submit">Submit</button>
+                        
+                <div className="buttons-flex">
+                    <button className="ui blue button" type="submit">Submit</button>
+                    <div id="signInDiv"></div>
+                </div>
+                
+                
+               
             </form>
         </div>
     );

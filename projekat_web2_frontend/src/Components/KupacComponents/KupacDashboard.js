@@ -30,7 +30,7 @@ const KupacDashboard = () => {
         setLoading(false);
         setMessage({
           type: "positive",
-          content: "Uspesno ucitani podaci",
+          content: "Dobro dosli na stranicu. Ako ste se po prvi put registrovali preko Google Account-a, molimo Vas azurirajte Vas datum rodjenja i adresu",
         });
         setShowMessage(true);
       } else{

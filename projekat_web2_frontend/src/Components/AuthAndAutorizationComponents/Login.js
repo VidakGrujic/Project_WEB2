@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LoginUser } from "../../Services/KorisnikService";
+import { useEffect } from "react";
+import jwt_decode from 'jwt-decode';
 
 const Login = ({handleKorisnikInfo}) => {
     
@@ -8,8 +10,50 @@ const Login = ({handleKorisnikInfo}) => {
     const[email, setEmail] = useState('');
     const[lozinka, setLozinka] = useState('');
     const[error, setError] = useState(false);
-
+    
     const navigate = useNavigate();
+
+    const[google, setGoogle] = useState(window.google);
+    
+    const handleCallbackResponse = async (response) => {
+        console.log("Token: " + response.credential);
+
+        var userObject = jwt_decode(response.credential)
+        var email = userObject.email;
+        var lozinka = userObject.email;
+
+        const data = await LoginUser(email, lozinka);
+        if(data !== null){
+            sessionStorage.setItem("isAuth", JSON.stringify(true));
+            sessionStorage.setItem("token", data.token);
+            sessionStorage.setItem("korisnik", JSON.stringify(data.korisnikDto));
+            const tipKorisnika = data.korisnikDto.tipKorisnika; // propertiji su mala slova
+            handleKorisnikInfo(true); //prvo se postave podaci pa se re reneruje
+            alert("Uspesno ste se logovali");
+            redirectTo(tipKorisnika);
+        }
+        else{
+            
+            sessionStorage.setItem("isAuth", false);
+            handleKorisnikInfo(false); //prvo se postave podaci pa se re reneruje
+            setInputsToEmpty();
+        }
+
+    }
+
+    //verifikacija korisnika preko gmaila
+    useEffect(() => {
+        google.accounts.id.initialize({
+            client_id: process.env.REACT_APP_GOOGLE_CLIENT,
+            callback: handleCallbackResponse
+        });
+
+        google.accounts.id.renderButton(
+            document.getElementById('signInDiv'),
+            {theme: "outline", size:"medium"}
+        )
+    }, [])
+
 
 
     const setInputsToEmpty = () => {
@@ -80,7 +124,17 @@ const Login = ({handleKorisnikInfo}) => {
                     
                    {error && lozinka.length === 0 ? <div className="ui pointing red basic label">Morate uneti lozinku</div> : null} 
                 </div>
-                <button className="ui blue button" type="submit">Log in</button>
+
+                <div className="buttons-flex">
+                    <button className="ui blue button" type="submit">Log in</button>
+                    <div id="signInDiv"></div>
+                </div>
+                
+                
+                
+               
+                
+                
             </form>
         </div>
     );
