@@ -1,5 +1,5 @@
 import axios from "../api/axios";
-
+import ArtikalDto from '../Models/ArtikalDto';
 
 export const GetProdavceveArtikle = async(prodavacId, token) => {
     try{
@@ -13,7 +13,10 @@ export const GetProdavceveArtikle = async(prodavacId, token) => {
                 withCredential: true
             }
         );
-        return data;
+        const prodavceviArtikli = data.map(artikal => {
+            return new ArtikalDto(artikal);
+        })
+        return prodavceviArtikli;
     }catch(err){
         console.log(err);
         alert('Nesto se desilo prilikom dobavljanja artikala');
@@ -33,7 +36,8 @@ export const GetArtikalById = async(artikalId, token) => {
                 withCredential: true
             }
         );
-        return data;
+        const artikal = new ArtikalDto(data);
+        return artikal;
     }catch(err){
         console.log(err);
         alert('Nesto se desilo prilikom dobavljanja informacija o artiklu');
@@ -54,7 +58,8 @@ export const UpdateArtikal = async(artikalId, artikalDto, token) => {
                 withCredential: true
             }
         );
-        return data;
+        const updateArtikal = new ArtikalDto(data);
+        return updateArtikal;
     }catch(err){
         console.log(err);
         alert('Nesto se desilo prilikom azuriranja informacija o artiklu');
@@ -94,7 +99,10 @@ export const GetArtikle = async(token) => {
                     },
                 }
             );
-        return data;
+        const artikli = data.map(artikal => {
+            return new ArtikalDto(artikal);
+        })   
+        return artikli;
     }catch(err){
         alert("Nesto se desilo prilikom dobavljanja artikala");
         return null;
@@ -115,7 +123,8 @@ export const AddArtikal = async(artikalDto, token) => {
                 withCredentials: true
             }
         );
-        return data;
+        const newArtikal = new ArtikalDto(data);
+        return newArtikal;
     }catch(err){
         alert("Nesto se desilo prilikom dodavanja artikla")
         return null;

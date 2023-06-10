@@ -102,7 +102,7 @@ const KupacPorudzbine = () => {
                             {kupcevaPorudzbina.adresa}
                         </td>
                         <td className="center aligned"> 
-                            {kupcevaPorudzbina.cenaPorudzbine}
+                            {kupcevaPorudzbina.cenaPorudzbine} $
                         </td>
                         <td>
                             <CountdownTimer targetDate={kupcevaPorudzbina.datumDostave}/>

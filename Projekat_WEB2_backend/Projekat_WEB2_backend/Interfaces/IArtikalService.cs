@@ -8,12 +8,12 @@ namespace Projekat_WEB2_backend.Interfaces
 {
     public interface IArtikalService
     {
-        ArtikalDto AddArtikal(ArtikalDto newArtikalDto);
-        List<ArtikalDto> GetAllArtikals();
-        ArtikalDto GetArtikalById(long id);
-        ArtikalDto UpdateArtikal(long id, ArtikalDto updateArtikalDto);
-        bool DeleteArtikal(long id);
-        List<ArtikalDto> GetProdavceveArtikle(long id);
+        Task<ArtikalDto> AddArtikal(ArtikalDto newArtikalDto);
+        Task<List<ArtikalDto>> GetAllArtikals();
+        Task<ArtikalDto> GetArtikalById(long id);
+        Task<ArtikalDto> UpdateArtikal(long id, ArtikalDto updateArtikalDto);
+        Task<bool> DeleteArtikal(long id);
+        Task<List<ArtikalDto>> GetProdavceveArtikle(long id);
 
     }
 }

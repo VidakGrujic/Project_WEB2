@@ -8,16 +8,16 @@ namespace Projekat_WEB2_backend.Interfaces
 {
     public interface IPorudzbinaService
     {
-        PorudzbinaDto AddPorudzbina(PorudzbinaDto newPorudzbinaDto);
-        List<PorudzbinaDto> GetAllPorudzbina();
-        PorudzbinaPrikazDto GetPorudzbinaById(long id);
-        PorudzbinaDto UpdatePorudzbina(long id, PorudzbinaDto updatePorudzbinaDto);
-        void DeletePorudzbina(long id);
-        List<PorudzbinaDto> GetKupcevePorudzbine(long id);
-        ResponsePorudzbinaDto OtkaziPorudzbinu(long id, string statusVerifikacije);
-        List<PorudzbinaDto> GetProdavceveNovePorudzbine(long id);
+        Task<PorudzbinaDto> AddPorudzbina(PorudzbinaDto newPorudzbinaDto);
+        Task<List<PorudzbinaDto>> GetAllPorudzbina();
+        Task<PorudzbinaPrikazDto> GetPorudzbinaById(long id);
+        Task<PorudzbinaDto> UpdatePorudzbina(long id, PorudzbinaDto updatePorudzbinaDto);
+        Task DeletePorudzbina(long id);
+        Task<List<PorudzbinaDto>> GetKupcevePorudzbine(long id);
+        Task<ResponsePorudzbinaDto> OtkaziPorudzbinu(long id, string statusVerifikacije);
+        Task<List<PorudzbinaDto>> GetProdavceveNovePorudzbine(long id);
 
-        List<PorudzbinaDto> GetProdavcevePrethodnePorudzbine(long id);
+        Task<List<PorudzbinaDto>> GetProdavcevePrethodnePorudzbine(long id);
 
         
     }

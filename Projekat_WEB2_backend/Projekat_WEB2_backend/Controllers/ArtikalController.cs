@@ -22,16 +22,16 @@ namespace Projekat_WEB2_backend.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllArtikals()
+        public async Task<IActionResult> GetAllArtikals()
         {
-            return Ok(_artikalService.GetAllArtikals());
+            return Ok(await _artikalService.GetAllArtikals());
         }
 
         [HttpGet("{id}")]
         [Authorize(Roles ="prodavac")]
-        public IActionResult GetArtikalById(long id) //id artikla
+        public async Task<IActionResult> GetArtikalById(long id) //id artikla
         {
-            ArtikalDto artikal = _artikalService.GetArtikalById(id);
+            ArtikalDto artikal = await _artikalService.GetArtikalById(id);
             if(artikal == null)
             {
                 return BadRequest("Artikal ne postoji");
@@ -41,9 +41,9 @@ namespace Projekat_WEB2_backend.Controllers
 
         [HttpPost("addArtikal")]
         [Authorize(Roles = "prodavac")]
-        public IActionResult CreateArtikal([FromBody] ArtikalDto artikal)
+        public async Task<IActionResult> CreateArtikal([FromBody] ArtikalDto artikal)
         {
-            ArtikalDto newArtikalDto = _artikalService.AddArtikal(artikal);
+            ArtikalDto newArtikalDto = await _artikalService.AddArtikal(artikal);
             if(newArtikalDto == null)
             {
                 return BadRequest("Polja nisu dobro popunjena ili prodavac ne postoji");
@@ -53,21 +53,22 @@ namespace Projekat_WEB2_backend.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = "prodavac")]
-        public IActionResult ChangeArtikal(long id, [FromBody] ArtikalDto artikal)
+        public  async Task<IActionResult> ChangeArtikal(long id, [FromBody] ArtikalDto artikal)
         {
-            ArtikalDto updateArtikal = _artikalService.UpdateArtikal(id, artikal);
-            if(updateArtikal == null)
+            ArtikalDto updateArtikal = await _artikalService.UpdateArtikal(id, artikal);
+            if (updateArtikal == null)
             {
                 return BadRequest("Artikal ne postoji");
             }
-            return Ok(updateArtikal); 
+            return Ok(updateArtikal);
         }
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "prodavac")]
-        public IActionResult DeleteArtikal(long id)
+        public async Task<IActionResult> DeleteArtikal(long id)
         {
-            if (!_artikalService.DeleteArtikal(id))
+            bool response = await _artikalService.DeleteArtikal(id);
+            if (!response)
             {
                 return BadRequest("Artikal ne postoji ili nije uspesno obrisan");
             }
@@ -76,9 +77,9 @@ namespace Projekat_WEB2_backend.Controllers
 
         [HttpGet("getProdavceveArtikle/{id}")]
         [Authorize(Roles = "prodavac")]
-        public IActionResult GetProdavceveArtikle(long id) //prodavcev id
+        public async Task<IActionResult> GetProdavceveArtikle(long id) //prodavcev id
         {
-            List<ArtikalDto> prodavceviArtikli = _artikalService.GetProdavceveArtikle(id);
+            List<ArtikalDto> prodavceviArtikli = await _artikalService.GetProdavceveArtikle(id);
             if(prodavceviArtikli == null)
             {
                 return BadRequest("Korisnik ne postoji");

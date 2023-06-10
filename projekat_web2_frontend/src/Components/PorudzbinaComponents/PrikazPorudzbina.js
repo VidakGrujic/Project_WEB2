@@ -37,10 +37,10 @@ export default function PrikazPorudzbina() {
     }
     else if(korisnik.tipKorisnika === 'Prodavac'){
       const pathname = window.location.pathname;
-      const redirectionComponent = pathname.split("/")[2];
+      const redirectionComponent = pathname.split("/")[1];
       
       //ovde mozes da parsiras path name
-      if("prodavacPrethodnePorudzbine") {
+      if(redirectionComponent === 'prodavacPrethodnePorudzbine') {
         navigate('/prodavacPrethodnePorudzbine');
       } else if("prodavacNovePorudzbine"){
         navigate('/prodavacNovePorudzbine');
@@ -98,7 +98,7 @@ export default function PrikazPorudzbina() {
           <br />
           <div className="field">
             <h3 className="ui blue center aligned header">
-              Cena porudzbine: {porudzbina.cenaPorudzbine}
+              Cena porudzbine: {porudzbina.cenaPorudzbine} $
             </h3>
           </div>
           <br />

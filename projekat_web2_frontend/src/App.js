@@ -20,6 +20,7 @@ import PrikazPorudzbine from './Components/PorudzbinaComponents/PrikazPorudzbina
 import ProdavacPregledArtikala from './Components/ProdavacComponents/ProdavacPregledArtikala';
 import IzmeniArtikal from './Components/ArtikalComponents/IzmeniArtikal';
 
+
 function App() {
 
   //da li je korisnik autentifikovan, on je atuentifikovan i posle registracije i posle logovanje
@@ -27,7 +28,7 @@ function App() {
   const [tipKorisnika, setTipKorisnika] = useState('');
   const [statusVerifikacije, setStatusVerifikacije] = useState('');
   const [isKorisnikInfoGot, setIsKorisnikInfoGot] = useState(false);  //ovo govori da li smo dobili podatke o korisniku
-
+  
   useEffect(() => {
     const getAuth = () => {
         if(sessionStorage.getItem('korisnik') !== null && sessionStorage.getItem('isAuth') !== null){
@@ -44,6 +45,20 @@ function App() {
   const handleKorisnikInfo = (gotKorisnikInfo) => {
     setIsKorisnikInfoGot(gotKorisnikInfo);
   }
+
+  const handleLogout = () => {
+    sessionStorage.removeItem('korisnik');
+    sessionStorage.removeItem('isAuth');
+    sessionStorage.removeItem('token');
+    setIsAuth(false);
+    setStatusVerifikacije('');
+    setTipKorisnika('');
+    setIsKorisnikInfoGot(false);  
+  
+    
+  }
+
+  
 
   const routes = [
     {path: '/', element: <Home></Home>},
@@ -70,7 +85,7 @@ function App() {
 
   return (
     <div className='App'>
-      <NavBar isAuth={isAuth} tipKorisnika = {tipKorisnika} statusVerifikacije={statusVerifikacije}/>
+      <NavBar isAuth={isAuth} tipKorisnika = {tipKorisnika} statusVerifikacije={statusVerifikacije} handleLogout={handleLogout}/>
       <div className='container'>
         <Routes>
           {

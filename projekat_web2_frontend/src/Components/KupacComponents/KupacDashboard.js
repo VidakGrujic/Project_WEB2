@@ -189,9 +189,9 @@ const KupacDashboard = () => {
                       ></img>
                       <div className="content">
                         {artikal.naziv}
-                        <div className="sub header">Cena: {artikal.cena}</div>
+                        <div className="sub header">Cena: {artikal.cena} $</div>
                         <div className="sub header">Kolicina: {artikal.kolicina}</div>
-                        <div className="sub header">Cena Dostave: {artikal.cenaDostave}</div>
+                        <div className="sub header">Cena Dostave: {artikal.cenaDostave} $</div>
                       </div>
                     </h4>
                   </td>

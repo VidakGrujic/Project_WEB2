@@ -1,4 +1,6 @@
 import axios from "../api/axios";
+import PorudzbinaDto from '../Models/PorudzbinaDto';
+import ResponsePorudzbinaDto from '../Models/ResponsePorudzbinaDto';
 
 export const GetKupcevePorudzbine = async(kupacId, token) => {
     //[HttpGet("getKupcevePorudzbine/{id}")]
@@ -11,6 +13,9 @@ export const GetKupcevePorudzbine = async(kupacId, token) => {
             },
             withCredential: true
         });
+        /*const kupcevePorudzbine = data.map(porudzbina => {
+            return new PorudzbinaDto(porudzbina);
+        })*/
         return data;
     } catch(err){
         console.log(err);
@@ -31,6 +36,7 @@ export const GetPorudzbinaById = async (id, token) => {
                 withCredentials: true
             }
         );
+        //const porudzbina = new PorudzbinaDto(data);
         return data;
     }catch(err){
         console.log(err);
@@ -55,6 +61,7 @@ export const OtkaziPorudzbinu = async (id, token) => {
                 withCredentials: true
             }
         );
+        //const responsePorudzbinaDto = new ResponsePorudzbinaDto(data);
         return data;
     }catch(err){
         console.log(err);
@@ -76,6 +83,9 @@ export const GetNoveProdavcevePorudzbine = async (id, token) => {
                 withCredentials: true
             }
         );
+        /*const porudzbine = data.map(porudzbina => {
+            return new PorudzbinaDto(porudzbina);
+        })*/
         return data;
     }catch(err){
         console.log(err);
@@ -96,6 +106,9 @@ export const GetProdavcevePrethodnePorudzbine = async (id, token) => {
                 withCredentials: true
             }
         );
+        /*const porudzbine = data.map(porudzbina => {
+            return new PorudzbinaDto(porudzbina);
+        })*/
         return data;
     }catch(err){
         console.log(err);
@@ -116,6 +129,9 @@ export const GetSvePorudzbine = async (token) => {
                 withCredentials: true
             }
         );
+        /*const porudzbine = data.map(porudzbina => {
+            return new PorudzbinaDto(porudzbina);
+        })*/
         return data;
     }catch(err){
         console.log(err);
@@ -123,9 +139,6 @@ export const GetSvePorudzbine = async (token) => {
         return null;
     }
 }
-
-
-
 
 export const AddPorudzbina = async(porudzbinaDto, token) =>{
     const ADD_PORUDZBINA_URL = "/orders/addPorudzbina";
@@ -140,6 +153,7 @@ export const AddPorudzbina = async(porudzbinaDto, token) =>{
             withCredentials: true,
             }
         );
+        //const newPorudzbina = new PorudzbinaDto(data);
         return data;
     } catch(err){
         console.log(err);
@@ -147,6 +161,5 @@ export const AddPorudzbina = async(porudzbinaDto, token) =>{
          return null;
     }    
 }
-
 
 

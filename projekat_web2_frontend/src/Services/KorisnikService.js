@@ -1,5 +1,6 @@
 import axios from "../api/axios";
-
+import ResponseDto from "../Models/ResponseDto";
+import KorisnikDto from "../Models/KorisnikDto";
 export const LoginUser = async (email,lozinka) => {
   const LOGIN_URL = "/users/login";
   try {
@@ -12,7 +13,8 @@ export const LoginUser = async (email,lozinka) => {
       }
     );
     
-    return data;
+    const response = new ResponseDto(data);
+    return response;
 
   } catch (err) {
     alert("Nesto se desilo prilikom logovanja");
@@ -30,7 +32,8 @@ export const RegisterUser = async (korisnikJSON) => {
                 withCredentials: true
             }
         );
-        return data;
+        const response = new ResponseDto(data);
+        return response;
     }catch(err){
         alert("Nesto se desilo prilikom registracije");
         return null;
@@ -52,7 +55,8 @@ export const EditProfile = async (updatedKorisnikJSON, id, token) => {
                 withCredentials: true
             }
         );
-        return data;
+        const updatedKorisnik = new KorisnikDto(data);
+        return updatedKorisnik;
     }catch(err){
         console.log(err);
         alert("Nesto se desilo prilikom izmene podataka")
@@ -71,7 +75,10 @@ export const GetAllProdavce = async (token) => {
                 },
             }
         );
-        return data;
+        const prodavci = data.map(prodavac => {
+            return new KorisnikDto(prodavac);
+        })
+        return prodavci;
     }catch(err){
         console.log(err);
         alert("Nesto se desilo prilikom dobavljanja prodavaca");
@@ -93,7 +100,10 @@ export const VerifyProdavca = async (prodavacId, buttonType, token) =>{
                 withCredentials: true
             }
         );
-        return data;
+        const verifikovaniProdavci = data.map(verifikovanProdavac => {
+            return new KorisnikDto(verifikovanProdavac);
+        })
+        return verifikovaniProdavci;
     }catch(err){
         console.log(err);
         alert("Nesto se desilo prilikom verifikacije prodavca");

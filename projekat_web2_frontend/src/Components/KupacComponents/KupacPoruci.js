@@ -87,7 +87,7 @@ export default function KupacPoruci() {
             </ul>
             <br />
             <h3 className="ui left aligned header">
-              Cena porudzbine: {cenaPorudzbine}
+              Cena porudzbine: {cenaPorudzbine} $
             </h3>
           </div>
         </div>

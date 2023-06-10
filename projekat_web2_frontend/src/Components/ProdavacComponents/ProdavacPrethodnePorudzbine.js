@@ -53,7 +53,7 @@ const ProdavacPrethodnePorudzbine = () => {
                                 {prodavcevaMojaPorudzbina.adresa}
                             </td>
                             <td className="center aligned"> 
-                                {prodavcevaMojaPorudzbina.cenaPorudzbine}
+                                {prodavcevaMojaPorudzbina.cenaPorudzbine} $
                             </td>
                             <td>
                                 <CountdownTimer targetDate={prodavcevaMojaPorudzbina.datumDostave}/>

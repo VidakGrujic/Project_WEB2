@@ -15,6 +15,7 @@ using Projekat_WEB2_backend.Enumerations;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.EntityFrameworkCore;
 
 namespace Projekat_WEB2_backend.Services
 {
@@ -31,59 +32,57 @@ namespace Projekat_WEB2_backend.Services
             _secretKey = configuration.GetSection("SecretKey");
         }
 
-        public KorisnikDto AddKorisnik(KorisnikDto newKorisnikDto)
+        public async Task<KorisnikDto> AddKorisnik(KorisnikDto newKorisnikDto)
         {
             Korisnik newKorisnik = _mapper.Map<Korisnik>(newKorisnikDto);
             newKorisnik.Lozinka = KorisnikHelperClass.HashPassword(newKorisnik.Lozinka);
             _dbContext.Korisnici.Add(newKorisnik);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
             return _mapper.Map<KorisnikDto>(newKorisnik);
         }
 
-        public void DeleteKorisnik(long id)
+        public async Task DeleteKorisnik(long id)
         {
             Korisnik deleteKorisnik = _dbContext.Korisnici.Find(id);
             _dbContext.Korisnici.Remove(deleteKorisnik);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
         }
 
-        public List<KorisnikDto> GetAllKorisnik()
+        public async Task<List<KorisnikDto>> GetAllKorisnik()
         {
-            List<KorisnikDto> korisnici = _mapper.Map<List<KorisnikDto>>(_dbContext.Korisnici.ToList());
-            return korisnici;
+            List<Korisnik> korisnici = await _dbContext.Korisnici.ToListAsync();
+            return _mapper.Map<List<KorisnikDto>>(korisnici);
+   
         }
 
-        public KorisnikDto GetKorisnikById(long id)
+        public async Task<KorisnikDto> GetKorisnikById(long id)
         {
-            Korisnik findKorisnik = _dbContext.Korisnici.Find(id);
+            Korisnik findKorisnik = await _dbContext.Korisnici.FindAsync(id);
             return _mapper.Map<KorisnikDto>(findKorisnik);
         }
 
-        public KorisnikDto UpdateKorisnik(long id, KorisnikDto updateKorisnikDto)
+        public async Task<KorisnikDto> UpdateKorisnik(long id, KorisnikDto updateKorisnikDto)
         {
 
-            Korisnik updateKorisnik = new Korisnik();
+            Korisnik updateKorisnik = await _dbContext.Korisnici.FindAsync(id);
 
-            try
-            {
-                updateKorisnik = _dbContext.Korisnici.Find(id);
-            }
-            catch(Exception e)
+            if (updateKorisnik == null)
             {
                 return null;
             }
+        
             if (!KorisnikHelperClass.IsKorisnikFieldsValid(updateKorisnikDto))
                 return null;
 
             updateKorisnik.Lozinka = KorisnikHelperClass.HashPassword(updateKorisnikDto.Lozinka);
             KorisnikHelperClass.UpdateKorisnikFields(updateKorisnik, updateKorisnikDto);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
             return _mapper.Map<KorisnikDto>(updateKorisnik);
         }
 
-        public ResponseDto Login(LoginKorisnikDto loginKorisnikDto)
+        public async Task<ResponseDto> Login(LoginKorisnikDto loginKorisnikDto)
         {
 
             Korisnik loginKorisnik = new Korisnik();
@@ -92,14 +91,12 @@ namespace Projekat_WEB2_backend.Services
                 return new ResponseDto("Niste uneli email ili lozinku.");
             }
             
-            try
-            {
-                loginKorisnik = _dbContext.Korisnici.First(x => x.Email == loginKorisnikDto.Email);
-            }
-            catch (Exception e)
-            {
+            
+            loginKorisnik =  await _dbContext.Korisnici.FirstOrDefaultAsync(x => x.Email == loginKorisnikDto.Email);
+
+            if(loginKorisnik == null)
                 return new ResponseDto($"Korisnik sa emailom {loginKorisnikDto.Email} ne postoji");
-            }
+            
             
  
             if (BCrypt.Net.BCrypt.Verify(loginKorisnikDto.Lozinka, loginKorisnik.Lozinka))
@@ -134,7 +131,7 @@ namespace Projekat_WEB2_backend.Services
             }
         }
 
-        public ResponseDto Registration(KorisnikDto registerKorisnik)
+        public async Task<ResponseDto> Registration(KorisnikDto registerKorisnik)
         {
             if (string.IsNullOrEmpty(registerKorisnik.Email)) //ako nije unet email, baci gresku
                 return new ResponseDto("Niste uneli email");
@@ -159,7 +156,7 @@ namespace Projekat_WEB2_backend.Services
             if (!KorisnikHelperClass.IsKorisnikFieldsValid(registerKorisnik)) //ako nisu validna polja onda nista
                 return new ResponseDto("Ostala polja moraju biti validna");
 
-            KorisnikDto registeredKorisnik = AddKorisnik(registerKorisnik);
+            KorisnikDto registeredKorisnik = await AddKorisnik(registerKorisnik);
 
             if (registeredKorisnik == null)
                 return null;
@@ -187,10 +184,11 @@ namespace Projekat_WEB2_backend.Services
             return responseDto;
         }
 
-        public List<KorisnikDto> GetProdavce()
+        public async Task<List<KorisnikDto>> GetProdavce()
         {
             List<Korisnik> prodavci = new List<Korisnik>();
-            foreach(Korisnik korisnik in _dbContext.Korisnici.ToList())
+            
+            foreach(Korisnik korisnik in await _dbContext.Korisnici.ToListAsync())
             {
                 if(korisnik.TipKorisnika == TipKorisnika.Prodavac && korisnik.StatusVerifikacije != StatusVerifikacije.Odbijen)
                 {
@@ -201,7 +199,7 @@ namespace Projekat_WEB2_backend.Services
             return _mapper.Map<List<KorisnikDto>>(prodavci);
         }
 
-        public List<KorisnikDto> VerifyProdavce(long id, string statusVerifikacije)
+        public async Task<List<KorisnikDto>> VerifyProdavce(long id, string statusVerifikacije)
         {
             Korisnik prodavac = _dbContext.Korisnici.Find(id);
             if(prodavac == null)
@@ -217,9 +215,9 @@ namespace Projekat_WEB2_backend.Services
             {
                 prodavac.StatusVerifikacije = StatusVerifikacije.Odbijen;
             }
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
-            return GetProdavce();
+            return await GetProdavce();
         }
     }
 }

@@ -8,18 +8,18 @@ namespace Projekat_WEB2_backend.Interfaces
 {
     public interface IKorisnikService
     {
-        KorisnikDto AddKorisnik(KorisnikDto newKorisnikDto);
-        List<KorisnikDto> GetAllKorisnik();
-        KorisnikDto GetKorisnikById(long id);
-        KorisnikDto UpdateKorisnik(long id, KorisnikDto updateKorisnikDto);
-        void DeleteKorisnik(long id);
+        Task<KorisnikDto> AddKorisnik(KorisnikDto newKorisnikDto);
+        Task<List<KorisnikDto>> GetAllKorisnik();
+        Task<KorisnikDto> GetKorisnikById(long id);
+        Task<KorisnikDto> UpdateKorisnik(long id, KorisnikDto updateKorisnikDto);
+        Task DeleteKorisnik(long id);
 
-        ResponseDto Login(LoginKorisnikDto loginKorisnikDto);
-        ResponseDto Registration(KorisnikDto registerKorisnik);
+        Task<ResponseDto> Login(LoginKorisnikDto loginKorisnikDto);
+        Task<ResponseDto> Registration(KorisnikDto registerKorisnik);
 
 
-        List<KorisnikDto> GetProdavce();
-        List<KorisnikDto> VerifyProdavce(long id, string statusVerifikacije);
+        Task<List<KorisnikDto>> GetProdavce();
+        Task<List<KorisnikDto>> VerifyProdavce(long id, string statusVerifikacije);
 
 
     }

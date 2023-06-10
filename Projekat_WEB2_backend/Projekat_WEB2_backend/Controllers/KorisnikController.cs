@@ -24,27 +24,28 @@ namespace Projekat_WEB2_backend.Controllers
         }
 
         [HttpGet("getAll")]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            return Ok(_korisnikService.GetAllKorisnik());
+            List<KorisnikDto> korisnici = await _korisnikService.GetAllKorisnik();
+            return Ok(korisnici);
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetKorisnikById(long id)
+        public async Task<IActionResult> GetKorisnikById(long id)
         {
-            return Ok(_korisnikService.GetKorisnikById(id));
+            return Ok(await _korisnikService.GetKorisnikById(id));
         }
 
         [HttpPost]
-        public IActionResult CreateKorisnik([FromBody] KorisnikDto korisnik)
+        public async Task<IActionResult> CreateKorisnik([FromBody] KorisnikDto korisnik)
         {
-            return Ok(_korisnikService.AddKorisnik(korisnik));
+            return Ok(await _korisnikService.AddKorisnik(korisnik));
         }
 
         [HttpPut("{id}")]
-        public IActionResult ChangeKorisnik(long id, [FromBody] KorisnikDto korisnik)
+        public async Task<IActionResult> ChangeKorisnik(long id, [FromBody] KorisnikDto korisnik)
         {
-            KorisnikDto updatedKorisnik = _korisnikService.UpdateKorisnik(id, korisnik);
+            KorisnikDto updatedKorisnik = await _korisnikService.UpdateKorisnik(id, korisnik);
             if (updatedKorisnik == null)
             {
                 return BadRequest("Postoje neka prazna polja(mozda korisnik ne postoji)");
@@ -55,16 +56,16 @@ namespace Projekat_WEB2_backend.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteKorisnik(long id)
+        public async Task<IActionResult> DeleteKorisnik(long id)
         {
-            _korisnikService.DeleteKorisnik(id);
+            await _korisnikService.DeleteKorisnik(id);
             return Ok($"Korisnik sa id = {id} je uspesno obrisan.");
         }
 
         [HttpPost("login")]
-        public IActionResult Login([FromBody] LoginKorisnikDto loginKorisnikDto)
+        public async Task<IActionResult> Login([FromBody] LoginKorisnikDto loginKorisnikDto)
         {
-            ResponseDto responseDto = _korisnikService.Login(loginKorisnikDto);
+            ResponseDto responseDto = await _korisnikService.Login(loginKorisnikDto);
             if(responseDto.KorisnikDto == null)
             {
                 return BadRequest(responseDto.Result);
@@ -75,9 +76,9 @@ namespace Projekat_WEB2_backend.Controllers
         }
 
         [HttpPost("registration")]
-        public IActionResult Registration([FromBody] KorisnikDto registerKorisnikDto)
+        public async Task<IActionResult> Registration([FromBody] KorisnikDto registerKorisnikDto)
         {
-            ResponseDto responseDto = _korisnikService.Registration(registerKorisnikDto);
+            ResponseDto responseDto = await _korisnikService.Registration(registerKorisnikDto);
             if (responseDto.KorisnikDto == null)
                 return BadRequest(responseDto.Result);
 
@@ -89,23 +90,23 @@ namespace Projekat_WEB2_backend.Controllers
 
         [HttpGet("getProdavce")]
         [Authorize(Roles = "administrator")]
-        public IActionResult GetProdavce()
+        public async Task<IActionResult> GetProdavce()
         {
-            return Ok(_korisnikService.GetProdavce());
+            return Ok(await _korisnikService.GetProdavce());
         }
 
 
         [HttpPut("verifyProdavca/{id}")]
         [Authorize(Roles = "administrator")]
-        public IActionResult VerifyProdavca(long id, [FromBody] string statusVerifikacije)
+        public async Task<IActionResult> VerifyProdavca(long id, [FromBody] string statusVerifikacije)
         {
-            List<KorisnikDto> verifiedProdavci = _korisnikService.VerifyProdavce(id, statusVerifikacije);
+            List<KorisnikDto> verifiedProdavci = await _korisnikService.VerifyProdavce(id, statusVerifikacije);
             if(verifiedProdavci == null)
             {
                 return BadRequest("Ne postoji prodavac");
             }
 
-            KorisnikDto prodavac = _korisnikService.GetKorisnikById(id);
+            KorisnikDto prodavac = await _korisnikService.GetKorisnikById(id);
             _emailVerifyService.SendVerificationMail(prodavac.Email, statusVerifikacije);
 
             return Ok(verifiedProdavci);

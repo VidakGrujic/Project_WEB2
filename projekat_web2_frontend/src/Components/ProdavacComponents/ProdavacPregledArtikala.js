@@ -91,7 +91,7 @@ export default function ProdavacPregledArtikala() {
                       ></img>
                       <div className="content">
                         {artikal.naziv}
-                        <div className="sub header">Cena: {artikal.cena}</div>
+                        <div className="sub header">Cena: {artikal.cena} $</div>
                         <div className="sub header">
                           Kolicina: {artikal.kolicina}
                         </div>

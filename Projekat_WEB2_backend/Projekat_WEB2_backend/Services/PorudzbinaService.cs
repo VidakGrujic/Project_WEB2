@@ -25,7 +25,7 @@ namespace Projekat_WEB2_backend.Services
             _dbContext = dbContext;
         }
 
-        public PorudzbinaDto AddPorudzbina(PorudzbinaDto newPorudzbinaDto)
+        public async Task<PorudzbinaDto> AddPorudzbina(PorudzbinaDto newPorudzbinaDto)
         {
             
             //ako je lista artikala prazna, onda ne moze da se napravi porudzbina
@@ -56,7 +56,7 @@ namespace Projekat_WEB2_backend.Services
             //porudzbini podesiti vreme dostave i datum kreiranja
             //ubaciti porudzbinu u db set
             _dbContext.Porudzbine.Add(newPorudzbina);
-            _dbContext.SaveChanges(); //mora save changes da bi porudzbina dobila id
+            await _dbContext.SaveChangesAsync(); //mora save changes da bi porudzbina dobila id
 
             //sve ovo mora da stavim u try, jer u slucaju da pukne, porudzbina mora da se obrise iz baze
             //mora da napravim transkacionu operaciju
@@ -74,7 +74,7 @@ namespace Projekat_WEB2_backend.Services
                     {
                         //stavim da se porudzbina izvbaci ako nije uspelo pronalazenje artikla
                         _dbContext.Porudzbine.Remove(newPorudzbina);
-                        _dbContext.SaveChanges();
+                        await _dbContext.SaveChangesAsync();
                         return null;
                     }
 
@@ -82,7 +82,7 @@ namespace Projekat_WEB2_backend.Services
                     {
                         //stavim da se porudzbina izvbaci ako se trazi vise nego sto ima
                         _dbContext.Porudzbine.Remove(newPorudzbina);
-                        _dbContext.SaveChanges();
+                        await _dbContext.SaveChangesAsync();
                         return null;
                     }
                     //skinuti kolicinu artikala kolko je poruceno
@@ -104,7 +104,7 @@ namespace Projekat_WEB2_backend.Services
                 //mozda ne treba da se ovo uradi jer je uradjen svae changes, on je vec sacuvao korisniku na osnovu ID porudbinu
                 //_dbContext.Korisnici.Find(newPorudzbinaDto.KorisnikId).Porudzbine.Add(newPorudzbina);
 
-                _dbContext.SaveChanges();
+                await _dbContext.SaveChangesAsync();
 
                 PorudzbinaDto returnPorudzbinaDto = _mapper.Map<PorudzbinaDto>(newPorudzbina);
                 return returnPorudzbinaDto;
@@ -115,31 +115,31 @@ namespace Projekat_WEB2_backend.Services
                 //obrisati porudzbinu
                 PorudzbinaHelperClass.ReturnKolicinaArtikalaPorudzbine(newPorudzbinaDto.ArtikliPorudzbine, _dbContext);
                 _dbContext.Porudzbine.Remove(newPorudzbina);
-                _dbContext.SaveChanges();
+                await _dbContext.SaveChangesAsync();  
                 return null;
             }
            
         }
 
-        public void DeletePorudzbina(long id)
+        public async Task DeletePorudzbina(long id)
         {
-            Porudzbina deletePorudzbina = _dbContext.Porudzbine.Find(id);
+            Porudzbina deletePorudzbina = await _dbContext.Porudzbine.FindAsync(id);
             _dbContext.Porudzbine.Remove(deletePorudzbina);
 
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
         }
 
-        public List<PorudzbinaDto> GetAllPorudzbina()
+        public async Task<List<PorudzbinaDto>> GetAllPorudzbina()
         {
-            return _mapper.Map<List<PorudzbinaDto>>(_dbContext.Porudzbine.ToList());
+            return _mapper.Map<List<PorudzbinaDto>>(await _dbContext.Porudzbine.ToListAsync());
         }
 
-        public List<PorudzbinaDto> GetKupcevePorudzbine(long id)
+        public async Task<List<PorudzbinaDto>> GetKupcevePorudzbine(long id)
         {
             //moraju sugavi includovi zbog lazy loadinga
-            Korisnik kupac = _dbContext.Korisnici.Include(x => x.Porudzbine)
+            Korisnik kupac = await  _dbContext.Korisnici.Include(x => x.Porudzbine)
                                                  .ThenInclude(porudzbina => porudzbina.ArtikliPorudzbine)
-                                                 .First(x => x.Id == id);
+                                                 .FirstOrDefaultAsync(x => x.Id == id);
             if(kupac == null)
             {
                 return null;
@@ -154,9 +154,9 @@ namespace Projekat_WEB2_backend.Services
 
         }
 
-        public PorudzbinaPrikazDto GetPorudzbinaById(long id)
+        public async Task<PorudzbinaPrikazDto> GetPorudzbinaById(long id)
         {
-            Porudzbina porudzbinaPrikaz = _dbContext.Porudzbine.Include(x => x.ArtikliPorudzbine).First(x => x.Id == id);
+            Porudzbina porudzbinaPrikaz = await _dbContext.Porudzbine.Include(x => x.ArtikliPorudzbine).FirstOrDefaultAsync(x => x.Id == id);
             if(porudzbinaPrikaz == null)
             {
                 return null;
@@ -178,21 +178,21 @@ namespace Projekat_WEB2_backend.Services
             return porudzbinaPrikazDto;
         }
 
-        public PorudzbinaDto UpdatePorudzbina(long id, PorudzbinaDto updatePorudzbinaDto)
+        public async Task<PorudzbinaDto> UpdatePorudzbina(long id, PorudzbinaDto updatePorudzbinaDto)
         {
             Porudzbina updatePorudzbina = _dbContext.Porudzbine.Find(id);
             PorudzbinaHelperClass.UpdatePorudzbinaFields(updatePorudzbina, updatePorudzbinaDto);
 
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
             return _mapper.Map<PorudzbinaDto>(updatePorudzbina);
         }
 
-        public ResponsePorudzbinaDto OtkaziPorudzbinu(long id, string statusVerifikacije)
+        public async Task<ResponsePorudzbinaDto> OtkaziPorudzbinu(long id, string statusVerifikacije)
         {
             try
             {
-                Porudzbina otkazivanjePorudzbina =  _dbContext.Porudzbine.Include(x => x.ArtikliPorudzbine).First(x => x.Id == id);
+                Porudzbina otkazivanjePorudzbina =  await _dbContext.Porudzbine.Include(x => x.ArtikliPorudzbine).FirstOrDefaultAsync(x => x.Id == id);
                 if((DateTime.UtcNow - otkazivanjePorudzbina.DatumKreiranja).TotalHours < 1 && statusVerifikacije == "Otkazana")
                 {
                     otkazivanjePorudzbina.StanjePorudzbine = StanjePorudzbine.Otkazana;
@@ -212,7 +212,7 @@ namespace Projekat_WEB2_backend.Services
                         PorudzbinaDto = _mapper.Map<PorudzbinaDto>(otkazivanjePorudzbina)
                     };
 
-                    _dbContext.SaveChanges();
+                    await _dbContext.SaveChangesAsync();
                     return otkazanaPorudzbinaResponseDto;
                 } 
                 else
@@ -242,11 +242,11 @@ namespace Projekat_WEB2_backend.Services
 
         }
 
-        public List<PorudzbinaDto> GetProdavceveNovePorudzbine(long id)
+        public async Task<List<PorudzbinaDto>> GetProdavceveNovePorudzbine(long id)
         {
             try
             {
-                Korisnik prodavac = _dbContext.Korisnici.Include(x => x.ProdavceviArtikli).First(x => x.Id == id);
+                Korisnik prodavac = await _dbContext.Korisnici.Include(x => x.ProdavceviArtikli).FirstAsync(x => x.Id == id);
                 List<Porudzbina> prodavcevePorudzbine = new List<Porudzbina>();
 
                 foreach(Artikal prodavcevArtikal in prodavac.ProdavceviArtikli)
@@ -273,11 +273,11 @@ namespace Projekat_WEB2_backend.Services
             }
         }
 
-        public List<PorudzbinaDto> GetProdavcevePrethodnePorudzbine(long id)
+        public async Task<List<PorudzbinaDto>> GetProdavcevePrethodnePorudzbine(long id)
         {
             try
             {
-                Korisnik prodavac = _dbContext.Korisnici.Include(x => x.ProdavceviArtikli).First(x => x.Id == id);
+                Korisnik prodavac = await _dbContext.Korisnici.Include(x => x.ProdavceviArtikli).FirstAsync(x => x.Id == id);
                 List<Porudzbina> prodavcevePorudzbine = new List<Porudzbina>();
 
                 foreach (Artikal prodavcevArtikal in prodavac.ProdavceviArtikli)

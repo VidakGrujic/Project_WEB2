@@ -24,7 +24,7 @@ namespace Projekat_WEB2_backend.Services
         }
 
         
-        public ArtikalDto AddArtikal(ArtikalDto newArtikalDto)
+        public async Task<ArtikalDto> AddArtikal(ArtikalDto newArtikalDto)
         {
             if (!ArtikalHelperClass.IsArtikalFieldsValid(newArtikalDto))
                 return null;
@@ -36,12 +36,12 @@ namespace Projekat_WEB2_backend.Services
             newArtikal.CenaDostave = _dbContext.Korisnici.Find(newArtikalDto.ProdavacId).CenaDostave;
             _dbContext.Artikli.Add(newArtikal);
 
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
             return _mapper.Map<ArtikalDto>(newArtikal);
         }
 
-        public bool DeleteArtikal(long id)
+        public async Task<bool> DeleteArtikal(long id)
         {
             Artikal deleteArtikal = _dbContext.Artikli.Find(id);
             if(deleteArtikal == null)
@@ -49,20 +49,22 @@ namespace Projekat_WEB2_backend.Services
                 return false;
             }
             _dbContext.Artikli.Remove(deleteArtikal);
-            _dbContext.SaveChanges();
+
+            _dbContext.ArtikliUPorudzbinama.RemoveRange(_dbContext.ArtikliUPorudzbinama.Where(x => x.ArtikalId == deleteArtikal.Id));
+            await _dbContext.SaveChangesAsync();
             return true;
 
         }
 
-        public List<ArtikalDto> GetAllArtikals()
+        public async Task<List<ArtikalDto>> GetAllArtikals()
         {
-            List<ArtikalDto> artikalList = _mapper.Map<List<ArtikalDto>>(_dbContext.Artikli.ToList());
+            List<ArtikalDto> artikalList = _mapper.Map<List<ArtikalDto>>(await _dbContext.Artikli.ToListAsync());
             return artikalList;
         }
 
-        public ArtikalDto GetArtikalById(long id)
+        public async Task<ArtikalDto> GetArtikalById(long id)
         {
-            Artikal artikal = _dbContext.Artikli.Find(id);
+            Artikal artikal = await _dbContext.Artikli.FindAsync(id);
             if(artikal == null)
             {
                 return null;
@@ -70,24 +72,24 @@ namespace Projekat_WEB2_backend.Services
             return _mapper.Map<ArtikalDto>(artikal);
         }
 
-        public ArtikalDto UpdateArtikal(long id, ArtikalDto updateArtikalDto)
+        public async Task<ArtikalDto> UpdateArtikal(long id, ArtikalDto updateArtikalDto)
         {
-            Artikal updateArtikal = _dbContext.Artikli.Find(id);
+            Artikal updateArtikal = await _dbContext.Artikli.FindAsync(id);
             if(updateArtikal == null)
             {
                 return null;
             }
             ArtikalHelperClass.UpdateArtikalFiels(updateArtikal, updateArtikalDto);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
             return _mapper.Map<ArtikalDto>(updateArtikal);
             
         }
 
 
-        public List<ArtikalDto> GetProdavceveArtikle(long id)
+        public async Task<List<ArtikalDto>> GetProdavceveArtikle(long id)
         {
-            Korisnik prodavac = _dbContext.Korisnici.Include(x => x.ProdavceviArtikli).FirstOrDefault(x=> x.Id == id);
+            Korisnik prodavac = await _dbContext.Korisnici.Include(x => x.ProdavceviArtikli).FirstOrDefaultAsync(x=> x.Id == id);
             if(prodavac == null)
             {
                 return null;
