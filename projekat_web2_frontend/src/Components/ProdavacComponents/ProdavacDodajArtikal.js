@@ -29,7 +29,7 @@ const ProdavacDodajArtikal = () => {
         const prodavacId = prodavac.id;
         const cenaDostave = prodavac.cenaDostave;
 
-        if(naziv.length === 0 || cena === 0 || Math.floor(kolicina) === 0
+        if(naziv.length === 0 || cena === 0 || cena === "" || kolicina === "" || Math.floor(kolicina) === 0
         || opis.length === 0 || fotografija.length === 0){
             setError(true);
             return;
@@ -76,7 +76,7 @@ const ProdavacDodajArtikal = () => {
                                 onChange={(e) => setCena(e.target.value)}
                                 placeholder="Cena artikla"
                                 />
-                        {error && cena === 0 ? <div className="ui pointing red basic label">Morate cenu artikla</div> : null}
+                        {(error && cena === 0) || (error && cena === "") ? <div className="ui pointing red basic label">Morate cenu artikla</div> : null}
                     </div>
                     <div className="field">
                         <label>Kolicina artikla</label>
@@ -87,7 +87,7 @@ const ProdavacDodajArtikal = () => {
                                 onChange={(e) => setKolicina(e.target.value)}
                                 placeholder="Kolicina artikla"
                         />
-                        {error && Math.floor(kolicina) === 0 ? <div className="ui pointing red basic label">Morate uneti kolicinu artikla</div> : null}
+                        {(error && Math.floor(kolicina) === 0) || ( error && cena === "") ? <div className="ui pointing red basic label">Morate uneti kolicinu artikla</div> : null}
                     </div>
                 </div>
                 <div className="field">

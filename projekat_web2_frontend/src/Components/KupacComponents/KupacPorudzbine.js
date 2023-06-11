@@ -30,12 +30,12 @@ const KupacPorudzbine = () => {
   
     const handleButtonCell = (datumKreiranja, id) => {
         //pronadjem da li je od ovog trenutka proslo vise od sat vremena
-        var oneHour = 60*60*1000;
+        var fiveMinutes = 5*60*1000;
         var datumKreiranjaObject = new Date(datumKreiranja);
         var currentTime = new Date();
         var difference = currentTime.getTime() - datumKreiranjaObject.getTime()  
     
-        if( difference < oneHour){
+        if( difference < fiveMinutes){
             return <td className="center aligned">
                         <button className="mini ui red labeled icon button"
                                 id={id} 

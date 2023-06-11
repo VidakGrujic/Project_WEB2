@@ -48,7 +48,7 @@ export default function IzmeniArtikal() {
     const prodavacId = prodavac.id;
     const cenaDostave = prodavac.cenaDostave;
 
-    if(naziv.length === 0 || cena === 0 || Math.floor(kolicina) === 0
+    if(naziv.length === 0 || cena === 0 || cena === "" || Math.floor(kolicina) === 0 || kolicina === ""
     || opis.length === 0 || fotografija.length === 0){
         setError(true);
         return;
@@ -116,7 +116,7 @@ export default function IzmeniArtikal() {
                   onChange={(e) => setCena(e.target.value)}
                   placeholder="Cena artikla"
                 />
-                {error && cena === 0 ? (
+                {(error && cena === 0) || (error && cena === "") ? (
                   <div className="ui pointing red basic label">
                     Morate cenu artikla
                   </div>
@@ -132,7 +132,7 @@ export default function IzmeniArtikal() {
                   onChange={(e) => setKolicina(e.target.value)}
                   placeholder="Kolicina artikla"
                 />
-                {error && Math.floor(kolicina) === 0 ? (
+                {(error && Math.floor(kolicina) === 0) || ( error && cena === "") ? (
                   <div className="ui pointing red basic label">
                     Morate uneti kolicinu artikla
                   </div>

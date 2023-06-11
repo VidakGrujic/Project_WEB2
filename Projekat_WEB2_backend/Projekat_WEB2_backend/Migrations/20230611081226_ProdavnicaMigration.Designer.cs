@@ -10,7 +10,7 @@ using Projekat_WEB2_backend.Infrastructure;
 namespace Projekat_WEB2_backend.Migrations
 {
     [DbContext(typeof(ProdavnicaDbContext))]
-    [Migration("20230603144340_ProdavnicaMigration")]
+    [Migration("20230611081226_ProdavnicaMigration")]
     partial class ProdavnicaMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

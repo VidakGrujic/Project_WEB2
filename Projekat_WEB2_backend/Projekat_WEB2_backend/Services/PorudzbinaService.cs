@@ -193,7 +193,7 @@ namespace Projekat_WEB2_backend.Services
             try
             {
                 Porudzbina otkazivanjePorudzbina =  await _dbContext.Porudzbine.Include(x => x.ArtikliPorudzbine).FirstOrDefaultAsync(x => x.Id == id);
-                if((DateTime.UtcNow - otkazivanjePorudzbina.DatumKreiranja).TotalHours < 1 && statusVerifikacije == "Otkazana")
+                if((DateTime.UtcNow - otkazivanjePorudzbina.DatumKreiranja).TotalMinutes < 5 && statusVerifikacije == "Otkazana")
                 {
                     otkazivanjePorudzbina.StanjePorudzbine = StanjePorudzbine.Otkazana;
 

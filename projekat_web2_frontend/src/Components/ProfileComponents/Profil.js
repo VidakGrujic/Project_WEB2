@@ -196,7 +196,7 @@ const Profil = () => {
             value={adresa}
             onChange={(e) => setAdresa(e.target.value)}
           />
-          {error && prezime.length === 0 ? (
+          {error && adresa.length === 0 ? (
             <div className="ui pointing red basic label">
               Morate uneti adresu
             </div>

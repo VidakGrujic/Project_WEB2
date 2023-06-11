@@ -25,7 +25,7 @@ export default function UploadImage({ slika, setSlika }) {
     <>
       <div className="field">
         <img
-          className="ui centered medium circular image"
+          className="ui centered medium image"
           src={slika}
           alt="file preview"
         ></img>

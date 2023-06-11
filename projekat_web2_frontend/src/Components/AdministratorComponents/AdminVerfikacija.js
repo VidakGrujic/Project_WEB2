@@ -88,7 +88,7 @@ const AdminVerifikacija = () => {
                                 <tr>
                                     <td>
                                         <h4 className="ui image header">
-                                            <img className="ui mini rounded image" src="https://staticg.sportskeeda.com/editor/2022/01/3daff-16432330593294-1920.jpg"></img>
+                                            <img className="ui mini rounded image" src={prodavac.slika}></img>
                                             <div className="content">
                                                 {prodavac.korisnickoIme}
                                                 <div className="sub header">{prodavac.ime} {prodavac.prezime}</div>

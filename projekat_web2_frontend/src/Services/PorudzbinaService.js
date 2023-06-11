@@ -152,8 +152,8 @@ export const GetSvePorudzbine = async (token) => {
         })*/
         const svePorudzbine = [];
         for(var i = 0; i < data.length; i++){
-            const porudzbina = new PorudzbinaDto(data);
-            porudzbina.addAllArtiklePorudzbine(data.artikliPorudzbine);
+            const porudzbina = new PorudzbinaDto(data[i]);
+            porudzbina.addAllArtiklePorudzbine(data[i].artikliPorudzbine);
             svePorudzbine.push(porudzbina);
         }
         return data;
