@@ -41,7 +41,7 @@ const NavBar = ({isAuth, tipKorisnika, statusVerifikacije, handleLogout}) => {
 
             {/*logovani korisnik bez obzira na ulogu*/}
             {isAuth && statusVerifikacije === 'Prihvacen' ? <NavLink className={({isActive}) => active(isActive)} to="/profil">Profil</NavLink> : null}
-            {isAuth && statusVerifikacije === 'Prihvacen' ? <NavLink className={({isActive}) => active(isActive)} onClick={handleLogout} to="/">Logout</NavLink> : null}
+            {isAuth ? <NavLink className={({isActive}) => active(isActive)} onClick={handleLogout} to="/">Logout</NavLink> : null}
 
 
         </div>

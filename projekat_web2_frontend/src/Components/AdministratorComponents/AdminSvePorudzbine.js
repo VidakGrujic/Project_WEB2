@@ -38,6 +38,7 @@ const AdminSvePorudzbine = () => {
                         <th>Adresa dostave</th>
                         <th>Cena porudzbine</th>
                         <th>Vreme ostalo do isporuke</th>
+                        <th>Status porudzbine</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -56,6 +57,9 @@ const AdminSvePorudzbine = () => {
                             </td>
                             <td>
                                 <CountdownTimer targetDate={adminovaPorudzbina.datumDostave}/>
+                            </td>
+                            <td>
+                                {adminovaPorudzbina.stanjePorudzbine}
                             </td>
                        </tr>
                     ))}
