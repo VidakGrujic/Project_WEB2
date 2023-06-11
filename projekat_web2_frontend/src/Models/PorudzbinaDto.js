@@ -9,9 +9,14 @@ export default class PorudzbinaDto{
         this.datumKreiranja = data.datumKreiranja;
         this.stanjePorudzbine = data.stanjePorudzbine;
         this.korisnikId = data.korisnikId;
-        this.artikliPorudzbine = data.artikliPorudzbine.map(artikalPorudzbine => {
-            return new ArtikalPorudzbineDto(artikalPorudzbine);
-        });
+        this.artikliPorudzbine = [];
         this.cenaPorudzbine = data.cenaPorudzbine;
+    }
+
+
+    addAllArtiklePorudzbine(artikliPorudzbine){
+        for(var i = 0; i < artikliPorudzbine.length; i++){
+            this.artikliPorudzbine.push(artikliPorudzbine[i]);
+        }
     }
 }
