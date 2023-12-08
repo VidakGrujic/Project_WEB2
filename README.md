@@ -54,8 +54,8 @@ Administrator is able to see every order, for every customer.
 
 ## Implementation details
 
-For database is used .NET Entity Framework, Model to Data approach. For backend is used .NET CORE. For fronted is used React.js library, written in Javascript. REST convention is fulfilled. Password are hashed in the database.
-Authentication and authorization are implemented using token which user use for the current session. Token is got after registration and login and sent with every HTTP request from frontend to backend.  
+For database is used .NET Entity Framework, Model to Data approach. For backend is used .NET CORE. For fronted is used React.js library, written in Javascript. REST convention is fulfilled. Passwords are hashed in the database.
+Authentication and authorization are implemented using tokens which user uses for the current session. Token is got after registration and login and sent with every HTTP request from frontend to backend.  
 
 
   
